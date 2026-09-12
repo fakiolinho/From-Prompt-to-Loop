@@ -79,10 +79,15 @@ Suggested wording for box 2:
 >     night wakes        under standing       to work on a repo the check
 >     nobody.            orders.              cannot actually read.
 
-**Why:** measured on two real repositories on 2026-09-12. Sixteen of eighteen engineering and
-QA loops returned "there is work" on repos they were not wired to, because "is there work" only
-had two answers. On a weekly schedule that is sixteen agent runs a week, each capped at two
+**Why:** measured on two real repositories on 2026-09-12. **Thirty three of all thirty five
+loops** returned "there is work" on repos they were not wired to, because "is there work" only
+had two answers. On a weekly schedule that is thirty three agent runs a week, each capped at two
 dollars, all of them finding nothing to do, on every repo that adopts the pack.
+
+The cloud chapter was the sharpest case. All nine printed "cannot read ECR", "cannot read
+CloudWatch", "cannot read ACM" and then returned 1. "I cannot reach your account" was being
+reported as "there is work here", which wakes an agent to investigate infrastructure it has no
+credentials for. Nine runs a week that can only fail.
 
 The loops now return 2 for "not wired" and say what to wire. The idea generalises past this
 repo: any check with only two answers will answer "there is work" when it is really answering

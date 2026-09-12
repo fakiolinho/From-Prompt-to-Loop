@@ -1,11 +1,19 @@
 #!/usr/bin/env bash
 set -uo pipefail
-# Non-zero when a source is newer than its index entry (re-embed needed).
-# note: mtime heuristic; wire to your vector store's real freshness signal.
-src="${RAG_SOURCES:-sources}"; idx="${RAG_INDEX:-index}"
-[ -d "$src" ] || { echo "no sources dir ($src); wire your store"; exit 1; }
-work=0
-for f in "$src"/*; do [ -e "$f" ] || continue; b=$(basename "$f")
-  { [ ! -f "$idx/$b.json" ] || [ "$f" -nt "$idx/$b.json" ]; } && { echo "stale index for $b"; work=1; }
-done
-[ "$work" -eq 0 ] && { echo "index fresh"; exit 0; } || exit 1
+# Is there work? 0 = no, 1 = yes, 2 = this loop is not wired to this repo.
+#
+# Until this points at something real it cannot tell you anything. Returning 1 here
+# would wake an agent on every scheduled run to look at data it does not have.
+
+if [ -z "${LOOP_RAG:-}" ]; then
+  echo "Rag knowledge base sync is not wired to this repo."
+  echo "Set LOOP_RAG to the command that checks your index against its sources, for example:"
+  echo "  LOOP_RAG='node scripts/check-index-freshness.js'"
+  exit 2
+fi
+
+out=$(eval "$LOOP_RAG" 2>&1); rc=$?
+printf '%s\n' "$out"
+[ "$rc" -eq 0 ] && { echo "the index is fresh"; exit 0; }
+echo "sources are newer than the index"
+exit 1
