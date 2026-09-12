@@ -78,6 +78,29 @@ Every loop is one or the other. Its `ORDERS.md` says which.
 
 Nothing irreversible happens without a person. That is the whole reason you can walk away.
 
+## What it costs, and what it needs
+
+Most of this repo costs nothing and needs nothing. The part that spends money is one step, and
+it is fenced.
+
+| | Needs | Costs |
+|---|---|---|
+| `./run-all-demos.sh` and every `check.sh` | Node 18 and bash | nothing, ever |
+| `./run-loop.sh 02` on your machine | your existing Claude Code or Codex login | whatever that agent run costs you |
+| The GitHub Actions runner | `ANTHROPIC_API_KEY` or `OPENAI_API_KEY` as a repo secret | per token, metered |
+
+**Locally you do not need an API key.** If you are already signed in to Claude Code, a
+subscription included, `run-loop.sh` uses that. Nothing to buy to try this.
+
+**In CI you do.** A GitHub runner has no login, so the workflow needs a key in
+`Settings > Secrets and variables > Actions`. That is programmatic usage and it is metered per
+token, whatever your interactive plan says. The field guide is blunt about this: do not assume
+your subscription covers a fleet, and check your plan's current terms before you build one.
+
+**Every agent run is capped** at `--max-budget-usd 2` and `--max-turns 30`, with a 20 minute
+job timeout. And the check runs first, so a loop with nothing to do never wakes an agent at
+all. A quiet night costs nothing. That is the whole point of the shape.
+
 ## Three answers, not two
 
 Every `check.sh` answers one question, and it has three ways to answer it.

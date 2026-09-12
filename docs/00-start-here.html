@@ -55,6 +55,10 @@
     padding:17px 19px; overflow-x:auto; }
   article pre code { background:none; border:0; padding:0; font-size:13.2px;
     color:#c7d0de; line-height:1.62; }
+  section table { border-collapse:collapse; width:100%; font-size:15px; }
+  section th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 12px; border-bottom:1px solid var(--line); }
+  section td { padding:11px 12px; border-bottom:1px solid var(--line); color:#d3d9e4; vertical-align:top; }
   .tw { overflow-x:auto; margin:22px 0; }
   article table { border-collapse:collapse; width:100%; font-size:15px; }
   article th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
@@ -139,11 +143,17 @@ are a catalog you come back to.</p>
 <p>If a word here is unfamiliar, it is in <a href="02-plain-words.html">plain words</a>. Nothing is assumed.</p>
 <h2>What you need</h2>
 <ul>
-<li><strong>Node 18 or newer</strong> and <strong>bash</strong>. That is all the demos need.</li>
-<li><strong>git</strong> and the GitHub CLI <code>gh</code>, only when you want an agent to open a real PR.</li>
-<li>An <strong>Anthropic or OpenAI API key</strong>, only for that same step. Every check in this repo runs
-without one.</li>
+<li><strong>Node 18 or newer</strong> and <strong>bash</strong>. That is all the demos need, and all any check ever needs.</li>
+<li><strong>A Claude Code or Codex login</strong> to run a loop for real on your machine. If you are already
+signed in, including on a subscription, <code>./run-loop.sh</code> uses that. <strong>There is nothing to buy
+to try this.</strong></li>
+<li><strong>An API key</strong> only when you put a loop on GitHub Actions. A runner has no login, so the
+workflow reads <code>ANTHROPIC_API_KEY</code> (or <code>OPENAI_API_KEY</code>) from your repo secrets, and that is
+metered per token.</li>
+<li><strong>git</strong>, and the GitHub CLI <code>gh</code>, only for the steps that open a PR or read an issue.</li>
 </ul>
+<p>Every agent run is capped at two dollars and thirty turns, and the check runs first, so a loop
+with nothing to do never wakes one. See <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/README.md#what-it-costs-and-what-it-needs">what it costs</a>.</p>
 <h2>The book this came from</h2>
 <p><strong><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf">From Prompt to Loop</a></strong> sits in the root of this
 repo, and it is free. It has

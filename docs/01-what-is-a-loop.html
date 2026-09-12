@@ -55,6 +55,10 @@
     padding:17px 19px; overflow-x:auto; }
   article pre code { background:none; border:0; padding:0; font-size:13.2px;
     color:#c7d0de; line-height:1.62; }
+  section table { border-collapse:collapse; width:100%; font-size:15px; }
+  section th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 12px; border-bottom:1px solid var(--line); }
+  section td { padding:11px 12px; border-bottom:1px solid var(--line); color:#d3d9e4; vertical-align:top; }
   .tw { overflow-x:auto; margin:22px 0; }
   article table { border-collapse:collapse; width:100%; font-size:15px; }
   article th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
@@ -129,8 +133,8 @@ and you will find the same two files every time.</p>
 </tr>
 <tr>
 <td>Agent</td>
-<td>your API key, plus the orders below</td>
-<td>Claude Code or Codex</td>
+<td>Claude Code or Codex, signed in locally or an API key in CI</td>
+<td>capped at $2 and 30 turns</td>
 </tr>
 <tr>
 <td>Orders</td>

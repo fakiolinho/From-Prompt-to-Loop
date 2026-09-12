@@ -17,7 +17,7 @@ and you will find the same two files every time.
 |---|---|---|
 | Trigger | `.github/workflows/loop.yml` | one runner for the whole chapter |
 | Check | `loops/NN-name/check.sh` | is there work? |
-| Agent | your API key, plus the orders below | Claude Code or Codex |
+| Agent | Claude Code or Codex, signed in locally or an API key in CI | capped at $2 and 30 turns |
 | Orders | `loops/NN-name/ORDERS.md` | what this loop owns, and must never touch |
 | Rules | `CLAUDE.md` / `AGENTS.md` | the rules for the whole chapter, read every run |
 | Gate | `ORDERS.md` says which kind | see below |

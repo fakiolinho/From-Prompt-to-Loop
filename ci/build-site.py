@@ -129,6 +129,10 @@ PAGE = r"""<!doctype html>
     padding:17px 19px; overflow-x:auto; }}
   article pre code {{ background:none; border:0; padding:0; font-size:13.2px;
     color:#c7d0de; line-height:1.62; }}
+  section table {{ border-collapse:collapse; width:100%; font-size:15px; }}
+  section th {{ text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 12px; border-bottom:1px solid var(--line); }}
+  section td {{ padding:11px 12px; border-bottom:1px solid var(--line); color:#d3d9e4; vertical-align:top; }}
   .tw {{ overflow-x:auto; margin:22px 0; }}
   article table {{ border-collapse:collapse; width:100%; font-size:15px; }}
   article th {{ text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
@@ -412,6 +416,25 @@ TEMPLATE = r"""<!doctype html>
     <a href="{repo}/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf">The field guide (free PDF)</a>
   </div>
 </div></header>
+
+<section><div class="wrap">
+  <h2>What it costs, and what it needs</h2>
+  <p class="sub">Most of this costs nothing. The part that spends money is one step, and it is
+  fenced on four sides.</p>
+  <div class="tw"><table>
+    <tr><th></th><th>Needs</th><th>Costs</th></tr>
+    <tr><td><code>./run-all-demos.sh</code> and every check</td><td>Node 18 and bash</td><td>nothing, ever</td></tr>
+    <tr><td><code>./run-loop.sh 02</code> on your machine</td><td>your existing Claude Code or Codex login</td><td>whatever that run costs you</td></tr>
+    <tr><td>The GitHub Actions runner</td><td>an API key in repo secrets</td><td>per token, metered</td></tr>
+  </table></div>
+  <p class="sub" style="margin-top:16px"><strong>Locally you do not need an API key.</strong> If
+  you are already signed in to Claude Code, a subscription included, the runner uses that. There
+  is nothing to buy to try this. A runner in CI has no login, so that one does need a key, and
+  it is metered per token whatever your interactive plan says.</p>
+  <p class="sub">Every agent run is capped at <code>--max-budget-usd 2</code> and
+  <code>--max-turns 30</code>, with a 20 minute timeout. And the check runs first, so a loop with
+  nothing to do never wakes an agent. A quiet night costs nothing.</p>
+</div></section>
 
 <section><div class="wrap">
   <h2>A check has three answers, not two</h2>

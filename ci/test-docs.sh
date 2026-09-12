@@ -218,6 +218,18 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "the price of running this is stated up front"
+grep -qi "what it costs" README.md && ok "README states the cost" \
+  || bad "README never says running a loop costs money"
+grep -qi "nothing to buy" README.md && ok "README says a local run needs no key" \
+  || bad "README does not say a local run works on an existing login"
+grep -qi "what it costs" docs/index.html && ok "the landing page states the cost" \
+  || bad "the landing page never mentions cost"
+grep -q "ANTHROPIC_API_KEY" docs/00-start-here.md && ok "page 0 names the key CI needs" \
+  || bad "page 0 never names the key the workflow needs"
+grep -q "max-budget-usd 2" README.md && ok "README names the per run cap" \
+  || bad "README never states the spend cap on an agent run"
+
 head2 "a loop can be run without GitHub"
 [ -x run-loop.sh ] && ok "run-loop.sh is executable" || bad "nothing lets a user run a loop locally"
 grep -q 'run-loop.sh' install.sh && ok "install.sh ships it into the target repo" \

@@ -164,3 +164,33 @@ release notes.
 The loop now takes the newest version shaped tag, and refuses when the range is implausibly
 large, because a release note covering hundreds of commits means the baseline is wrong rather
 than that there is a lot to write.
+
+---
+
+## 7. Say plainly that a local run needs no API key
+
+**Where:** page 2, "what you are holding", or the prerequisites implied on page 26. Also page 35,
+the billing box, which currently only carries the warning half.
+
+**Change:** page 35 says, correctly, that interactive work and a loop calling `claude -p` from
+CI are metered differently, and that you should not assume your subscription covers a fleet.
+That is the right warning and it should stay. What is missing is the other half, and it is the
+half that gets somebody started:
+
+> Running a loop on your own machine uses whatever login your agent already has. If you are
+> signed in to Claude Code, a subscription included, there is nothing to buy to try this. The
+> key is for the unattended runs: a CI runner has no login, so it reads one from your secrets,
+> and that is the usage metered per token.
+
+**Why:** the repo had the same gap and it was worse there. The README never mentioned cost or
+keys at all, and the only place the word "subscription" appeared was the warning that it might
+not cover a fleet. A reader could reasonably conclude they had to buy API credits before they
+could try anything, when in fact the demos, every check, and a local `run-loop.sh` all run on
+what they already have.
+
+Verified on 2026-09-12 with no `ANTHROPIC_API_KEY` in the environment: `claude -p` authenticated
+on the existing login and ran.
+
+The fix in the repo is a short table on the front door, showing what each of the three surfaces
+needs and what it costs, plus the caps. The guide has the cost chapter to do this properly; it
+just needs the "nothing to buy to start" sentence somewhere a beginner meets early.

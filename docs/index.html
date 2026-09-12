@@ -126,6 +126,25 @@
 </div></header>
 
 <section><div class="wrap">
+  <h2>What it costs, and what it needs</h2>
+  <p class="sub">Most of this costs nothing. The part that spends money is one step, and it is
+  fenced on four sides.</p>
+  <div class="tw"><table>
+    <tr><th></th><th>Needs</th><th>Costs</th></tr>
+    <tr><td><code>./run-all-demos.sh</code> and every check</td><td>Node 18 and bash</td><td>nothing, ever</td></tr>
+    <tr><td><code>./run-loop.sh 02</code> on your machine</td><td>your existing Claude Code or Codex login</td><td>whatever that run costs you</td></tr>
+    <tr><td>The GitHub Actions runner</td><td>an API key in repo secrets</td><td>per token, metered</td></tr>
+  </table></div>
+  <p class="sub" style="margin-top:16px"><strong>Locally you do not need an API key.</strong> If
+  you are already signed in to Claude Code, a subscription included, the runner uses that. There
+  is nothing to buy to try this. A runner in CI has no login, so that one does need a key, and
+  it is metered per token whatever your interactive plan says.</p>
+  <p class="sub">Every agent run is capped at <code>--max-budget-usd 2</code> and
+  <code>--max-turns 30</code>, with a 20 minute timeout. And the check runs first, so a loop with
+  nothing to do never wakes an agent. A quiet night costs nothing.</p>
+</div></section>
+
+<section><div class="wrap">
   <h2>A check has three answers, not two</h2>
   <p class="sub">Every loop starts with one question, and how it answers decides what you pay.
   The third answer is the one most people leave out, and it is the expensive one: a check with

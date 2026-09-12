@@ -22,10 +22,17 @@ If a word here is unfamiliar, it is in [plain words](02-plain-words.md). Nothing
 
 ## What you need
 
-- **Node 18 or newer** and **bash**. That is all the demos need.
-- **git** and the GitHub CLI `gh`, only when you want an agent to open a real PR.
-- An **Anthropic or OpenAI API key**, only for that same step. Every check in this repo runs
-  without one.
+- **Node 18 or newer** and **bash**. That is all the demos need, and all any check ever needs.
+- **A Claude Code or Codex login** to run a loop for real on your machine. If you are already
+  signed in, including on a subscription, `./run-loop.sh` uses that. **There is nothing to buy
+  to try this.**
+- **An API key** only when you put a loop on GitHub Actions. A runner has no login, so the
+  workflow reads `ANTHROPIC_API_KEY` (or `OPENAI_API_KEY`) from your repo secrets, and that is
+  metered per token.
+- **git**, and the GitHub CLI `gh`, only for the steps that open a PR or read an issue.
+
+Every agent run is capped at two dollars and thirty turns, and the check runs first, so a loop
+with nothing to do never wakes one. See [what it costs](../README.md#what-it-costs-and-what-it-needs).
 
 ## The book this came from
 
