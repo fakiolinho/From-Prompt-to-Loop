@@ -99,6 +99,23 @@ for pack in engineering-loops cloud-loops ai-ml-loops qa-loops; do
   done
 done
 
+head2 "you can actually install this into a repo"
+[ -x install.sh ] && ok "install.sh is executable" || bad "install.sh is missing or not executable"
+grep -q 'install.sh' README.md && ok "README says how to install" || bad "README never mentions install.sh"
+[ -f WIRING.md ] && ok "WIRING.md present" || bad "WIRING.md is missing"
+# every setting a check reads must be documented, or nobody can wire that loop
+miss=0
+for v in $(grep -rhoE '\$\{(LOOP_[A-Z_]+|MIGRATION|BASE_REF|BASE_TAG)' loop-packs/*/loops/*/check.sh \
+           | sed 's/\${//' | sort -u); do
+  grep -q "\`$v\`" WIRING.md || { bad "$v is read by a check but absent from WIRING.md"; miss=1; }
+done
+[ "$miss" -eq 0 ] && ok "every setting a check reads is in WIRING.md"
+# and every runner must load the file those settings live in
+for f in loop-packs/*/.github/workflows/loop.yml; do
+  grep -q 'loops.env' "$f" && ok "$(echo "$f" | cut -d/ -f2) loads loops.env" \
+    || bad "$(echo "$f" | cut -d/ -f2) never loads loops.env, so its settings can never reach the check"
+done
+
 head2 "the three answer contract is on the front door"
 grep -q 'not wired' README.md && ok "README explains exit 2" \
   || bad "README never mentions the third answer a check can give"

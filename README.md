@@ -17,10 +17,23 @@ MIT licensed. Take it, use it, build on it.
 |---|---|---|
 | **See it work** | `./run-all-demos.sh` | 1 minute, no setup |
 | **Understand it** | [What a loop is](docs/01-what-is-a-loop.md) | 5 minutes |
-| **Run one for real** | [Your first loop](docs/04-your-first-loop.md) | 10 minutes, a real PR |
+| **Run one for real** | `./install.sh ~/code/my-app 02` | 10 minutes, a real PR |
 
 New here? **[Start with page 0](docs/00-start-here.md).** It is one screen and it points you at
 the right door.
+
+### Putting a loop in your own repo
+
+    ./install.sh ~/code/my-app 02            one loop
+    ./install.sh ~/code/my-app engineering   a whole chapter
+
+That copies the loop, the standing orders, the runner and the PR template into the right
+places, and writes a `loops.env` listing the settings that loop needs. It never overwrites
+anything of yours without asking.
+
+[WIRING.md](WIRING.md) lists every setting for all thirty five loops. Anything you leave unset
+is fine: that loop exits 2, says what it wanted, and never wakes an agent. Walk through it all
+in [Your first loop](docs/04-your-first-loop.md).
 
 ---
 
@@ -95,6 +108,8 @@ repo they were never wired to and you get a schedule full of agent runs that can
         memory/NN-name.md   what the loop learned, one line per run
         .github/workflows/loop.yml   one runner for the whole chapter
     ci/                   this repo's own tests, one per chapter
+    install.sh            put loops into your own repo
+    WIRING.md             every setting every loop reads
 
 `cloud-loops` also has a `SETUP.md`, because it runs against AWS rather than a repo.
 

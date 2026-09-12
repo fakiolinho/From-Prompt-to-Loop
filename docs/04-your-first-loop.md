@@ -54,27 +54,51 @@ These are in the workflow file, not in a promise.
 **Off switch:** cancel the run in the Actions tab, or delete the workflow file. Nothing keeps
 running in the background.
 
-## Step 1. Copy five things into your repo
+## Step 1. Install it
 
-Keep the paths.
+From this repo, pointed at yours:
+
+    ./install.sh ~/code/my-app 02
+
+That copies the loop, the standing orders, the runner and the PR template into the right
+places, and writes a `loops.env` listing exactly the settings this loop needs. It never
+overwrites anything of yours without asking.
+
+A whole chapter works the same way:
+
+    ./install.sh ~/code/my-app engineering
+
+<details>
+<summary>Or copy the five things by hand</summary>
 
     CLAUDE.md  and  AGENTS.md              the rules the agent reads every run
     .github/workflows/loop.yml             one runner for the whole chapter
+    .github/PULL_REQUEST_TEMPLATE.md       what the agent's PR has to tell you
     loops/02-dependency-upgrades/          the loop you are adopting
     memory/02-dependency-upgrades.md       where the loop writes what it learned
-    .github/PULL_REQUEST_TEMPLATE.md       what the agent's PR has to tell you
 
-Copying the whole `engineering-loops` folder is fine too. You still start with one loop.
+Keep the paths. The runner looks for `loops/<name>/check.sh` at your repo root.
+</details>
 
-The PR template is the one people skip. It is what turns the agent's pull request into evidence
-you can rule on, instead of a diff you have to reverse engineer at the end of a long day.
+The PR template is the one people skip. It is what turns the agent's pull request into
+evidence you can rule on, instead of a diff you have to reverse engineer at the end of a
+long day.
 
-## Step 2. Name an owner
+## Step 2. Fill in loops.env, and name an owner
 
-Open [`loops/02-dependency-upgrades/ORDERS.md`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) and replace the `**Owner:**` line with a real
-person. Ten seconds, and it decides whether this is a fleet somebody runs or a fleet nobody
-maintains. An unowned loop is the one still running badly a year from now, because nobody ever
-felt responsible for turning it off.
+Open `loops.env`. Every setting your loops need is there, commented out, with an example:
+
+    # loop 02: dependency-upgrades
+    # LOOP_VERIFY=''
+
+Fill in the ones you want. **A setting you leave blank is not a problem**: that loop exits 2,
+says what it wanted, and never wakes an agent. You can install everything and wire it up over
+weeks. [WIRING.md](../WIRING.md) lists every setting for all thirty five.
+
+Then open `loops/02-dependency-upgrades/ORDERS.md` and replace the `**Owner:**` line with a
+real person. Ten seconds, and it decides whether this is a fleet somebody runs or a fleet
+nobody maintains. An unowned loop is the one still running badly a year from now, because
+nobody ever felt responsible for turning it off.
 
 ## Step 3. Add one secret
 

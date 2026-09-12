@@ -39,6 +39,17 @@ jobs:
           role-to-assume: ${{ vars.LOOP_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
 
+      # Your repo's loop settings. A check that needs one says so and exits 2.
+      - name: Load loops.env
+        run: |
+          if [ -f loops.env ]; then
+            set -a; . ./loops.env; set +a
+            env | grep -E '^(LOOP_|MIGRATION=|BASE_REF=|BASE_TAG=)' >> "$GITHUB_ENV" || true
+            echo "loaded $(grep -cE '^[A-Z_]+=' loops.env) setting(s) from loops.env"
+          else
+            echo "no loops.env in this repo. Loops that need a setting will say so and exit 2."
+          fi
+
       # The check answers one question: is there work?
       #   0 = nothing to do, the job ends here and spends nothing
       #   1 = there is work, wake the agent

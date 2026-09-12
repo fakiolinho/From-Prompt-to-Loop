@@ -10,10 +10,17 @@ here="$(cd "$(dirname "$0")" && pwd)"
 # Demo mode: either we are being run from inside the pack, or the current directory is
 # not a JavaScript project at all. A real project that simply has not wired this loop
 # must get a 2, not a cheerful answer about the example that ships with the pack.
-in_pack_or_not_a_project() {
-  case "$PWD" in "${here%/loops/*}"*) return 0;; esac
-  [ -f package.json ] && return 1
-  [ -d "$here/example" ] && return 0
+# Am I the copy that ships inside the pack, or one installed into somebody's repo?
+#
+# Only the pack has the chapter catalog sitting above the loops. An installed copy has
+# loops/ and memory/ and no LOOPS.md, which is what tells the two apart. Getting this
+# wrong means the loop reports on its own bundled example while sitting in your repo,
+# which is exactly the bug this whole exercise started with.
+in_the_pack() { [ -f "${here%/loops/*}/LOOPS.md" ]; }
+demo_mode() {
+  in_the_pack && return 0
+  [ -f package.json ] && return 1     # a real project that simply has not wired this loop
+  [ -d "$here/example" ] && return 0  # a bare directory: show the example rather than nothing
   return 1
 }
 
@@ -24,7 +31,7 @@ if [ -n "${LOOP_DOCS:-}" ]; then
 elif [ -f package.json ] && node -e 'const s=require("./package.json").scripts||{};process.exit(s["check-docs"]||s["check:docs"]?0:1)' 2>/dev/null; then
   cmd=$(node -e 'const s=require("./package.json").scripts||{};console.log(s["check-docs"]?"npm run --silent check-docs":"npm run --silent check:docs")')
 # 2. running inside the pack itself: use the worked example, which is a real repo
-elif [ "$PWD" = "$here" ] || in_pack_or_not_a_project; then
+elif [ "$PWD" = "$here" ] || demo_mode; then
   cd "$here/example" || { echo "example missing"; exit 2; }
   cmd="npm run --silent check-docs"
 else
