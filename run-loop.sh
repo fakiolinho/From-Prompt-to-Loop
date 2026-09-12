@@ -18,11 +18,11 @@ for a in "$@"; do
     --dry-run) MODE="dry" ;;
     --agent)   AGENT="__next__" ;;
     claude|codex) [ "$AGENT" = "__next__" ] && AGENT="$a" ;;
-    -h|--help) sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    -h|--help) sed -n '2,/^[^#]/s/^# \{0,1\}//p' "$0"; exit 0 ;;
     *)         [ -z "$LOOP" ] && LOOP="$a" ;;
   esac
 done
-[ -n "$LOOP" ] || { sed -n '2,11p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+[ -n "$LOOP" ] || { sed -n '2,/^[^#]/s/^# \{0,1\}//p' "$0"; exit 1; }
 
 # Accept 02, 2, or the full folder name
 dir=$(ls -d loops/"$(printf '%02d' "$((10#${LOOP%%-*}))" 2>/dev/null || echo "$LOOP")"-*/ 2>/dev/null | head -1)

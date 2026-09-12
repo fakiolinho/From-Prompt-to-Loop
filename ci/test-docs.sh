@@ -308,6 +308,26 @@ grep -q 'run-loop.sh' README.md && ok "README says it exists" || bad "README nev
 grep -q 'run-loop.sh' docs/04-your-first-loop.md && ok "the walkthrough uses it" \
   || bad "docs/04 never tells anyone they can run a loop without Actions"
 
+head2 "install.sh works on a real repo, and on a second run"
+T=$(mktemp -d); git -C "$T" init -q
+./install.sh "$T" 02 >/dev/null 2>&1 </dev/null && ok "a first install exits 0" \
+  || bad "install.sh fails on an empty git repo"
+[ -f "$T/loops/02-dependency-upgrades/check.sh" ] && [ -x "$T/run-loop.sh" ] && [ -f "$T/loops.env" ] \
+  && ok "it lands the loop, the runner and loops.env" || bad "install.sh left out the loop, run-loop.sh or loops.env"
+grep -q '\.\./\.\./\.\./\.\./' "$T/loops/02-dependency-upgrades/ORDERS.md" \
+  && bad "installed ORDERS.md still links above the user's repo" || ok "installed links point at GitHub"
+again=$(./install.sh "$T" 02 2>&1 </dev/null)
+printf '%s' "$again" | grep -qE 'differs|cmp:|diff:' \
+  && bad "a rerun thinks an untouched install has changed: $(printf '%s' "$again" | grep -E 'differs|cmp:|diff:' | head -1)" \
+  || ok "a rerun sees an untouched install as unchanged"
+[ -d "$T/loops/02-dependency-upgrades/02-dependency-upgrades" ] \
+  && bad "a rerun nested the loop inside itself" || ok "a rerun does not nest the loop folder"
+rm -rf "$T"
+for s in install.sh run-loop.sh; do
+  usage=$(./$s 2>&1 </dev/null)   # captured first: it exits 1, which pipefail would pass on
+  printf '%s' "$usage" | grep -q 'set -uo' && bad "$s usage prints its own source" || ok "$s usage is only the usage"
+done
+
 head2 "pushing markdown is enough"
 W=.github/workflows/build-site.yml
 [ -f "$W" ] && ok "build-site.yml exists" || bad "nothing rebuilds the site on push, so markdown edits never reach the page"
@@ -331,7 +351,7 @@ done
 grep -q 'not wired' docs/index.html && ok "the landing page explains exit 2" \
   || bad "the landing page never mentions the third answer a check can give"
 # the anatomy diagram has to show all three branches too
-grep -q 'NOT WIRED' docs/img/loop-anatomy.svg && ok "the anatomy diagram shows all three answers" \
+grep -qi 'not wired' docs/img/loop-anatomy.svg && ok "the anatomy diagram shows all three answers" \
   || bad "docs/img/loop-anatomy.svg still draws a check with only two branches"
 
 head2 "the published landing page is not stale"

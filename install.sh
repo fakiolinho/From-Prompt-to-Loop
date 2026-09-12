@@ -13,7 +13,7 @@ cd "$(dirname "$0")"
 HERE=$(pwd)
 
 TARGET="${1:-}"; shift 2>/dev/null || true
-[ -n "$TARGET" ] || { sed -n '2,12p' "$0" | sed 's/^# \{0,1\}//'; exit 1; }
+[ -n "$TARGET" ] || { sed -n '2,/^[^#]/s/^# \{0,1\}//p' "$0"; exit 1; }
 [ -d "$TARGET" ] || { echo "no such directory: $TARGET"; exit 1; }
 [ $# -gt 0 ] || { echo "name at least one loop (02) or a chapter (engineering)"; exit 1; }
 TARGET=$(cd "$TARGET" && pwd)
@@ -40,8 +40,10 @@ for arg in "$@"; do
   picks="$picks $found"
 done
 
+same() { if [ -d "$1" ]; then diff -rq "$1" "$2" >/dev/null 2>&1; else cmp -s "$1" "$2"; fi; }
+
 copy() { # copy src dst, never clobber your work without asking
-  if [ -e "$2" ] && ! cmp -s "$1" "$2"; then
+  if [ -e "$2" ] && ! same "$1" "$2"; then
     if [ -t 0 ]; then
       printf '  %s exists and differs. Overwrite? [y/N] ' "${2#$TARGET/}"
       read -r a || a=n
@@ -51,7 +53,10 @@ copy() { # copy src dst, never clobber your work without asking
       return
     fi
   fi
-  mkdir -p "$(dirname "$2")"; cp -R "$1" "$2"; echo "  ${2#$TARGET/}"
+  # cp -R into an existing folder would nest it (loops/02/02-...), so copy the contents
+  if [ -d "$1" ]; then mkdir -p "$2"; cp -R "$1/." "$2"
+  else mkdir -p "$(dirname "$2")"; cp "$1" "$2"; fi
+  echo "  ${2#$TARGET/}"
 }
 
 packs=$(for p in $picks; do echo "${p%%/*}"; done | sort -u)
@@ -94,12 +99,16 @@ relink() {
   sed -i.bak "s#PACKNAME#$2#g" "$f" && rm -f "$f.bak"
 }
 
+# Relink a staged copy before comparing, or a rerun sees every installed ORDERS.md as
+# changed and asks to overwrite a loop that is already exactly what we would install.
+STAGE=$(mktemp -d); trap 'rm -rf "$STAGE"' EXIT
 echo; echo "loops:"
 for p in $picks; do
   pack="${p%%/*}"; loop="${p#*/}"
-  copy "$HERE/loop-packs/$pack/loops/$loop" "$TARGET/loops/$loop"
+  cp -R "$HERE/loop-packs/$pack/loops/$loop" "$STAGE/$loop"
+  relink "$STAGE/$loop/ORDERS.md" "$pack"
+  copy "$STAGE/$loop" "$TARGET/loops/$loop"
   copy "$HERE/loop-packs/$pack/memory/$loop.md" "$TARGET/memory/$loop.md"
-  relink "$TARGET/loops/$loop/ORDERS.md" "$pack"
 done
 
 # loops.env: exactly the settings these loops read, with the example from each check
