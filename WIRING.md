@@ -38,7 +38,7 @@ Keep secrets out of it. Anything that needs an API key or a token goes in
 | Loop | Setting | Example |
 |---|---|---|
 | **1** docs and examples sync | `LOOP_DOCS` | `npm run test:examples` |
-| **2** dependency upgrades | `LOOP_VERIFY` | _no default_ |
+| **2** dependency upgrades | `LOOP_VERIFY` | `npm test && npm run build` |
 | **3** codemod and framework migrations | `MIGRATION` | `react-18-to-19` |
 |  | `LOOP_CODEMOD` | `npx jscodeshift -t ./codemods/foo.js src/` |
 | **4** test backfill on changed code | `BASE_REF` | _no default_ |

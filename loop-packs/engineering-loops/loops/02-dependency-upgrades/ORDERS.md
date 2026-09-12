@@ -6,7 +6,7 @@
 **Ships:** Ships on green. Opens a PR you can revert in one click, and merges once the check is green.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
 **The check:** `loops/02-dependency-upgrades/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
-**Needs:** `LOOP_VERIFY` in your `loops.env`. Without it the check exits 2 and this loop never runs. See [WIRING.md](../../../../WIRING.md).
+**Needs:** a `test` or `build` script in package.json, which the check uses as the verify command, `test` first. Set `LOOP_VERIFY` in your `loops.env` when that script alone does not prove a bump is safe (e.g. `npm test && npm run build`). With no script and no `LOOP_VERIFY` the check exits 2 and this loop never runs. See [WIRING.md](../../../../WIRING.md).
 
 ## Owns, and never touches
 - Owns:  package.json and the lockfile
@@ -18,16 +18,25 @@
   `@types/node` pins its latest tag to the current Node LTS, so on a repo running a newer
   major, "upgrading to latest" is a downgrade of two majors.
 - Never install a version lower than the one already installed, whatever npm calls latest.
-- Run the repo's verify command, the one the check named. The bump is done only when it is
-  green. If there is no verify command the check exits 2 and you never run at all.
-- Open one PR per batch on branch loop/02-dependency-upgrades. Reversible, ships on green.
+- Run the verify command the check named. The bump is done only when it is green.
+- Open one PR per batch on branch loop/02-dependency-upgrades, against the repository's
+  default branch. Reversible, ships on green.
+- Majors are not this loop's work. The check counts only what moves inside your ranges, so a
+  major never wakes you and you never bump one. If you see majors waiting, list them in the
+  PR description so a person can plan them.
 - The maintainer wrote the code and the world reviewed it. Your risk is integration, and the
   verify command is the only thing that catches it. It is worth exactly as much as that
   command is.
 
 ## When to stop and call a human
-- A major version bump. Open an issue with the changelog link and stop. Never auto bump a major.
-- Tests that will not go green after a bump. Revert that one dep, flag it, keep the rest.
+- An upgrade that will not install cleanly (a peer dependency or engine range) or will not go
+  green. Revert that one dep and keep the rest. Never force it past the conflict with
+  `--force` or `--legacy-peer-deps`, and never bump the thing blocking it. Open an issue
+  saying what blocks it, and ask for one of two fixes: lift the blocker, or park the package
+  with `LOOP_HOLD` in `loops.env` (e.g. `LOOP_HOLD='@opennextjs/cloudflare'`). Until one
+  happens the check keeps counting it, and every run wakes an agent to fail at the same thing.
+- No way to open a PR or an issue (no `gh`, or not signed in). Commit on the branch, do not
+  push, and say in your last message exactly what you would have opened.
 
 ## Memory
 - Read `memory/02-dependency-upgrades.md` at the start. Append one durable lesson at the end.

@@ -11,6 +11,7 @@ set -uo pipefail
 [ -f package.json ] || { echo "no package.json here. Run this from your project root"; exit 2; }
 
 # What proves a bump is safe here? Name your own with LOOP_VERIFY, else we look.
+# e.g. LOOP_VERIFY='npm test && npm run build'
 if [ -n "${LOOP_VERIFY:-}" ]; then
   verify="$LOOP_VERIFY"
 elif node -e 'process.exit(require("./package.json").scripts?.test?0:1)' 2>/dev/null; then
@@ -29,17 +30,27 @@ fi
 # newest release). Wanted is the honest column.
 # npm outdated exits non-zero when it finds anything, so swallow that here: a
 # non-zero exit from it is data, not an error.
+# An upgrade that cannot land (a peer pin, a build it breaks) would keep this check at
+# 1 forever, waking an agent every run to fail at the same thing. A person parks it by
+# name in LOOP_HOLD, space or comma separated, and it stops counting until they lift it.
+# Read with printenv: it is not wiring, so it has no place in the list of settings.
 outdated=$( { npm outdated --json 2>/dev/null || true; } )
-count=$(printf '%s' "$outdated" | node -e '
+result=$(printf '%s' "$outdated" | HOLD="$(printenv LOOP_HOLD || true)" node -e '
 let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{
   let d={};try{d=JSON.parse(s||"{}")}catch(e){}
-  console.log(Object.values(d).filter(p=>p.current&&p.wanted&&p.current!==p.wanted).length);
+  const hold=(process.env.HOLD||"").split(/[\s,]+/).filter(Boolean);
+  const up=Object.entries(d).filter(([,p])=>p.current&&p.wanted&&p.current!==p.wanted).map(([n])=>n);
+  const held=up.filter(n=>hold.includes(n));
+  console.log((up.length-held.length)+" "+held.join(","));
 })' 2>/dev/null)
-count=${count:-0}
+set -- $result
+count=${1:-0}; held=${2:-}
 
-if [ "${count:-0}" -eq 0 ]; then
+if [ "$count" -eq 0 ]; then
   echo "dependencies are current within their ranges. Verify command: $verify"
+  [ -n "$held" ] && echo "held back by LOOP_HOLD: $held"
   exit 0
 fi
 echo "$count dependency upgrade(s) available within range. Verify command: $verify"
+[ -n "$held" ] && echo "held back by LOOP_HOLD: $held"
 exit 1

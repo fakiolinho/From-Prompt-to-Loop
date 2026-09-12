@@ -56,10 +56,14 @@ open an issue; do not try a third time. Append one line to memory/$name.md. If t
 open a PR, use the single branch loop/$name and never open a second. If you cannot proceed \
 without guessing intent, open an issue and stop."
 
+# The agent you already have installed comes first: it carries your login, and npx
+# would stop in the middle of a run to ask whether to download a second copy.
 if [ "$AGENT" = "codex" ]; then
-  CMD=(npx @openai/codex exec --sandbox workspace-write "$PROMPT")
+  if command -v codex >/dev/null 2>&1; then BIN=(codex); else BIN=(npx --yes @openai/codex); fi
+  CMD=("${BIN[@]}" exec --sandbox workspace-write "$PROMPT")
 else
-  CMD=(npx @anthropic-ai/claude-code -p "$PROMPT"
+  if command -v claude >/dev/null 2>&1; then BIN=(claude); else BIN=(npx --yes @anthropic-ai/claude-code); fi
+  CMD=("${BIN[@]}" -p "$PROMPT"
        --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(npx:*),Bash(git:*),Bash(gh:*),Bash(bash loops/*/check.sh)"
        --max-turns 30 --max-budget-usd 2)
 fi
@@ -68,9 +72,9 @@ if [ "$MODE" = "dry" ]; then
   echo "There is work. This is what would run:"
   echo
   if [ "$AGENT" = "codex" ]; then
-    echo "  npx @openai/codex exec --sandbox workspace-write \\"
+    echo "  ${BIN[*]} exec --sandbox workspace-write \\"
   else
-    echo "  npx @anthropic-ai/claude-code -p \\"
+    echo "  ${BIN[*]} -p \\"
   fi
   printf '%s\n' "$PROMPT" | fold -s -w 76 | sed 's/^/      /'
   if [ "$AGENT" != "codex" ]; then
@@ -82,7 +86,15 @@ if [ "$MODE" = "dry" ]; then
   exit 1
 fi
 
-command -v npx >/dev/null 2>&1 || { echo "npx not found. Install Node 18 or newer."; exit 1; }
+if [ "${BIN[0]}" = "npx" ] && ! command -v npx >/dev/null 2>&1; then
+  echo "Neither $AGENT nor npx is installed. Install $AGENT, or Node 18 or newer."; exit 1
+fi
+# Most orders end in a PR or an issue. Say so now, not after the agent has spent the run.
+if ! command -v gh >/dev/null 2>&1; then
+  echo "Note: gh is not installed, so the agent can commit on a branch but cannot open a PR"
+  echo "or an issue. It will tell you what it would have opened. https://cli.github.com"
+  echo
+fi
 echo "There is work. Waking $AGENT, capped at 30 turns and 2 dollars."
 echo
 "${CMD[@]}"; arc=$?
