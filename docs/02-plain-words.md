@@ -43,6 +43,14 @@ lesson is one revert away.
 **Demo app.** `demo-app/` inside a chapter. A small project deliberately seeded with problems, so
 you can watch the checks find real work before you point one at your own code.
 
+**loops.env.** One file at your repo root holding the settings your loops read: the command
+that proves a bump is safe, the command that diffs your screenshots. `./install.sh` writes it
+with every setting your chosen loops need, commented out with an example. Commit it; these are
+commands, not secrets.
+
+**`run-loop.sh`.** Runs one loop on your machine, exactly as the workflow would: the check,
+then the agent only if there is work, then the check again. No secret and no schedule needed.
+
 **Dry run.** `DRY_RUN=1` in front of a cloud check. It runs against canned AWS responses in
 `mock/`, so you can try every cloud loop with no AWS account.
 

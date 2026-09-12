@@ -201,6 +201,11 @@ decide</strong> loop that a human babysits anyway. You pay the tokens and the sa
 running <code>claude -p</code> from CI are not always metered the same way. Do not assume your
 subscription covers a fleet.</p>
 </blockquote>
+<p>This cuts both ways, and the encouraging half is worth saying out loud. <code>./run-loop.sh</code> on your
+own machine uses the login your agent already has, so trying a loop costs you nothing you are
+not already paying. It is the unattended runs that need a key: a CI runner has no login, reads
+<code>ANTHROPIC_API_KEY</code> from your secrets, and that usage is metered per token. Prove a loop locally
+first. The bill only starts when you put it on a clock.</p>
 <h2>The brake, built before the loop</h2>
 <p>Every one of these is already in <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/.github/workflows/loop.yml">the chapter runner</a>. Keep them when you copy.</p>
 <table>

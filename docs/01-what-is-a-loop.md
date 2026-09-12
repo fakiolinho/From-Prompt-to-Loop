@@ -73,6 +73,7 @@ Nothing irreversible happens without a person. That is the whole reason you can 
 | | |
 |---|---|
 | **Run all four chapters now** | `./run-all-demos.sh` (1 minute, no setup) |
+| **Run one on your own repo** | `./install.sh ~/code/my-app 02` then `./run-loop.sh 02 --check` |
 | **Read a real loop's orders** | [loop 2, dependency upgrades](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) |
 | **Browse all 35** | [Engineering](../loop-packs/engineering-loops/LOOPS.md) · [Cloud](../loop-packs/cloud-loops/LOOPS.md) · [AI and ML](../loop-packs/ai-ml-loops/LOOPS.md) · [QA](../loop-packs/qa-loops/LOOPS.md) |
 

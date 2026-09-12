@@ -105,6 +105,12 @@ decide** loop that a human babysits anyway. You pay the tokens and the salary.
 > running `claude -p` from CI are not always metered the same way. Do not assume your
 > subscription covers a fleet.
 
+This cuts both ways, and the encouraging half is worth saying out loud. `./run-loop.sh` on your
+own machine uses the login your agent already has, so trying a loop costs you nothing you are
+not already paying. It is the unattended runs that need a key: a CI runner has no login, reads
+`ANTHROPIC_API_KEY` from your secrets, and that usage is metered per token. Prove a loop locally
+first. The bill only starts when you put it on a clock.
+
 ## The brake, built before the loop
 
 Every one of these is already in [the chapter runner](../loop-packs/engineering-loops/.github/workflows/loop.yml). Keep them when you copy.

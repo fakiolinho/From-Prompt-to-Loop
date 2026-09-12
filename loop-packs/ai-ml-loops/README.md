@@ -18,9 +18,27 @@ down to pass. The global rule lives in `CLAUDE.md` / `AGENTS.md`; each loop adds
 - **The orders** are split: global in `CLAUDE.md` / `AGENTS.md`, per loop in each `ORDERS.md`.
 
 ## Run any loop
-From the Actions tab, run **ai-ml-loop** with two inputs: the `loop` folder and the `agent`
+
+**On your machine first.** From this repo, pointed at yours:
+
+    ./install.sh ~/code/my-app 19      put the loop in your repo
+    cd ~/code/my-app
+    ./run-loop.sh 19 --check           is there work?
+    ./run-loop.sh 19                   hand it to the agent and watch
+
+`run-loop.sh` is the workflow, locally. It loads `loops.env`, runs the check, wakes the agent
+only if the answer is 1, and runs the check again afterwards so nothing marks its own work. No
+secret, no schedule, nothing committed. If you are signed in to Claude Code, a subscription
+included, there is nothing to buy.
+
+**Then on a clock.** From the Actions tab, run **ai-ml-loop** with the `loop` folder and the `agent`
 (`claude` or `codex`). The runner checks first; nothing to do, it ends green and spends nothing.
-Work to do, it wakes the chosen agent, fenced and capped.
+Work to do, it wakes the chosen agent, fenced and capped. A CI runner has no login, so that path
+needs `ANTHROPIC_API_KEY` in your repo secrets.
+
+A loop that needs a setting says so and exits 2. Settings live in `loops.env`; the full list is
+in [WIRING.md](../../WIRING.md).
+
 
 ## The worked example
 Loop 19 ships a full runnable eval harness in `loops/19-eval-suite-on-prompt-or-model-change/example`.

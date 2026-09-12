@@ -33,6 +33,11 @@ real eval set and a baseline. Run `bash loops/19-eval-suite-on-prompt-or-model-c
 and it works offline today, blocking on any accuracy regression. The other seven are orders and
 a check, ready to wire into your stack. Loop 25 is the same harness pointed at adversarial cases.
 
+Anything in the **To run it here** column that names a `LOOP_*` setting goes in your repo's
+`loops.env`, which `./install.sh` writes for you. [WIRING.md](../../WIRING.md) is the full
+reference. A loop whose setting is missing exits 2 and says what it wanted; it never guesses
+and never wakes an agent.
+
 ## Where these tags come from
 
 The two tags and the star on this page are the field guide's own, taken from the catalog on pages

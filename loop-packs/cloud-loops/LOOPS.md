@@ -39,6 +39,11 @@ result. Each keeps a plain-CLI fallback, so the loop runs with or without the ag
 SETUP.md and then a loop against your own account, about 20 minutes per loop. That is the
 "tested against real AWS" stamp, and it is yours to earn, not something to take on faith.
 
+Anything in the **To run it here** column that names a `LOOP_*` setting goes in your repo's
+`loops.env`, which `./install.sh` writes for you. [WIRING.md](../../WIRING.md) is the full
+reference. A loop whose setting is missing exits 2 and says what it wanted; it never guesses
+and never wakes an agent.
+
 ## Where these tags come from
 
 The two tags and the star on this page are the field guide's own, taken from the catalog on pages

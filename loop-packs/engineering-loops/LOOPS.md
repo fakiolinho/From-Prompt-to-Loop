@@ -30,6 +30,11 @@ Loop 1 is the worked example: its `example/` folder is a complete, runnable docs
 (its own source, check, memory, and standalone workflow). Run `bash loops/01-docs-and-examples-sync/check.sh`
 and it works offline today. The other eight are orders and a check, ready to wire into your repo.
 
+Anything in the **To run it here** column that names a `LOOP_*` setting goes in your repo's
+`loops.env`, which `./install.sh` writes for you. [WIRING.md](../../WIRING.md) is the full
+reference. A loop whose setting is missing exits 2 and says what it wanted; it never guesses
+and never wakes an agent.
+
 ## Where these tags come from
 
 The two tags and the star on this page are the field guide's own, taken from the catalog on pages

@@ -2,6 +2,13 @@
 
 # Preliminary AWS setup
 
+## Getting the pack into your repo
+
+    ./install.sh ~/code/my-infra cloud
+
+That brings the loops, the standing orders, the runner, `lib/aws.sh` and a `loops.env`. Then
+everything below wires it to an account. Nothing here touches AWS until you finish step 4.
+
 ## Try it locally first, no AWS account
 Every loop in this pack runs offline against canned outputs, so you can see what each one detects
 before wiring any AWS. Set `DRY_RUN=1`:
@@ -101,6 +108,9 @@ pins `environment: cloud-loops`, so **every** cloud run pauses for human approva
 ## You are ready
 Run any loop from the Actions tab: pick the `loop` folder and the `agent`. The runner assumes
 the scoped role, runs the check, and only wakes the agent if there is work.
+
+Locally, `./run-loop.sh 15 --check` does the same thing without Actions. With no credentials it
+exits 2 and says so, which is the honest answer rather than a wasted agent run.
 
 ---
 

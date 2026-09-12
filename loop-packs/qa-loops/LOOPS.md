@@ -34,6 +34,11 @@ flags the unstable one, and refuses to call the suite green. Run
 `bash loops/28-flaky-test-detection-and-quarantine/check.sh` and it works offline today. The
 other eight are orders and a check, ready to wire into your test stack.
 
+Anything in the **To run it here** column that names a `LOOP_*` setting goes in your repo's
+`loops.env`, which `./install.sh` writes for you. [WIRING.md](../../WIRING.md) is the full
+reference. A loop whose setting is missing exits 2 and says what it wanted; it never guesses
+and never wakes an agent.
+
 ## Where these tags come from
 
 The two tags and the star on this page are the field guide's own, taken from the catalog on pages

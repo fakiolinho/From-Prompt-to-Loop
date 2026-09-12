@@ -60,6 +60,17 @@ run right now:
 | **[19](../loop-packs/ai-ml-loops/loops/19-eval-suite-on-prompt-or-model-change/ORDERS.md)** eval suite | scores a classifier against an eval set, blocks on a regression | `cd loop-packs/ai-ml-loops/loops/19-*/example && node run-evals.js` |
 | **[28](../loop-packs/qa-loops/loops/28-flaky-test-detection-and-quarantine/ORDERS.md)** flaky test detector | runs each test 20 times, catches the unstable one | `cd loop-packs/qa-loops/loops/28-*/example && node detect-flaky.js` |
 
+## Then put one in your own repo
+
+The demos run against seeded data. The point is your repo:
+
+    ./install.sh ~/code/my-app 02      put loop 2 in your project
+    cd ~/code/my-app
+    ./run-loop.sh 02 --check           is there work here?
+
+That second command is the whole idea in one line. [Your first loop](04-your-first-loop.md)
+walks the rest.
+
 ## If it will not run
 
 | What you see | What to do |

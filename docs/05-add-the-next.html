@@ -132,8 +132,13 @@ trivially reversible.</p>
 </tr>
 </tbody>
 </table>
-<p>Same four steps as <a href="04-your-first-loop.html">your first loop</a>. Copy the loop folder and its memory
-file, set the <code>loop</code> input, run it. The runner and the secret are already there.</p>
+<p>One command each, and the runner and the secret are already there:</p>
+<pre><code>./install.sh ~/code/my-app 06
+./install.sh ~/code/my-app 07
+</code></pre>
+<p>Then <code>./run-loop.sh 06 --check</code> in your repo. Run it again with more loop numbers whenever you
+want another; it never overwrites your work without asking, and it adds only the settings the
+new loops need to your existing <code>loops.env</code>.</p>
 <h2>Then adopt a whole chapter</h2>
 <p>Once three loops feel boring, take a chapter. Pick the one that matches the pain you actually
 have.</p>

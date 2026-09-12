@@ -17,21 +17,26 @@ Swap the agent, keep everything else. Claude reads `CLAUDE.md`; Codex reads `AGE
 
 ## Run any loop
 
-From the Actions tab, run **engineering-loop** with two inputs: the `loop` folder and the
-`agent` (`claude` or `codex`). The runner checks first; if there is nothing to do it ends
-green and spends nothing. If there is work, it wakes the chosen agent, fenced and capped.
+**On your machine first.** From this repo, pointed at yours:
 
-Locally, the same shape:
+    ./install.sh ~/code/my-app 02      put the loop in your repo
+    cd ~/code/my-app
+    ./run-loop.sh 02 --check           is there work?
+    ./run-loop.sh 02                   hand it to the agent and watch
 
-    # is there work?
-    bash loops/06-lint-format-and-type-fixes/check.sh
+`run-loop.sh` is the workflow, locally. It loads `loops.env`, runs the check, wakes the agent
+only if the answer is 1, and runs the check again afterwards so nothing marks its own work. No
+secret, no schedule, nothing committed. If you are signed in to Claude Code, a subscription
+included, there is nothing to buy.
 
-    # if it exits non-zero, hand the loop to an agent
-    npx @anthropic-ai/claude-code -p "Read CLAUDE.md and loops/06-lint-format-and-type-fixes/ORDERS.md. Do exactly what the orders say. Run the check until it exits 0. Open a PR on loop/06-lint-format-and-type-fixes." \
-      --allowedTools "Read,Edit,Bash(npm:*),Bash(npx:*),Bash(git:*),Bash(gh:*)" --max-turns 30 --max-budget-usd 2
+**Then on a clock.** From the Actions tab, run **engineering-loop** with two inputs: the `loop` folder and
+the `agent` (`claude` or `codex`). The runner checks first; nothing to do and it ends green,
+spending nothing. Work to do and it wakes the chosen agent, fenced and capped. A CI runner has
+no login, so that path needs `ANTHROPIC_API_KEY` in your repo secrets.
 
-    # or Codex, same orders
-    npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and loops/06-lint-format-and-type-fixes/ORDERS.md ..."
+A loop that needs a setting says so and exits 2. Settings live in `loops.env`; the full list is
+in [WIRING.md](../../WIRING.md).
+
 
 ## What keeps every loop safe
 - **Gated:** the agent only runs when the check says there is work. Green nights cost nothing.

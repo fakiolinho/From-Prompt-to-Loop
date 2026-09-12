@@ -24,8 +24,31 @@ services each loop reads, optionally turn on the agents, and create the protecte
 environment so irreversible loops pause for human approval.
 
 ## Run any loop
-From the Actions tab, run **cloud-loop** with the `loop` folder and the `agent`. The runner
-assumes the scoped role, runs the AWS CLI check, and only wakes the agent if there is work.
+
+**On your machine first.** From this repo, pointed at yours:
+
+    ./install.sh ~/code/my-app 15      put the loop in your repo
+    cd ~/code/my-app
+    ./run-loop.sh 15 --check           is there work?
+    ./run-loop.sh 15                   hand it to the agent and watch
+
+`run-loop.sh` is the workflow, locally. It loads `loops.env`, runs the check, wakes the agent
+only if the answer is 1, and runs the check again afterwards so nothing marks its own work. No
+secret, no schedule, nothing committed. If you are signed in to Claude Code, a subscription
+included, there is nothing to buy.
+
+**Then on a clock.** From the Actions tab, run **cloud-loop** with the `loop` folder and the `agent`
+(`claude` or `codex`). The runner checks first; nothing to do, it ends green and spends nothing.
+Work to do, it wakes the chosen agent, fenced and capped. A CI runner has no login, so that path
+needs `ANTHROPIC_API_KEY` in your repo secrets.
+
+A loop that needs a setting says so and exits 2. Settings live in `loops.env`; the full list is
+in [WIRING.md](../../WIRING.md).
+
+**The cloud chapter is different.** These act on an AWS account, not a repo. Try every
+one offline first with `DRY_RUN=1`, and read [SETUP.md](SETUP.md) before you point any
+of them at a live account.
+
 
 ## What keeps every loop safe
 - **No keys:** the runner signs in with short lived OIDC credentials, scoped to this repo.

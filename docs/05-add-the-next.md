@@ -16,8 +16,14 @@ trivially reversible.
 | 2nd | **6** lint, format, and type fixes | Pure busywork. The tools decide what is right, not the agent. |
 | 3rd | **7** release notes and changelog | It writes prose from your commit log. Nothing executable changes. |
 
-Same four steps as [your first loop](04-your-first-loop.md). Copy the loop folder and its memory
-file, set the `loop` input, run it. The runner and the secret are already there.
+One command each, and the runner and the secret are already there:
+
+    ./install.sh ~/code/my-app 06
+    ./install.sh ~/code/my-app 07
+
+Then `./run-loop.sh 06 --check` in your repo. Run it again with more loop numbers whenever you
+want another; it never overwrites your work without asking, and it adds only the settings the
+new loops need to your existing `loops.env`.
 
 ## Then adopt a whole chapter
 
