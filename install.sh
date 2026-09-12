@@ -59,14 +59,36 @@ copy() { # copy src dst, never clobber your work without asking
   echo "  ${2#$TARGET/}"
 }
 
+# Your CLAUDE.md and AGENTS.md describe your project, and an agent reads them every run.
+# The loops' standing orders go in as a marked section of their own, so installing never
+# replaces your instructions, and a rerun refreshes only the section between the markers.
+BEGIN_MARK="<!-- from-prompt-to-loop: begin -->"
+END_MARK="<!-- from-prompt-to-loop: end -->"
+merge_rules() { # merge_rules src dst
+  rel="${2#$TARGET/}"
+  if [ ! -e "$2" ] || same "$1" "$2"; then
+    { echo "$BEGIN_MARK"; cat "$1"; echo "$END_MARK"; } > "$2"
+    echo "  $rel"
+  elif grep -qF "$BEGIN_MARK" "$2"; then
+    awk -v b="$BEGIN_MARK" -v e="$END_MARK" -v src="$1" '
+      $0 == b { print; while ((getline l < src) > 0) print l; skip = 1; next }
+      skip && $0 == e { skip = 0 }
+      !skip { print }' "$2" > "$2.tmp" && mv "$2.tmp" "$2"
+    echo "  $rel (loop section refreshed, the rest is yours and untouched)"
+  else
+    { echo; echo "$BEGIN_MARK"; cat "$1"; echo "$END_MARK"; } >> "$2"
+    echo "  $rel (loop section added at the end, your content untouched)"
+  fi
+}
+
 packs=$(for p in $picks; do echo "${p%%/*}"; done | sort -u)
 primary=$(echo $picks | awk '{print $1}' | cut -d/ -f1)
 extra=$(echo "$packs" | grep -v "^$primary$" || true)
 
 echo "Installing into $TARGET"
 echo; echo "shared files, from $primary:"
-copy "$HERE/loop-packs/$primary/CLAUDE.md"  "$TARGET/CLAUDE.md"
-copy "$HERE/loop-packs/$primary/AGENTS.md"  "$TARGET/AGENTS.md"
+merge_rules "$HERE/loop-packs/$primary/CLAUDE.md" "$TARGET/CLAUDE.md"
+merge_rules "$HERE/loop-packs/$primary/AGENTS.md" "$TARGET/AGENTS.md"
 copy "$HERE/loop-packs/$primary/.github/workflows/loop.yml" "$TARGET/.github/workflows/loop.yml"
 copy "$HERE/loop-packs/$primary/.github/PULL_REQUEST_TEMPLATE.md" "$TARGET/.github/PULL_REQUEST_TEMPLATE.md"
 [ -d "$HERE/loop-packs/$primary/lib" ] && copy "$HERE/loop-packs/$primary/lib" "$TARGET/lib"
@@ -108,7 +130,12 @@ for p in $picks; do
   cp -R "$HERE/loop-packs/$pack/loops/$loop" "$STAGE/$loop"
   relink "$STAGE/$loop/ORDERS.md" "$pack"
   copy "$STAGE/$loop" "$TARGET/loops/$loop"
-  copy "$HERE/loop-packs/$pack/memory/$loop.md" "$TARGET/memory/$loop.md"
+  # Memory is what the loop learned in your repo. Seed it once, never offer to replace it.
+  if [ -e "$TARGET/memory/$loop.md" ]; then
+    echo "  memory/$loop.md kept, it holds what this loop has learned here"
+  else
+    copy "$HERE/loop-packs/$pack/memory/$loop.md" "$TARGET/memory/$loop.md"
+  fi
 done
 
 # loops.env: exactly the settings these loops read, with the example from each check
@@ -167,7 +194,7 @@ commented out with an example. WIRING.md has the full reference.
 
 When you want it running without you, three more things:
 
-  1. Commit loops.env and the loops/ folder.
+  1. Commit loops.env, the loops/ folder and memory/.
   2. Add ANTHROPIC_API_KEY (or OPENAI_API_KEY) in
      Settings > Secrets and variables > Actions.
   3. Settings > Actions > General > Workflow permissions:

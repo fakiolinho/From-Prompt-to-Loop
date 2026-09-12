@@ -310,16 +310,29 @@ grep -q 'run-loop.sh' docs/04-your-first-loop.md && ok "the walkthrough uses it"
 
 head2 "install.sh works on a real repo, and on a second run"
 T=$(mktemp -d); git -C "$T" init -q
+printf '# My project\n\nRun nvm use first.\n' > "$T/CLAUDE.md"
 ./install.sh "$T" 02 >/dev/null 2>&1 </dev/null && ok "a first install exits 0" \
   || bad "install.sh fails on an empty git repo"
 [ -f "$T/loops/02-dependency-upgrades/check.sh" ] && [ -x "$T/run-loop.sh" ] && [ -f "$T/loops.env" ] \
   && ok "it lands the loop, the runner and loops.env" || bad "install.sh left out the loop, run-loop.sh or loops.env"
 grep -q '\.\./\.\./\.\./\.\./' "$T/loops/02-dependency-upgrades/ORDERS.md" \
   && bad "installed ORDERS.md still links above the user's repo" || ok "installed links point at GitHub"
+echo "- a lesson the loop wrote on a real run" >> "$T/memory/02-dependency-upgrades.md"
 again=$(./install.sh "$T" 02 2>&1 </dev/null)
+grep -q "lesson the loop wrote" "$T/memory/02-dependency-upgrades.md" \
+  && ok "a rerun keeps what the loop learned" || bad "a rerun replaced the loop's memory with the blank template"
+printf '%s' "$again" | grep -q 'memory/02-dependency-upgrades.md exists and differs' \
+  && bad "a rerun offers to overwrite memory, and one wrong keypress loses it" \
+  || ok "a rerun never offers to overwrite memory"
 printf '%s' "$again" | grep -qE 'differs|cmp:|diff:' \
   && bad "a rerun thinks an untouched install has changed: $(printf '%s' "$again" | grep -E 'differs|cmp:|diff:' | head -1)" \
   || ok "a rerun sees an untouched install as unchanged"
+grep -q 'Run nvm use first' "$T/CLAUDE.md" && ok "the project's own CLAUDE.md survives the install" \
+  || bad "install.sh replaced the project's CLAUDE.md, and every agent run loses the project's own rules"
+grep -q 'Global standing orders' "$T/CLAUDE.md" && ok "the loops' standing orders are added to it" \
+  || bad "the project's CLAUDE.md never got the loops' standing orders"
+[ "$(grep -c 'from-prompt-to-loop: begin' "$T/CLAUDE.md")" = 1 ] && ok "a rerun refreshes that section, not a second copy" \
+  || bad "a rerun added the standing orders to CLAUDE.md more than once"
 [ -d "$T/loops/02-dependency-upgrades/02-dependency-upgrades" ] \
   && bad "a rerun nested the loop inside itself" || ok "a rerun does not nest the loop folder"
 rm -rf "$T"
