@@ -165,6 +165,20 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "the published landing page is not stale"
+# docs/index.html is generated from the catalog and each chapter's LOOPS.md. If a loop
+# changes and nobody regenerates, the page GitHub Pages serves starts lying.
+cp docs/index.html /tmp/site-committed.$$ 2>/dev/null
+python3 ci/build-site.py >/dev/null 2>&1
+if diff -q /tmp/site-committed.$$ docs/index.html >/dev/null 2>&1; then
+  ok "docs/index.html matches the repo"
+else
+  bad "docs/index.html is stale. Run: python3 ci/build-site.py, then commit it"
+fi
+rm -f /tmp/site-committed.$$
+[ -f docs/.nojekyll ] && ok "docs/.nojekyll present, Pages serves the page as written" \
+  || bad "docs/.nojekyll missing, GitHub Pages would try to run Jekyll over the markdown"
+
 head2 "the guide has all eight pages, in order"
 for n in 00-start-here 01-what-is-a-loop 02-plain-words 03-run-the-demos \
          04-your-first-loop 05-add-the-next 06-operating 07-where-these-fit; do

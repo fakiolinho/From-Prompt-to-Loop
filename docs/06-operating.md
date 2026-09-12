@@ -37,8 +37,7 @@ So every chapter's runner has two jobs. The first one wakes the agent and lets i
 second one takes the branch it produced, on a clean machine that agent never touched, and runs
 the check again with no agent in the room.
 
-    run      the maker.   wakes the agent, it works, it opens a PR
-    verify   the checker. clean clone, runs check.sh again, no agent
+![Two jobs: the maker, then an independent checker](img/maker-checker.svg)
 
 The second job costs pennies and takes a minute. What you buy with it is the difference between
 "the agent says it is green" and "it is green". That is the sentence you need before you stop
@@ -84,7 +83,7 @@ decide** loop that a human babysits anyway. You pay the tokens and the salary.
 
 ## The brake, built before the loop
 
-Every one of these is already in the workflows here. Keep them when you copy.
+Every one of these is already in [the chapter runner](../loop-packs/engineering-loops/.github/workflows/loop.yml). Keep them when you copy.
 
 | Brake | Where it is |
 |---|---|
@@ -138,3 +137,5 @@ A loop with no memory repeats yesterday. A loop with unread memory repeats yeste
 ---
 
 [← Add the next one](05-add-the-next.md) · [Contents](../README.md) · [Next: Where these fit →](07-where-these-fit.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)

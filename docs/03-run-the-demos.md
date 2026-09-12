@@ -56,9 +56,9 @@ run right now:
 
 | Loop | What it does | Run it |
 |---|---|---|
-| **1** docs and examples sync | rewrites drifted docs, runs every example to prove it works | `bash loop-packs/engineering-loops/loops/01-docs-and-examples-sync/check.sh` |
-| **19** eval suite | scores a classifier against an eval set, blocks on a regression | `cd loop-packs/ai-ml-loops/loops/19-*/example && node run-evals.js` |
-| **28** flaky test detector | runs each test 20 times, catches the unstable one | `cd loop-packs/qa-loops/loops/28-*/example && node detect-flaky.js` |
+| **[1](../loop-packs/engineering-loops/loops/01-docs-and-examples-sync/ORDERS.md)** docs and examples sync | rewrites drifted docs, runs every example to prove it works | `bash loop-packs/engineering-loops/loops/01-docs-and-examples-sync/check.sh` |
+| **[19](../loop-packs/ai-ml-loops/loops/19-eval-suite-on-prompt-or-model-change/ORDERS.md)** eval suite | scores a classifier against an eval set, blocks on a regression | `cd loop-packs/ai-ml-loops/loops/19-*/example && node run-evals.js` |
+| **[28](../loop-packs/qa-loops/loops/28-flaky-test-detection-and-quarantine/ORDERS.md)** flaky test detector | runs each test 20 times, catches the unstable one | `cd loop-packs/qa-loops/loops/28-*/example && node detect-flaky.js` |
 
 ## If it will not run
 
@@ -73,3 +73,5 @@ run right now:
 ---
 
 [← Plain words](02-plain-words.md) · [Contents](../README.md) · [Next: Your first loop →](04-your-first-loop.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)

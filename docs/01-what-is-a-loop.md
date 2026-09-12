@@ -3,36 +3,15 @@
 Five parts. Every loop in this repo is this shape, whatever the job. Change the trigger and the
 check; the rest stays the same.
 
-    1. TRIGGER    something wakes it up
-                  a push, a merge, 2am, an alert, a new issue
-                       |
-                       v
-    2. CHECK      is there work?            <-- the part everyone skips
-                  one honest pass or fail the agent can run on itself
-                       |
-           +-----------+-----------+
-           |                       |
-      nothing to do            there is work
-      exit. costs nothing.     wake the agent
-                                   |
-                                   v
-    3. AGENT      it does the job, fenced
-                  reads the orders, works, checks itself, retries within a ceiling
-                       |
-                       v
-    4. GATE       ships on green, or flags and waits
-                  reversible: open a PR. irreversible: a human owns the button
-                       |
-                       v
-    5. MEMORY     it writes down what it learned
-                  the runner is destroyed. the lesson survives, in the repo.
+![The five parts of a loop](img/loop-anatomy.svg)
 
 > Miss the check and you have an expensive cron job. Miss the gate and you have a liability.
 
 ## Where each part lives in this repo
 
-Open any loop folder, say `loop-packs/engineering-loops/loops/02-dependency-upgrades/`, and you
-will find the same two files every time.
+Open any loop folder, say
+[`engineering-loops/loops/02-dependency-upgrades/`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md),
+and you will find the same two files every time.
 
 | Part | The file | What it is |
 |---|---|---|
@@ -75,6 +54,17 @@ work or because the action cannot be taken back. Code review, IAM audit, visual 
 
 Nothing irreversible happens without a person. That is the whole reason you can walk away.
 
+---
+
+## Enough reading. Go look at one.
+
+| | |
+|---|---|
+| **Run all four chapters now** | `./run-all-demos.sh` (1 minute, no setup) |
+| **Read a real loop's orders** | [loop 2, dependency upgrades](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) |
+| **Browse all 35** | [Chapter 1](../loop-packs/engineering-loops/LOOPS.md) · [Chapter 2](../loop-packs/cloud-loops/LOOPS.md) · [Chapter 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Chapter 4](../loop-packs/qa-loops/LOOPS.md) |
+
+
 ## Is your idea actually a loop?
 
 Before you build one of your own, the guide has a five question test (page 19). The short form:
@@ -84,3 +74,5 @@ tool already doing it? Four yeses buy you the right to walk away.
 ---
 
 [← Read this first](00-start-here.md) · [Contents](../README.md) · [Next: Plain words →](02-plain-words.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)

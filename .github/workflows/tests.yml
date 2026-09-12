@@ -63,6 +63,12 @@ jobs:
       - name: The pack workflows parse and are wired correctly
         if: always()
         run: python3 ci/check-workflows.py
+      - name: The published landing page is current
+        if: always()
+        run: |
+          python3 ci/build-site.py
+          git diff --exit-code -- docs/index.html \
+            || { echo "::error::docs/index.html is stale. Run python3 ci/build-site.py and commit."; exit 1; }
 
   demos:
     name: run-all-demos

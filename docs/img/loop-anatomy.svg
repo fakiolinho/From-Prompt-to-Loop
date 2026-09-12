@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" width="760" height="600" role="img" aria-label="The five parts of a loop: a trigger wakes it, a check asks if there is work, exit 0 ends the run for free, exit 1 wakes the agent, a gate decides whether it ships or flags for you, and memory records what it learned.">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#10b981"/>
+    </marker>
+    <style>
+      .t  { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .h  { font-size: 19px; font-weight: 700; fill: #fff; letter-spacing: .02em; }
+      .s  { font-size: 14px; fill: #e8eaf0; }
+      .n  { font-size: 13px; fill: #94a3b8; }
+      .nb { font-size: 14px; font-weight: 700; fill: #94a3b8; }
+      .num{ font-size: 13px; font-weight: 700; fill: #fff; opacity: .7; }
+    </style>
+  </defs>
+
+  <!-- 1 TRIGGER -->
+  <rect x="300" y="14" width="260" height="62" rx="12" fill="#6366f1"/>
+  <text class="t num" x="318" y="38">1</text>
+  <text class="t h"   x="336" y="40">TRIGGER</text>
+  <text class="t s"   x="336" y="61">a push, 2am, an alert</text>
+  <line x1="430" y1="76" x2="430" y2="110" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 2 CHECK -->
+  <rect x="272" y="112" width="316" height="78" rx="12" fill="#f59e0b"/>
+  <text class="t num" x="290" y="140">2</text>
+  <text class="t h"   x="308" y="142">CHECK</text>
+  <text class="t s"   x="308" y="165" style="fill:#3b2a05; font-weight:600">Is there work? One honest pass or fail.</text>
+  <text class="t n"   x="596" y="145" style="fill:#f59e0b; font-weight:700">the part</text>
+  <text class="t n"   x="596" y="162" style="fill:#f59e0b; font-weight:700">everyone skips</text>
+
+  <!-- branch -->
+  <path d="M430,190 L430,210 L150,210 L150,246" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#ag)"/>
+  <path d="M430,190 L430,246" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+  <text class="t nb" x="196" y="203" style="fill:#10b981">exit 0</text>
+  <text class="t nb" x="444" y="228">exit 1</text>
+
+  <!-- dead end: nothing to do -->
+  <rect x="24" y="248" width="252" height="80" rx="12" fill="#10b981"/>
+  <text class="t h" x="44" y="280" style="font-size:17px">NOTHING TO DO</text>
+  <text class="t s" x="44" y="303" style="fill:#04301f; font-weight:600">The run ends here.</text>
+  <text class="t s" x="44" y="320" style="fill:#04301f; font-weight:600">No agent. You spend nothing.</text>
+
+  <!-- 3 AGENT -->
+  <rect x="300" y="248" width="260" height="78" rx="12" fill="#3b82f6"/>
+  <text class="t num" x="318" y="274">3</text>
+  <text class="t h"   x="336" y="276">AGENT</text>
+  <text class="t s"   x="336" y="298">It does the job, fenced.</text>
+  <text class="t s"   x="336" y="316">Capped turns. Capped spend.</text>
+  <line x1="430" y1="326" x2="430" y2="360" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 4 GATE -->
+  <rect x="248" y="362" width="364" height="98" rx="12" fill="#8b5cf6"/>
+  <text class="t num" x="266" y="388">4</text>
+  <text class="t h"   x="284" y="390">GATE</text>
+  <rect x="266" y="402" width="160" height="44" rx="8" fill="#ffffff" fill-opacity=".16"/>
+  <text class="t s" x="280" y="421" style="font-weight:700">Ships on green</text>
+  <text class="t n" x="280" y="438" style="fill:#e8dcff">reversible. Opens a PR.</text>
+  <rect x="436" y="402" width="160" height="44" rx="8" fill="#ffffff" fill-opacity=".16"/>
+  <text class="t s" x="450" y="421" style="font-weight:700">Flags, you decide</text>
+  <text class="t n" x="450" y="438" style="fill:#e8dcff">a human owns it.</text>
+  <line x1="430" y1="460" x2="430" y2="494" stroke="#94a3b8" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- 5 MEMORY -->
+  <rect x="300" y="496" width="260" height="72" rx="12" fill="#64748b"/>
+  <text class="t num" x="318" y="522">5</text>
+  <text class="t h"   x="336" y="524">MEMORY</text>
+  <text class="t s"   x="336" y="546">It writes down what it learned,</text>
+  <text class="t s"   x="336" y="562">so tomorrow is not today again.</text>
+
+  <text class="t n" x="24" y="588" style="font-style:italic; fill:#a8b3c2">Miss the check and you have an expensive cron job. Miss the gate and you have a liability.</text>
+</svg>

@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From Prompt to Loop &middot; 35 runnable loops</title>
+<meta name="description" content="Thirty five loops that keep a product alive after it ships. Runnable on Claude Code or Codex. One command to see them all working.">
+<meta property="og:title" content="From Prompt to Loop &middot; 35 runnable loops">
+<meta property="og:description" content="Thirty five loops that keep a product alive after it ships. One command to watch them find real work.">
+<meta property="og:type" content="website">
+<style>
+  :root {
+    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
+    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6; --blue:#3b82f6;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1000px; margin:0 auto; padding:0 20px; }
+  a { color:inherit; }
+
+  header { padding:64px 0 40px; border-bottom:1px solid var(--line); }
+  h1 { font-size:clamp(30px,5vw,46px); line-height:1.12; margin:0 0 14px; letter-spacing:-.02em; }
+  h1 small { display:block; font-size:15px; font-weight:600; color:var(--amber);
+    letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; }
+  .lede { font-size:19px; color:var(--dim); max-width:62ch; margin:0 0 30px; }
+
+  .run { background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:18px 20px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+  .run code { font-family:var(--mono); font-size:15px; color:var(--green); }
+  .run .step { color:var(--dim); font-size:13px; }
+  button.copy { margin-left:auto; background:var(--green); color:#04301f; border:0;
+    border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer; font-size:14px; }
+  button.copy:hover { filter:brightness(1.08); }
+
+  .cta { display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
+  .cta a { text-decoration:none; border:1px solid var(--line); border-radius:9px;
+    padding:11px 18px; font-weight:600; font-size:15px; background:var(--panel); }
+  .cta a.primary { background:var(--violet); border-color:var(--violet); }
+  .cta a:hover { border-color:var(--dim); }
+
+  section { padding:52px 0; border-bottom:1px solid var(--line); }
+  h2 { font-size:24px; margin:0 0 8px; letter-spacing:-.01em; }
+  .sub { color:var(--dim); margin:0 0 24px; max-width:66ch; }
+
+  pre.demo { background:#05070b; border:1px solid var(--line); border-radius:12px;
+    padding:20px; overflow-x:auto; font-family:var(--mono); font-size:13px;
+    line-height:1.55; color:#c7d0de; margin:0; }
+
+  .filters { display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px; }
+  .pill { background:var(--panel); color:var(--dim); border:1px solid var(--line);
+    border-radius:999px; padding:7px 14px; font-size:13.5px; cursor:pointer; font-weight:600; }
+  .pill[aria-pressed="true"] { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  input.search { flex:1; min-width:190px; background:var(--panel); border:1px solid var(--line);
+    border-radius:999px; padding:8px 16px; color:var(--ink); font-size:14px; }
+
+  .loop { display:flex; gap:14px; align-items:flex-start; text-decoration:none;
+    padding:13px 15px; border:1px solid var(--line); border-radius:10px;
+    background:var(--panel); margin-bottom:8px; }
+  .loop:hover { border-color:var(--dim); }
+  .loop .num { font-family:var(--mono); font-size:13px; color:var(--dim);
+    min-width:26px; padding-top:2px; }
+  .loop .body { flex:1; min-width:0; }
+  .loop .name { display:block; font-weight:650; }
+  .loop .looks { display:block; color:var(--dim); font-size:13.5px; }
+  .star { color:var(--amber); margin-left:7px; }
+  .ready { margin-left:8px; font-size:11px; font-weight:700; letter-spacing:.05em;
+    text-transform:uppercase; color:var(--green); border:1px solid var(--green);
+    border-radius:4px; padding:1px 5px; vertical-align:1px; }
+  .tag { font-size:12px; font-weight:700; white-space:nowrap; padding-top:3px; }
+  .tag.ships { color:var(--green); }
+  .tag.flags { color:var(--violet); }
+  .count { color:var(--dim); font-size:13.5px; margin:14px 0 0; }
+
+  footer { padding:40px 0 70px; color:var(--dim); font-size:14.5px; }
+  footer a { color:var(--ink); }
+  @media (max-width:620px) {
+    .loop { flex-wrap:wrap; } .tag { padding-top:0; }
+  }
+</style>
+</head>
+<body>
+
+<header><div class="wrap">
+  <h1><small>The Warship CTO</small>From Prompt to Loop</h1>
+  <p class="lede">35 loops that keep a product alive after it ships. A loop finds its own
+  work, hands it to an agent, checks the result, and writes down what it learned. You build it
+  once. It runs without you after that.</p>
+
+  <div class="run">
+    <span class="step">Node 18 and bash. No API key, no AWS account.</span>
+    <code id="cmd">git clone https://github.com/fakiolinho/From-Prompt-to-Loop.git &amp;&amp; cd From-Prompt-to-Loop &amp;&amp; ./run-all-demos.sh</code>
+    <button class="copy" id="copy">Copy</button>
+  </div>
+
+  <div class="cta">
+    <a class="primary" href="https://github.com/fakiolinho/From-Prompt-to-Loop#readme">Open the repo</a>
+    <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/docs/00-start-here.md">Read this first</a>
+    <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/docs/01-what-is-a-loop.md">What a loop is</a>
+    <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf">The field guide (free PDF)</a>
+  </div>
+</div></header>
+
+<section><div class="wrap">
+  <h2>This is what that one command prints</h2>
+  <p class="sub">Real checks, on a real project, finding real problems. Nothing mocked for the
+  screenshot. A demo that exits non zero has not failed: that is the check saying there is work.</p>
+  <pre class="demo">=================  ENGINEERING (loops 2, 4, 5, 6, 7)  =================
+Loop 2. Dependency upgrades   (pack check: `npm outdated`)
+Package  Current  Wanted  Latest  Location             Depended by
+is-odd     1.0.0   1.0.0   3.0.1  node_modules/is-odd  demo-app
+ms         2.0.0   2.0.0   2.1.3  node_modules/ms      demo-app
+  ^ these have newer releases. The loop would bump patch/minor, run tests, open a PR.
+
+Loop 4. Test backfill on changed code   (pack check: git diff for untested changes)
+  NO TEST  src/discount.js  (live code, imported, but no src/discount.test.js)
+  The loop would write a focused test that passes against current behaviour.
+
+Loop 5. Dead code and unused dependencies   (pack check: `knip`)
+  DEAD FILE   src/unused.js  (exported but nothing imports it)
+  UNUSED DEP  is-odd  (in package.json, never imported)
+  The loop would remove these, then prove the build and tests still pass.
+
+Loop 6. Lint, format, and type fixes   (pack check: eslint + prettier + tsc)
+  src/messy.js: uses == (should be ===); uses var (should be const/let); unused variable &quot;unusedTax&quot;
+  The loop would auto-fix the mechanical issues; a type error it cannot fix safely it flags.
+
+Loop 7. Release notes and changelog   (pack check: git log since last tag)
+  BEHIND  package.json is 1.1.0 but the changelog tops out at 1.0.0.
+  The loop would write the entries for the new version from the commit log.
+
+5 loop(s) found work in this project.</pre>
+</div></section>
+
+<section><div class="wrap">
+  <h2>The 35 loops</h2>
+  <p class="sub"><strong>Ships on green</strong> opens a PR and merges once the check passes, and a
+  bad one is one click back. <strong>Flags, you decide</strong> stops and hands you the call.
+  Nothing irreversible happens without a person. ★ marks the three easiest first builds.</p>
+
+  <div class="filters">
+    <button class="pill" data-f="ch" data-v="1">Ch 1 · General engineering</button><button class="pill" data-f="ch" data-v="2">Ch 2 · Cloud and platform</button><button class="pill" data-f="ch" data-v="3">Ch 3 · AI and ML engineering</button><button class="pill" data-f="ch" data-v="4">Ch 4 · QA and testing</button>
+    <button class="pill" data-f="tag" data-v="ships">Ships on green</button>
+    <button class="pill" data-f="tag" data-v="flags">Flags, you decide</button>
+    <button class="pill" data-f="ready" data-v="1">Runnable today</button>
+    <input class="search" id="q" type="search" placeholder="Search the loops&hellip;" aria-label="Search the loops">
+  </div>
+
+  <div id="list">
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/01-docs-and-examples-sync/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="docs and examples sync docs drift"><span class="num">1</span><span class="body"><span class="name">Docs and examples sync<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">docs drift</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="dependency upgrades outdated deps (npm outdated)"><span class="num">2</span><span class="body"><span class="name">Dependency upgrades<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">outdated deps (npm outdated)</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/03-codemod-and-framework-migrations/ORDERS.md" data-ch="1" data-tag="ships" data-ready="0" data-q="codemod and framework migrations (you point it at a migration)"><span class="num">3</span><span class="body"><span class="name">Codemod and framework migrations</span><span class="looks">(you point it at a migration)</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/04-test-backfill-on-changed-code/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="test backfill on changed code changed code with no test"><span class="num">4</span><span class="body"><span class="name">Test backfill on changed code<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">changed code with no test</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/05-dead-code-and-unused-dependency-removal/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="dead code and unused dependency removal dead code (knip)"><span class="num">5</span><span class="body"><span class="name">Dead code and unused dependency removal<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">dead code (knip)</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/06-lint-format-and-type-fixes/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="lint, format, and type fixes eslint / prettier / tsc dirty"><span class="num">6</span><span class="body"><span class="name">Lint, format, and type fixes<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">eslint / prettier / tsc dirty</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/07-release-notes-and-changelog/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="release notes and changelog commits since last tag not logged"><span class="num">7</span><span class="body"><span class="name">Release notes and changelog<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">commits since last tag not logged</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/08-first-pass-code-review/ORDERS.md" data-ch="1" data-tag="flags" data-ready="0" data-q="first pass code review a pr to review"><span class="num">8</span><span class="body"><span class="name">First pass code review</span><span class="looks">a PR to review</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/09-issue-triage-and-routing/ORDERS.md" data-ch="1" data-tag="flags" data-ready="0" data-q="issue triage and routing an issue to triage"><span class="num">9</span><span class="body"><span class="name">Issue triage and routing</span><span class="looks">an issue to triage</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/10-container-and-base-image-bumps/ORDERS.md" data-ch="2" data-tag="ships" data-ready="0" data-q="container and base image bumps plain cli"><span class="num">10</span><span class="body"><span class="name">Container and base image bumps</span><span class="looks">plain CLI</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/11-backup-restore-drills/ORDERS.md" data-ch="2" data-tag="ships" data-ready="0" data-q="backup restore drills plain cli"><span class="num">11</span><span class="body"><span class="name">Backup restore drills</span><span class="looks">plain CLI</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/12-orphaned-resource-cleanup/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="orphaned resource cleanup plain cli"><span class="num">12</span><span class="body"><span class="name">Orphaned resource cleanup</span><span class="looks">plain CLI</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/13-certificate-and-secret-rotation/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="certificate and secret rotation plain cli"><span class="num">13</span><span class="body"><span class="name">Certificate and secret rotation</span><span class="looks">plain CLI</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/14-infrastructure-drift-reconciliation/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="infrastructure drift reconciliation plain cli"><span class="num">14</span><span class="body"><span class="name">Infrastructure drift reconciliation</span><span class="looks">plain CLI</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/15-cost-and-spend-anomaly-watch/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="cost and spend anomaly watch finops agent"><span class="num">15</span><span class="body"><span class="name">Cost and spend anomaly watch</span><span class="looks">FinOps Agent</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/16-alert-and-on-call-noise-tuning/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="alert and on-call noise tuning devops agent"><span class="num">16</span><span class="body"><span class="name">Alert and on-call noise tuning</span><span class="looks">DevOps Agent</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/17-known-alert-auto-remediation/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="known alert auto-remediation devops agent"><span class="num">17</span><span class="body"><span class="name">Known alert auto-remediation</span><span class="looks">DevOps Agent</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/loops/18-iam-and-permission-audit/ORDERS.md" data-ch="2" data-tag="flags" data-ready="0" data-q="iam and permission audit security agent / continuum"><span class="num">18</span><span class="body"><span class="name">IAM and permission audit</span><span class="looks">Security Agent / Continuum</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/19-eval-suite-on-prompt-or-model-change/ORDERS.md" data-ch="3" data-tag="ships" data-ready="1" data-q="eval suite on every prompt or model change an accuracy regression"><span class="num">19</span><span class="body"><span class="name">Eval suite on every prompt or model change<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">an accuracy regression</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/20-rag-knowledge-base-sync/ORDERS.md" data-ch="3" data-tag="ships" data-ready="1" data-q="rag knowledge base sync a source newer than its index"><span class="num">20</span><span class="body"><span class="name">RAG knowledge base sync<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">a source newer than its index</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/21-structured-output-conformance/ORDERS.md" data-ch="3" data-tag="ships" data-ready="0" data-q="structured output conformance outputs that break the schema"><span class="num">21</span><span class="body"><span class="name">Structured output conformance</span><span class="looks">outputs that break the schema</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/22-model-version-upgrade-testing/ORDERS.md" data-ch="3" data-tag="flags" data-ready="0" data-q="model version upgrade testing (you point it at a version)"><span class="num">22</span><span class="body"><span class="name">Model version upgrade testing</span><span class="looks">(you point it at a version)</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/23-golden-set-growth-from-production-failures/ORDERS.md" data-ch="3" data-tag="flags" data-ready="0" data-q="golden set growth from production failures failures not yet in the golden set"><span class="num">23</span><span class="body"><span class="name">Golden set growth from production failures</span><span class="looks">failures not yet in the golden set</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/24-prompt-cost-and-routing-optimisation/ORDERS.md" data-ch="3" data-tag="flags" data-ready="0" data-q="prompt cost and routing optimisation cost above baseline"><span class="num">24</span><span class="body"><span class="name">Prompt cost and routing optimisation</span><span class="looks">cost above baseline</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/25-safety-and-red-team-regression/ORDERS.md" data-ch="3" data-tag="flags" data-ready="0" data-q="safety and red team regression a red team regression"><span class="num">25</span><span class="body"><span class="name">Safety and red team regression</span><span class="looks">a red team regression</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/loops/26-data-quality-and-drift-monitoring/ORDERS.md" data-ch="3" data-tag="flags" data-ready="0" data-q="data quality and drift monitoring drift over threshold"><span class="num">26</span><span class="body"><span class="name">Data quality and drift monitoring</span><span class="looks">drift over threshold</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/27-bug-report-to-failing-test/ORDERS.md" data-ch="4" data-tag="ships" data-ready="0" data-q="bug report to failing test reports with no reproducing test"><span class="num">27</span><span class="body"><span class="name">Bug report to failing test</span><span class="looks">reports with no reproducing test</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/28-flaky-test-detection-and-quarantine/ORDERS.md" data-ch="4" data-tag="ships" data-ready="1" data-q="flaky test detection and quarantine a flaky or broken test"><span class="num">28</span><span class="body"><span class="name">Flaky test detection and quarantine<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">a flaky or broken test</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/29-self-healing-ui-tests/ORDERS.md" data-ch="4" data-tag="ships" data-ready="0" data-q="self healing ui tests selector-only failures"><span class="num">29</span><span class="body"><span class="name">Self healing UI tests</span><span class="looks">selector-only failures</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/30-test-data-and-fixtures/ORDERS.md" data-ch="4" data-tag="ships" data-ready="0" data-q="test data and fixtures fixtures that no longer fit the schema"><span class="num">30</span><span class="body"><span class="name">Test data and fixtures</span><span class="looks">fixtures that no longer fit the schema</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/31-smoke-tests-on-every-deploy/ORDERS.md" data-ch="4" data-tag="ships" data-ready="0" data-q="smoke tests on every deploy a failing critical path post deploy"><span class="num">31</span><span class="body"><span class="name">Smoke tests on every deploy</span><span class="looks">a failing critical path post deploy</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/32-cross-browser-and-device-matrix/ORDERS.md" data-ch="4" data-tag="ships" data-ready="0" data-q="cross browser and device matrix failures by config"><span class="num">32</span><span class="body"><span class="name">Cross browser and device matrix</span><span class="looks">failures by config</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/33-visual-regression-triage/ORDERS.md" data-ch="4" data-tag="flags" data-ready="0" data-q="visual regression triage screenshot diffs"><span class="num">33</span><span class="body"><span class="name">Visual regression triage</span><span class="looks">screenshot diffs</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/34-e2e-coverage-from-real-user-flows/ORDERS.md" data-ch="4" data-tag="flags" data-ready="0" data-q="e2e coverage from real user flows top journeys with no e2e test"><span class="num">34</span><span class="body"><span class="name">E2E coverage from real user flows</span><span class="looks">top journeys with no e2e test</span></span><span class="tag flags">Flags, you decide</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/loops/35-synthetic-uptime-and-journey-monitoring/ORDERS.md" data-ch="4" data-tag="flags" data-ready="0" data-q="synthetic uptime and journey monitoring a failing or slow prod journey"><span class="num">35</span><span class="body"><span class="name">Synthetic uptime and journey monitoring</span><span class="looks">a failing or slow prod journey</span></span><span class="tag flags">Flags, you decide</span></a>
+  </div>
+  <p class="count" id="count"></p>
+</div></section>
+
+<footer><div class="wrap">
+  <p><strong>Start with loop 2, dependency upgrades.</strong> The check only reads, the change is a
+  version bump, and the PR is easy to review. If it gets it wrong you close the PR and nothing
+  happened. <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/docs/04-your-first-loop.md">The ten minute walkthrough</a>.</p>
+  <p>MIT licensed. Built by <a href="https://mariosfakiolas.com">Marios Fakiolas</a>, who writes The
+  Warship CTO. Crews, not committees. Loops, not turns.</p>
+</div></footer>
+
+<script>
+(function () {
+  var copy = document.getElementById('copy');
+  copy.addEventListener('click', function () {
+    var t = document.getElementById('cmd').textContent;
+    navigator.clipboard.writeText(t).then(function () {
+      copy.textContent = 'Copied'; setTimeout(function () { copy.textContent = 'Copy'; }, 1600);
+    });
+  });
+
+  var on = {}, q = document.getElementById('q');
+  var loops = [].slice.call(document.querySelectorAll('.loop'));
+  var count = document.getElementById('count');
+
+  function apply() {
+    var term = (q.value || '').trim().toLowerCase(), shown = 0;
+    loops.forEach(function (el) {
+      var ok = true;
+      for (var f in on) { if (on[f] && el.dataset[f] !== on[f]) ok = false; }
+      if (ok && term && el.dataset.q.indexOf(term) === -1) ok = false;
+      el.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    });
+    count.textContent = shown + ' of ' + loops.length + ' loops';
+  }
+
+  [].slice.call(document.querySelectorAll('.pill')).forEach(function (b) {
+    b.addEventListener('click', function () {
+      var f = b.dataset.f, v = b.dataset.v, was = on[f] === v;
+      [].slice.call(document.querySelectorAll('.pill[data-f="' + f + '"]'))
+        .forEach(function (o) { o.setAttribute('aria-pressed', 'false'); });
+      on[f] = was ? null : v;
+      b.setAttribute('aria-pressed', was ? 'false' : 'true');
+      apply();
+    });
+  });
+  q.addEventListener('input', apply);
+  apply();
+})();
+</script>
+</body>
+</html>

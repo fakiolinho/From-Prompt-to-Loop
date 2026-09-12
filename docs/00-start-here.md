@@ -16,7 +16,7 @@ are a catalog you come back to.
 | See it work, right now, no setup | [Run the demos](03-run-the-demos.md) | 1 minute |
 | Understand what you are looking at first | [What a loop is](01-what-is-a-loop.md) | 5 minutes |
 | Put one on your own repo and get a real PR | [Your first loop](04-your-first-loop.md) | 10 minutes |
-| Browse all thirty five | [The catalog](../README.md#the-four-chapters) | browse |
+| Browse all thirty five | [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md) | browse |
 
 If a word here is unfamiliar, it is in [plain words](02-plain-words.md). Nothing is assumed.
 
@@ -39,3 +39,5 @@ Read the guide for *why*. Read these pages for *how*.
 ---
 
 [Contents](../README.md) · [Next: What a loop is →](01-what-is-a-loop.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)

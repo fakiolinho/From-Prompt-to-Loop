@@ -50,7 +50,7 @@ you can rule on, instead of a diff you have to reverse engineer at the end of a 
 
 ## Step 2. Name an owner
 
-Open `loops/02-dependency-upgrades/ORDERS.md` and replace the `**Owner:**` line with a real
+Open [`loops/02-dependency-upgrades/ORDERS.md`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) and replace the `**Owner:**` line with a real
 person. Ten seconds, and it decides whether this is a fleet somebody runs or a fleet nobody
 maintains. An unowned loop is the one still running badly a year from now, because nobody ever
 felt responsible for turning it off.
@@ -111,3 +111,5 @@ the loop step into a small dedicated workflow per scheduled loop.
 ---
 
 [← Run the demos](03-run-the-demos.md) · [Contents](../README.md) · [Next: Add the next one →](05-add-the-next.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)

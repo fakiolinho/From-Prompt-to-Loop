@@ -8,10 +8,10 @@ this list. The field guide has a longer version on page 6.
 **Loop.** A small system that finds work, hands it to an agent, checks the result, writes down
 what it learned, and exits. You build the loop. The loop runs the agent.
 
-**Check.** The script that answers one question: is there work? `check.sh` in every loop folder.
+**Check.** The script that answers one question: is there work? [`check.sh`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/check.sh) in every loop folder.
 Exit 0 means no, exit 1 means yes. Nothing is spent until it says yes.
 
-**Orders.** `ORDERS.md` in every loop folder. What this loop owns, what it must never touch, and
+**Orders.** [`ORDERS.md`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) in every loop folder. What this loop owns, what it must never touch, and
 when to stop and ask a person. The agent reads this every run.
 
 **Agent.** A model that does not just answer. It reads your files, runs commands, edits code,
@@ -28,10 +28,10 @@ them.
 
 **Pack.** The same thing as a chapter. The folder names end in `-loops`.
 
-**Standing orders.** `CLAUDE.md` (or `AGENTS.md` for Codex) at the top of a chapter. The rules
+**Standing orders.** [`CLAUDE.md`](../loop-packs/engineering-loops/CLAUDE.md) (or `AGENTS.md` for Codex) at the top of a chapter. The rules
 that apply to every loop in it, read on every single run.
 
-**Memory.** `memory/NN-name.md`. One line per run, written by the agent, kept in git so a wrong
+**Memory.** [`memory/NN-name.md`](../loop-packs/engineering-loops/memory/02-dependency-upgrades.md). One line per run, written by the agent, kept in git so a wrong
 lesson is one revert away.
 
 **Demo app.** `demo-app/` inside a chapter. A small project deliberately seeded with problems, so
@@ -67,3 +67,5 @@ slower, pricier, and worse.
 ---
 
 [← What a loop is](01-what-is-a-loop.md) · [Contents](../README.md) · [Next: Run the demos →](03-run-the-demos.md)
+
+**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)
