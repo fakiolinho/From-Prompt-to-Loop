@@ -107,3 +107,60 @@ major instead got eslint 10 on a repo pinned to eslint 9, which simply crashed.
 **Loop 2, page 22.** "your only risk is integration and the tests catch that" assumes tests
 exist. Add: and it is worth exactly as much as that command is. A repo with no test suite gets
 no safety from this loop, which is why the check now refuses to run without one.
+
+---
+
+## 5. A loop runs the project's commands. It never invents its own.
+
+**Where:** loop 6, page 22. Also worth a line in the anatomy, page 9, box 3, and in the
+starter pack on page 27 where CLAUDE.md names one verification command.
+
+**Change:** add the principle, and make loop 6's entry carry it:
+
+> **6. Lint, format, and type fixes.** A loop runs the lint, format and type commands **the
+> project already defines** and applies the mechanical fixes. Not commands the loop invents.
+> A project has already written down what it checks and how far it reaches; a loop that
+> guesses instead will reach further. Pure busywork, fully checkable, trivially reversible.
+> Ships on green.
+
+**Why:** measured on four real repositories on 2026-09-12.
+
+A Laravel plus Vite service scopes its own tooling deliberately:
+
+    lint        eslint "resources/**/*.{tsx,jsx,js,ts}"
+    prettify    prettier --check "resources/**/*.{tsx,jsx,js}"
+                prettier --check "{app,config,database,resources,routes,tests}/**/*.php"
+
+All three of the project's commands pass. The loop's invented `prettier --check .` on the
+same repo, at the same moment, flagged **10,762 files**, of which **10,434 were in vendor/**,
+third party PHP the project does not own. That loop would have opened a pull request
+reformatting somebody else's dependencies.
+
+A second repo showed the milder version: 91 files flagged against a default style it never
+adopted, while its own lint script passed. A third pulled eslint 10 from the registry to lint
+a project pinned to eslint 9, and crashed.
+
+The principle generalises past linting, which is why it belongs in the anatomy too. The
+project's scripts are where a team has written down its intent. A loop that substitutes its
+own guess is not automating the team's standard, it is imposing a different one at scale.
+
+---
+
+## 6. Loop 7 needs a release tag, not just any tag
+
+**Where:** loop 7, page 22.
+
+**Change:** add one sentence to the entry:
+
+> On every tag a loop drafts the notes from merged PRs, checks the links, and opens the
+> release. **It measures from the last release, so it needs a version shaped tag; the nearest
+> tag is not always a release.**
+
+**Why:** a real service had exactly one tag, named `patch`. `git describe` returns it happily,
+so the loop measured from there and reported **710 commits to add to the changelog**. A repo
+with no tags at all was worse: it counted every commit ever made, 453 of them, and called them
+release notes.
+
+The loop now takes the newest version shaped tag, and refuses when the range is implausibly
+large, because a release note covering hundreds of commits means the baseline is wrong rather
+than that there is a lot to write.
