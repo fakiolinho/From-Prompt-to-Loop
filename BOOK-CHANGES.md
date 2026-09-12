@@ -58,3 +58,47 @@ cheaply and honestly?" A loop that fails question two is not a loop.
 **Consider also:** page 21 uses "keeping your code free of known security holes" to show that
 the line between loop and not-a-loop can run through a single task. Loop 5 is a second, sharper
 example of the same idea, and one where the evidence is measured rather than argued.
+
+---
+
+## 3. A check has three answers, not two
+
+**Where:** page 9, the anatomy diagram, box 2. Also the check description on page 19,
+question 2 of the five question test.
+
+**Change:** the diagram shows the check branching two ways, "Nothing to do" and "There is
+work". Add the third branch:
+
+> **Not wired.** The check cannot see what it needs in this repo. The run fails loudly and the
+> agent never wakes. A loop pointed at a repo it cannot read is not idle, it is expensive.
+
+Suggested wording for box 2:
+
+>     Nothing to do      There is work        Not wired
+>     Exit. A green      Wake the agent,      Fail loudly. Never wake an agent
+>     night wakes        under standing       to work on a repo the check
+>     nobody.            orders.              cannot actually read.
+
+**Why:** measured on two real repositories on 2026-09-12. Sixteen of eighteen engineering and
+QA loops returned "there is work" on repos they were not wired to, because "is there work" only
+had two answers. On a weekly schedule that is sixteen agent runs a week, each capped at two
+dollars, all of them finding nothing to do, on every repo that adopts the pack.
+
+The loops now return 2 for "not wired" and say what to wire. The idea generalises past this
+repo: any check with only two answers will answer "there is work" when it is really answering
+"I cannot tell".
+
+---
+
+## 4. Minor caveats worth a sentence
+
+**Loop 6, page 22.** "A loop runs the linter, formatter, and type checker on changed files."
+Add: only the ones that project actually uses. Running a formatter a project never adopted
+flags every file it owns. On a real site `prettier --check .` reported 364 files in a repo with
+no prettier dependency, which is not a lint fix, it is an unwanted rewrite of the whole
+codebase. The same loop must use the project's pinned tool versions: fetching the newest
+major instead got eslint 10 on a repo pinned to eslint 9, which simply crashed.
+
+**Loop 2, page 22.** "your only risk is integration and the tests catch that" assumes tests
+exist. Add: and it is worth exactly as much as that command is. A repo with no test suite gets
+no safety from this loop, which is why the check now refuses to run without one.

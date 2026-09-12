@@ -178,12 +178,22 @@ and you will find the same two files every time.</p>
 <tr>
 <td><strong>2</strong></td>
 <td>not wired here</td>
-<td>The run fails loudly. The agent still never wakes.</td>
+<td>The run fails loudly. The agent still never wakes, and you pay nothing.</td>
 </tr>
 </tbody>
 </table>
 <p>That is why a quiet night is free, and why a check pointed at the wrong folder costs you nothing
 instead of costing you tokens.</p>
+<p><strong>The third answer is the one people leave out, and it is expensive.</strong> A check with only two
+answers says &quot;there is work&quot; when it really means &quot;I cannot tell&quot;. Point sixteen of those at a
+repo they were never wired to and you get sixteen agent runs a week, each one waking up, looking
+around, and finding nothing. Every check here names what it needs and exits 2 when it is
+missing:</p>
+<pre><code>$ bash loops/33-visual-regression-triage/check.sh
+Visual regression triage is not wired to this repo.
+Set LOOP_VISUAL to the command that diffs screenshots against the baseline, for example:
+  LOOP_VISUAL='npx playwright test --update-snapshots=none'
+</code></pre>
 <p>Try one:</p>
 <pre><code>cd loop-packs/engineering-loops/demo-app
 bash ../loops/05-dead-code-and-unused-dependency-removal/check.sh

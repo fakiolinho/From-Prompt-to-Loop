@@ -31,10 +31,22 @@ and you will find the same two files every time.
 |---|---|---|
 | **0** | no work | The run ends. The agent never wakes. You spend nothing. |
 | **1** | there is work | The agent wakes, under the orders. |
-| **2** | not wired here | The run fails loudly. The agent still never wakes. |
+| **2** | not wired here | The run fails loudly. The agent still never wakes, and you pay nothing. |
 
 That is why a quiet night is free, and why a check pointed at the wrong folder costs you nothing
 instead of costing you tokens.
+
+**The third answer is the one people leave out, and it is expensive.** A check with only two
+answers says "there is work" when it really means "I cannot tell". Point sixteen of those at a
+repo they were never wired to and you get sixteen agent runs a week, each one waking up, looking
+around, and finding nothing. Every check here names what it needs and exits 2 when it is
+missing:
+
+    $ bash loops/33-visual-regression-triage/check.sh
+    Visual regression triage is not wired to this repo.
+    Set LOOP_VISUAL to the command that diffs screenshots against the baseline, for example:
+      LOOP_VISUAL='npx playwright test --update-snapshots=none'
+
 
 Try one:
 

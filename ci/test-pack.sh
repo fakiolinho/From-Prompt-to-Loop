@@ -31,7 +31,13 @@ for d in loop-packs/"$PACK"/loops/*/; do
   out=$( cd "$ROOT" && DRY_RUN=1 bash "$REL/$n/check.sh" 2>&1 ); rc=$?
   case "$rc" in
     0|1) [ -n "$out" ] && ok "$n (exit $rc)" || bad "$n exited $rc but printed nothing" ;;
-    2)   bad "$n exited 2 (not wired) from a real project root — it would wake the agent for nothing" ;;
+    # Exit 2 is a legitimate answer: this loop is not wired to this repo. But it is only
+    # useful if it says what to wire. A bare 2 leaves the reader stuck.
+    2)   if printf '%s' "$out" | grep -qE 'not wired|Set LOOP_|Run this from|Add a|Create |first'; then
+           ok "$n (exit 2, and says what to wire)"
+         else
+           bad "$n exited 2 without telling anyone what to wire"
+         fi ;;
     *)   bad "$n exited $rc — outside the 0 / 1 / 2 contract" ;;
   esac
 done
