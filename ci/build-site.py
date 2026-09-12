@@ -72,6 +72,31 @@ def detail(pack, num):
     return "", ""
 
 
+# Shared by the landing page and every guide page, so the two cannot drift apart.
+# Each face falls back to a system font, so the site still reads if Google Fonts is blocked.
+FONTS = """<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;600;700&display=swap">
+<meta name="theme-color" content="#140c0b">"""
+
+TOKENS = """  :root {
+    --hull:#140c0b; --deck:#1c1210; --well:#0d0807; --rivet:#3a2622;
+    --ink:#f1e4d8; --text:#d9c8bb; --dim:#a48d80;
+    --red:#e6503d; --amber:#d9a441; --lamp:#86b86b;
+    --display:"Unbounded","Helvetica Neue",Arial,sans-serif;
+    --sans:"Instrument Sans",ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; color:var(--text); font:17px/1.68 var(--sans);
+    background:radial-gradient(90% 480px at 50% 0, rgba(230,80,61,.1), transparent) no-repeat, var(--hull); }
+  a { color:var(--ink); text-decoration-color:var(--red); text-underline-offset:3px; }
+  a:hover { color:var(--red); }
+  :focus-visible { outline:2px solid var(--red); outline-offset:3px; }
+  strong { color:var(--ink); }
+  code { font-family:var(--mono); font-size:.86em; color:var(--amber); }
+"""
+
 PAGE = r"""<!doctype html>
 <html lang="en">
 <head>
@@ -79,86 +104,67 @@ PAGE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} &middot; From Prompt to Loop</title>
 <meta name="description" content="{title}. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+{fonts}
 <style>
-  :root {{
-    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
-    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }}
-  * {{ box-sizing:border-box; }}
-  body {{ margin:0; background:var(--bg); color:var(--ink);
-    font:16.5px/1.72 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }}
-  a {{ color:#8ab4ff; }}
-  a:hover {{ color:#b9d0ff; }}
+  /* Night bridge: a warship's bridge after dark. Red light to see by, amber for the
+     instruments, and one green lamp that only ever means "nothing to do". */
+{tokens}
+  .top {{ border-bottom:1px solid var(--rivet); background:var(--well); }}
+  .top .wrap {{ display:flex; align-items:center; gap:16px; max-width:1120px; margin:0 auto; padding:14px 20px; }}
+  .top a.home {{ color:var(--ink); text-decoration:none; font:700 15px/1.3 var(--display); letter-spacing:-.01em; }}
+  .top .kicker {{ display:block; color:var(--red); font:600 13px/1.3 var(--sans); margin-bottom:2px; }}
+  .top .gh {{ margin-left:auto; font-size:14.5px; }}
 
-  .top {{ border-bottom:1px solid var(--line); background:#090c12; }}
-  .top .wrap {{ display:flex; align-items:center; gap:16px; padding:14px 20px; }}
-  .top a.home {{ color:var(--ink); text-decoration:none; font-weight:700; }}
-  .top .kicker {{ color:var(--amber); font-size:11.5px; font-weight:700;
-    letter-spacing:.14em; text-transform:uppercase; }}
-  .top .gh {{ margin-left:auto; font-size:14px; }}
+  .shell {{ display:grid; grid-template-columns:236px minmax(0,1fr);
+    gap:56px; max-width:1120px; margin:0 auto; padding:40px 20px 90px; }}
+  nav {{ position:sticky; top:24px; align-self:start; }}
+  nav .lbl {{ color:var(--dim); font-size:13.5px; font-weight:600; margin:0 0 8px; }}
+  nav a {{ display:flex; gap:12px; align-items:baseline; text-decoration:none; color:var(--dim);
+    padding:6px 10px; border-left:2px solid transparent; font-size:15px; line-height:1.45; }}
+  nav a em {{ font:500 11px/1 var(--display); color:var(--amber); opacity:.7; min-width:16px; }}
+  nav a:hover {{ color:var(--ink); }}
+  nav a.here {{ color:var(--ink); font-weight:600; border-left-color:var(--red); background:rgba(230,80,61,.1); }}
+  nav a.here em {{ opacity:1; }}
+  nav .loops {{ margin-top:22px; padding-top:18px; border-top:1px solid var(--rivet); }}
 
-  .shell {{ display:grid; grid-template-columns:246px minmax(0,1fr);
-    gap:44px; max-width:1120px; margin:0 auto; padding:34px 20px 80px; }}
-  nav {{ position:sticky; top:22px; align-self:start; }}
-  nav .lbl {{ color:var(--dim); font-size:11.5px; font-weight:700;
-    letter-spacing:.12em; text-transform:uppercase; margin:0 0 10px; }}
-  nav a {{ display:flex; gap:10px; text-decoration:none; color:var(--dim);
-    padding:7px 11px; border-radius:8px; font-size:14.5px; }}
-  nav a em {{ font-style:normal; color:#55627a; font-family:var(--mono); font-size:12.5px; }}
-  nav a:hover {{ background:var(--panel); color:var(--ink); }}
-  nav a.here {{ background:var(--panel); color:var(--ink); font-weight:650;
-    box-shadow:inset 2px 0 0 var(--amber); }}
-  nav .loops {{ margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }}
-
-  article {{ min-width:0; }}
-  article h1 {{ font-size:clamp(27px,4vw,38px); line-height:1.16; margin:0 0 6px;
-    letter-spacing:-.02em; }}
-  .meta {{ color:var(--dim); font-size:13.5px; margin:0 0 30px; }}
-  article h2 {{ font-size:23px; margin:40px 0 10px; letter-spacing:-.01em; }}
-  article h3 {{ font-size:18.5px; margin:30px 0 8px; }}
-  article p, article li {{ color:#d3d9e4; }}
-  article strong {{ color:var(--ink); }}
-  article img {{ max-width:100%; height:auto; display:block; margin:26px 0; }}
-  article hr {{ border:0; border-top:1px solid var(--line); margin:34px 0; }}
-  article blockquote {{ margin:24px 0; padding:2px 20px; border-left:3px solid var(--amber);
-    color:#c7d0de; font-style:italic; }}
-  article code {{ font-family:var(--mono); font-size:.88em; background:var(--panel);
-    border:1px solid var(--line); border-radius:5px; padding:1px 5px; }}
-  article pre {{ background:#05070b; border:1px solid var(--line); border-radius:10px;
-    padding:17px 19px; overflow-x:auto; }}
-  article pre code {{ background:none; border:0; padding:0; font-size:13.2px;
-    color:#c7d0de; line-height:1.62; }}
-  section table {{ border-collapse:collapse; width:100%; font-size:15px; }}
-  section th {{ text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
-    letter-spacing:.06em; text-transform:uppercase; padding:9px 12px; border-bottom:1px solid var(--line); }}
-  section td {{ padding:11px 12px; border-bottom:1px solid var(--line); color:#d3d9e4; vertical-align:top; }}
-  .tw {{ overflow-x:auto; margin:22px 0; }}
-  article table {{ border-collapse:collapse; width:100%; font-size:15px; }}
-  article th {{ text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
-    letter-spacing:.06em; text-transform:uppercase; padding:9px 13px;
-    border-bottom:1px solid var(--line); white-space:nowrap; }}
-  article td {{ padding:11px 13px; border-bottom:1px solid var(--line);
-    vertical-align:top; color:#d3d9e4; }}
+  article {{ min-width:0; max-width:760px; }}
+  article h1 {{ font:700 clamp(26px,3.6vw,38px)/1.14 var(--display); color:var(--ink);
+    letter-spacing:-.015em; margin:0 0 10px; }}
+  .meta {{ color:var(--dim); font-size:14px; margin:0 0 34px; }}
+  article h2 {{ font:500 22px/1.25 var(--display); color:var(--ink); letter-spacing:-.01em; margin:46px 0 12px; }}
+  article h3 {{ font:700 18px/1.35 var(--sans); color:var(--ink); margin:32px 0 8px; }}
+  article img {{ max-width:100%; height:auto; display:block; margin:28px 0; }}
+  article hr {{ border:0; border-top:1px solid var(--rivet); margin:38px 0; }}
+  article blockquote {{ margin:26px 0; padding:4px 0 4px 20px; border-left:2px solid var(--red); color:var(--ink); }}
+  article code {{ background:var(--deck); border:1px solid var(--rivet); border-radius:3px; padding:1px 5px; }}
+  article pre {{ background:var(--well); border:1px solid var(--rivet); border-radius:6px;
+    padding:18px 20px; overflow-x:auto; }}
+  article pre code {{ background:none; border:0; padding:0; font-size:13.5px; color:var(--text); line-height:1.65; }}
+  .tw {{ overflow-x:auto; margin:24px 0; }}
+  article table {{ border-collapse:collapse; width:100%; min-width:560px; font-size:15.5px; }}
+  article th {{ text-align:left; color:var(--dim); font-size:14px; font-weight:600;
+    padding:9px 13px; border-bottom:1px solid var(--dim); white-space:nowrap; }}
+  article td {{ padding:11px 13px; border-bottom:1px solid var(--rivet); vertical-align:top; }}
 
   .pager {{ display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
-    margin-top:52px; padding-top:22px; border-top:1px solid var(--line); font-size:15px; }}
-  .cta {{ margin-top:34px; background:var(--panel); border:1px solid var(--line);
-    border-radius:12px; padding:19px 21px; }}
-  .cta p {{ margin:0 0 10px; color:var(--dim); font-size:14.5px; }}
-  .cta code {{ color:var(--green); }}
+    margin-top:56px; padding-top:22px; border-top:1px solid var(--rivet); font-size:15.5px; }}
+  .cta {{ margin-top:40px; background:var(--well); border:1px solid var(--rivet);
+    border-left:3px solid var(--amber); border-radius:4px; padding:18px 22px; }}
+  .cta p {{ margin:0 0 8px; color:var(--dim); font-size:15px; }}
+  .cta code {{ font-size:14px; overflow-wrap:anywhere; }}
 
   @media (max-width:860px) {{
-    .shell {{ grid-template-columns:1fr; gap:26px; }}
+    .shell {{ grid-template-columns:1fr; gap:28px; }}
     nav {{ position:static; }}
-    nav a {{ display:inline-flex; }}
+    nav a {{ display:inline-flex; border-left:0; border-bottom:2px solid transparent; }}
+    nav a.here {{ border-bottom-color:var(--red); }}
   }}
 </style>
 </head>
 <body>
 
 <div class="top"><div class="wrap">
-  <a class="home" href="index.html"><span class="kicker">The Warship CTO</span><br>From Prompt to Loop</a>
+  <a class="home" href="index.html"><span class="kicker">The Warship CTO</span>From Prompt to Loop</a>
   <span class="gh"><a href="{repo}">View on GitHub</a></span>
 </div></div>
 
@@ -175,7 +181,7 @@ PAGE = r"""<!doctype html>
 
   <article>
     <h1>{title}</h1>
-    <p class="meta">Page {idx} of {total} &middot; From Prompt to Loop</p>
+    <p class="meta">Page {idx} of {total}</p>
     {body}
 
     <div class="cta">
@@ -227,6 +233,8 @@ def render_page(name, title, idx):
     body = md.renderer.render(tokens, md.options, {})
     # the page's own H1 becomes the header, so it is not repeated in the body
     body = re.sub(r"<h1>.*?</h1>\s*", "", body, count=1, flags=re.S)
+    # a wide table scrolls inside its own box, so a phone never scrolls the whole page
+    body = body.replace("<table>", '<div class="tw"><table>').replace("</table>", "</table></div>")
 
     prev_l = (f'<a href="{GUIDE[idx-1][0]}.html">&larr; {html.escape(GUIDE[idx-1][1])}</a>'
               if idx > 0 else '<span></span>')
@@ -239,7 +247,7 @@ def render_page(name, title, idx):
 
     return PAGE.format(title=html.escape(title), body=body, toc=toc,
                        prev=prev_l, next=next_l, repo=REPO, idx=idx,
-                       total=len(GUIDE) - 1)
+                       total=len(GUIDE) - 1, fonts=FONTS, tokens=TOKENS)
 
 def main():
     rows, fold = catalog(), folders()
@@ -280,6 +288,8 @@ def main():
         chapter_pills=chapter_pills,
         demo=html.escape(demo.strip()),
         total=len(rows),
+        fonts=FONTS,
+        tokens=TOKENS,
     )
     os.makedirs("docs", exist_ok=True)
     open("docs/index.html", "w").write(page)
@@ -300,92 +310,105 @@ TEMPLATE = r"""<!doctype html>
 <meta property="og:title" content="From Prompt to Loop &middot; 35 runnable loops">
 <meta property="og:description" content="Thirty five loops that keep a product alive after it ships. One command to watch them find real work.">
 <meta property="og:type" content="website">
+{fonts}
 <style>
-  :root {{
-    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
-    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6; --blue:#3b82f6;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }}
-  * {{ box-sizing:border-box; }}
-  body {{ margin:0; background:var(--bg); color:var(--ink);
-    font:16px/1.6 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }}
+  /* Night bridge: see the note above PAGE. */
+{tokens}
   .wrap {{ max-width:1000px; margin:0 auto; padding:0 20px; }}
-  a {{ color:inherit; }}
 
-  header {{ padding:64px 0 40px; border-bottom:1px solid var(--line); }}
-  h1 {{ font-size:clamp(30px,5vw,46px); line-height:1.12; margin:0 0 14px; letter-spacing:-.02em; }}
-  h1 small {{ display:block; font-size:15px; font-weight:600; color:var(--amber);
-    letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; }}
-  .lede {{ font-size:19px; color:var(--dim); max-width:62ch; margin:0 0 30px; }}
+  header {{ padding:84px 0 52px; border-bottom:1px solid var(--rivet); }}
+  h1 {{ font:700 clamp(36px,7vw,68px)/1.02 var(--display); color:var(--ink); letter-spacing:-.025em; margin:0 0 26px; }}
+  h1 small {{ display:block; font:600 16px/1.3 var(--sans); letter-spacing:0; color:var(--red); margin-bottom:18px; }}
+  .lede {{ font-size:20px; line-height:1.55; max-width:58ch; margin:0 0 34px; }}
 
-  .run {{ background:var(--panel); border:1px solid var(--line); border-radius:12px;
-    padding:18px 20px; display:flex; gap:14px; align-items:center; flex-wrap:wrap; }}
-  .run code {{ font-family:var(--mono); font-size:15px; color:var(--green); }}
-  .run .step {{ color:var(--dim); font-size:13px; }}
-  button.copy {{ margin-left:auto; background:var(--green); color:#04301f; border:0;
-    border-radius:8px; padding:9px 16px; font-weight:700; cursor:pointer; font-size:14px; }}
-  button.copy:hover {{ filter:brightness(1.08); }}
+  .run {{ background:var(--well); border:1px solid var(--rivet); border-left:3px solid var(--amber);
+    border-radius:4px; padding:16px 18px; display:flex; gap:10px 16px; align-items:center; flex-wrap:wrap; }}
+  .run .step {{ flex-basis:100%; color:var(--dim); font-size:14.5px; }}
+  .run code {{ flex:1 1 0; min-width:0; font-size:15px; overflow-wrap:anywhere; }}
+  button.copy {{ margin-left:auto; background:none; color:var(--amber); border:1px solid var(--amber);
+    border-radius:3px; padding:7px 16px; font:600 14px var(--sans); cursor:pointer; }}
+  button.copy:hover {{ background:var(--amber); color:var(--hull); }}
 
-  .cta {{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }}
-  .cta a {{ text-decoration:none; border:1px solid var(--line); border-radius:9px;
-    padding:11px 18px; font-weight:600; font-size:15px; background:var(--panel); }}
-  .cta a.primary {{ background:var(--violet); border-color:var(--violet); }}
-  .cta a:hover {{ border-color:var(--dim); }}
+  .cta {{ display:flex; gap:10px; flex-wrap:wrap; margin-top:26px; }}
+  .cta a {{ text-decoration:none; border:1px solid var(--rivet); border-radius:3px;
+    padding:11px 18px; font-weight:600; font-size:15.5px; }}
+  .cta a:hover {{ border-color:var(--dim); color:var(--ink); }}
+  .cta a.primary {{ background:var(--red); border-color:var(--red); color:#1a0806; }}
+  .cta a.primary:hover {{ background:#f06a58; color:#1a0806; }}
 
-  section {{ padding:52px 0; border-bottom:1px solid var(--line); }}
-  h2 {{ font-size:24px; margin:0 0 8px; letter-spacing:-.01em; }}
-  .sub {{ color:var(--dim); margin:0 0 24px; max-width:66ch; }}
+  section {{ padding:64px 0; border-bottom:1px solid var(--rivet); }}
+  h2 {{ font:500 clamp(22px,3vw,28px)/1.2 var(--display); color:var(--ink); letter-spacing:-.015em; margin:0 0 12px; }}
+  .sub {{ margin:0 0 26px; max-width:66ch; }}
 
-  pre.demo {{ background:#05070b; border:1px solid var(--line); border-radius:12px;
-    padding:20px; overflow-x:auto; font-family:var(--mono); font-size:13px;
-    line-height:1.55; color:#c7d0de; margin:0; }}
+  .tw {{ overflow-x:auto; }}
+  table {{ border-collapse:collapse; width:100%; font-size:15.5px; }}
+  th {{ text-align:left; color:var(--dim); font-size:14px; font-weight:600; padding:9px 16px 9px 0;
+    border-bottom:1px solid var(--dim); }}
+  td {{ padding:12px 16px 12px 0; border-bottom:1px solid var(--rivet); vertical-align:top; }}
 
-  .answers {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); gap:12px; }}
-  .ans {{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px;
-    border-top-width:3px; }}
-  .ans b {{ display:block; font-family:var(--mono); font-size:14px; }}
-  .ans span {{ display:block; font-weight:650; margin:2px 0 6px; }}
-  .ans em {{ font-style:normal; color:var(--dim); font-size:14px; }}
-  .a0 {{ border-top-color:var(--green); }} .a0 b {{ color:var(--green); }}
-  .a1 {{ border-top-color:var(--blue); }}  .a1 b {{ color:var(--blue); }}
-  .a2 {{ border-top-color:#e0668a; }}      .a2 b {{ color:#e0668a; }}
+  pre.demo {{ background:var(--well); border:1px solid var(--rivet); border-radius:6px;
+    padding:22px; overflow-x:auto; font:13px/1.6 var(--mono); color:var(--text); margin:0; }}
 
-  .guide {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:10px; }}
-  .guide a {{ display:flex; gap:12px; align-items:baseline; text-decoration:none;
-    background:var(--panel); border:1px solid var(--line); border-radius:10px;
-    padding:13px 16px; font-weight:600; }}
-  .guide a:hover {{ border-color:var(--dim); }}
-  .guide a em {{ font-style:normal; font-family:var(--mono); font-size:12.5px; color:var(--dim); }}
+  /* The three answers as a lit indicator panel: the one loud thing on the page. */
+  .answers {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); background:var(--well);
+    border:1px solid var(--rivet); border-radius:18px; padding:28px 8px;
+    box-shadow:inset 0 0 0 6px var(--deck), inset 0 0 0 7px var(--rivet); }}
+  .ans {{ --c:var(--lamp); padding:6px 24px; }}
+  .ans + .ans {{ border-left:1px solid var(--rivet); }}
+  .a1 {{ --c:var(--amber); }}
+  .a2 {{ --c:var(--red); }}
+  .ans b {{ display:flex; align-items:center; gap:12px; font:600 14px var(--mono); color:var(--c); }}
+  .ans b::before {{ content:""; flex:none; width:14px; height:14px; border-radius:50%; background:var(--c);
+    box-shadow:0 0 0 3px var(--well), 0 0 0 4px var(--rivet), 0 0 18px 3px var(--c);
+    animation:lamp .45s ease-out both; }}
+  .a1 b::before {{ animation-delay:.35s; }}
+  .a2 b::before {{ animation-delay:.7s; }}
+  @keyframes lamp {{ from {{ background:var(--rivet); box-shadow:0 0 0 3px var(--well), 0 0 0 4px var(--rivet); }} }}
+  .ans span {{ display:block; font:500 19px/1.3 var(--display); color:var(--ink); margin:14px 0 6px; }}
+  .ans em {{ font-style:normal; color:var(--dim); font-size:15px; }}
 
-  .filters {{ display:flex; gap:8px; flex-wrap:wrap; margin:0 0 18px; }}
-  .pill {{ background:var(--panel); color:var(--dim); border:1px solid var(--line);
-    border-radius:999px; padding:7px 14px; font-size:13.5px; cursor:pointer; font-weight:600; }}
-  .pill[aria-pressed="true"] {{ background:var(--ink); color:var(--bg); border-color:var(--ink); }}
-  input.search {{ flex:1; min-width:190px; background:var(--panel); border:1px solid var(--line);
-    border-radius:999px; padding:8px 16px; color:var(--ink); font-size:14px; }}
+  .guide {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); column-gap:36px; }}
+  .guide a {{ display:flex; gap:14px; align-items:baseline; text-decoration:none;
+    border-top:1px solid var(--rivet); padding:14px 0; font-weight:600; font-size:16.5px; }}
+  .guide a:hover {{ border-top-color:var(--red); }}
+  .guide a em {{ font:500 12px var(--display); color:var(--amber); min-width:18px; }}
 
-  .loop {{ display:flex; gap:14px; align-items:flex-start; text-decoration:none;
-    padding:13px 15px; border:1px solid var(--line); border-radius:10px;
-    background:var(--panel); margin-bottom:8px; }}
-  .loop:hover {{ border-color:var(--dim); }}
-  .loop .num {{ font-family:var(--mono); font-size:13px; color:var(--dim);
-    min-width:26px; padding-top:2px; }}
-  .loop .body {{ flex:1; min-width:0; }}
-  .loop .name {{ display:block; font-weight:650; }}
-  .loop .looks {{ display:block; color:var(--dim); font-size:13.5px; }}
-  .star {{ color:var(--amber); margin-left:7px; }}
-  .ready {{ margin-left:8px; font-size:11px; font-weight:700; letter-spacing:.05em;
-    text-transform:uppercase; color:var(--green); border:1px solid var(--green);
-    border-radius:4px; padding:1px 5px; vertical-align:1px; }}
-  .tag {{ font-size:12px; font-weight:700; white-space:nowrap; padding-top:3px; }}
-  .tag.ships {{ color:var(--green); }}
-  .tag.flags {{ color:var(--violet); }}
-  .count {{ color:var(--dim); font-size:13.5px; margin:14px 0 0; }}
+  .filters {{ display:flex; gap:8px; flex-wrap:wrap; margin:0 0 20px; }}
+  .pill {{ background:none; color:var(--dim); border:1px solid var(--rivet); border-radius:3px;
+    padding:7px 13px; font:600 14px var(--sans); cursor:pointer; }}
+  .pill:hover {{ color:var(--ink); border-color:var(--dim); }}
+  .pill[aria-pressed="true"] {{ color:var(--amber); border-color:var(--amber); background:rgba(217,164,65,.1); }}
+  input.search {{ flex:1; min-width:190px; background:var(--well); border:1px solid var(--rivet);
+    border-radius:3px; padding:8px 14px; color:var(--ink); font:15px var(--sans); }}
 
-  footer {{ padding:40px 0 70px; color:var(--dim); font-size:14.5px; }}
-  footer a {{ color:var(--ink); }}
-  @media (max-width:620px) {{
-    .loop {{ flex-wrap:wrap; }} .tag {{ padding-top:0; }}
+  #list {{ border-bottom:1px solid var(--rivet); }}
+  .loop {{ display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:4px 18px; align-items:baseline;
+    text-decoration:none; padding:15px 6px; border-top:1px solid var(--rivet); }}
+  .loop:hover {{ background:rgba(230,80,61,.06); color:inherit; }}
+  .loop .num {{ font:600 20px/1 var(--display); color:var(--amber); font-variant-numeric:tabular-nums; }}
+  .loop .name {{ display:block; font-weight:600; font-size:16.5px; color:var(--ink); }}
+  .loop .looks {{ display:block; color:var(--dim); font-size:14.5px; line-height:1.5; margin-top:2px; }}
+  .star {{ color:var(--amber); margin-left:8px; }}
+  .ready {{ margin-left:10px; font-size:12.5px; font-weight:600; color:var(--lamp);
+    border:1px solid rgba(134,184,107,.45); border-radius:3px; padding:0 6px; vertical-align:1px; }}
+  .tag {{ display:flex; align-items:center; gap:8px; font-size:13.5px; font-weight:600; white-space:nowrap; }}
+  .tag::before {{ content:""; width:8px; height:8px; border-radius:50%; background:currentColor; }}
+  .tag.ships {{ color:var(--lamp); }}
+  .tag.flags {{ color:var(--red); }}
+  .count {{ color:var(--dim); font-size:14px; margin:14px 0 0; }}
+
+  footer {{ padding:48px 0 80px; color:var(--dim); font-size:15px; }}
+  footer p {{ max-width:68ch; }}
+
+  @media (max-width:720px) {{
+    .answers {{ grid-template-columns:1fr; padding:14px 4px; }}
+    .ans {{ padding:16px 20px; }}
+    .ans + .ans {{ border-left:0; border-top:1px solid var(--rivet); }}
+    .loop {{ grid-template-columns:40px minmax(0,1fr); }}
+    .tag {{ grid-column:2; }}
+  }}
+  @media (prefers-reduced-motion:reduce) {{
+    .ans b::before {{ animation:none; }}
   }}
 </style>
 </head>
@@ -418,6 +441,21 @@ TEMPLATE = r"""<!doctype html>
 </div></header>
 
 <section><div class="wrap">
+  <h2>A check has three answers, not two</h2>
+  <p class="sub">Every loop starts with one question, and how it answers decides what you pay.
+  The third answer is the one most people leave out, and it is the expensive one: a check with
+  only two will say &ldquo;there is work&rdquo; when it means &ldquo;I cannot tell&rdquo;.</p>
+  <div class="answers">
+    <div class="ans a0"><b>exit 0</b><span>no work</span><em>The run ends. You spend nothing.</em></div>
+    <div class="ans a1"><b>exit 1</b><span>there is work</span><em>The agent wakes, fenced and capped.</em></div>
+    <div class="ans a2"><b>exit 2</b><span>not wired here</span><em>Fails loudly and says what it needs. No agent.</em></div>
+  </div>
+  <p class="sub" style="margin-top:22px"><a href="{repo}/blob/main/WIRING.md">WIRING.md</a> lists
+  every setting all thirty five loops read. Anything you leave unset simply exits 2 and tells you
+  what it wanted, so you can install everything and wire it up over weeks.</p>
+</div></section>
+
+<section><div class="wrap">
   <h2>What it costs, and what it needs</h2>
   <p class="sub">Most of this costs nothing. The part that spends money is one step, and it is
   fenced on four sides.</p>
@@ -434,21 +472,6 @@ TEMPLATE = r"""<!doctype html>
   <p class="sub">Every agent run is capped at <code>--max-budget-usd 2</code> and
   <code>--max-turns 30</code>, with a 20 minute timeout. And the check runs first, so a loop with
   nothing to do never wakes an agent. A quiet night costs nothing.</p>
-</div></section>
-
-<section><div class="wrap">
-  <h2>A check has three answers, not two</h2>
-  <p class="sub">Every loop starts with one question, and how it answers decides what you pay.
-  The third answer is the one most people leave out, and it is the expensive one: a check with
-  only two will say &ldquo;there is work&rdquo; when it means &ldquo;I cannot tell&rdquo;.</p>
-  <div class="answers">
-    <div class="ans a0"><b>exit 0</b><span>no work</span><em>The run ends. You spend nothing.</em></div>
-    <div class="ans a1"><b>exit 1</b><span>there is work</span><em>The agent wakes, fenced and capped.</em></div>
-    <div class="ans a2"><b>exit 2</b><span>not wired here</span><em>Fails loudly and says what it needs. No agent.</em></div>
-  </div>
-  <p class="sub" style="margin-top:18px"><a href="{repo}/blob/main/WIRING.md">WIRING.md</a> lists
-  every setting all thirty five loops read. Anything you leave unset simply exits 2 and tells you
-  what it wanted, so you can install everything and wire it up over weeks.</p>
 </div></section>
 
 <section><div class="wrap">

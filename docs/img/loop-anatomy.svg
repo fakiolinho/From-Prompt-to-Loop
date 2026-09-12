@@ -1,79 +1,83 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 610" width="880" height="610" role="img" aria-label="The five parts of a loop. A trigger wakes it. A check asks if there is work and answers one of three ways: exit 0 nothing to do and the run ends for free, exit 1 there is work and the agent wakes, exit 2 not wired and the run fails loudly saying what it needs. Then a gate decides whether the work ships or waits for you, and memory records what was learned.">
   <defs>
-    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#10b981"/></marker>
-    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/></marker>
-    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e0668a"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#86b86b"/></marker>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d9a441"/></marker>
+    <marker id="r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#e6503d"/></marker>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#7a645b"/></marker>
     <style>
-      .t  { font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
-      .h  { font-size: 18px; font-weight: 700; fill: #fff; letter-spacing: .02em; }
-      .s  { font-size: 13.5px; fill: #e8eaf0; }
-      .n  { font-size: 13px; fill: #a8b3c2; }
-      .nb { font-size: 13.5px; font-weight: 700; }
-      .num{ font-size: 13px; font-weight: 700; fill: #fff; opacity: .7; }
+      .t   { font-family: "Instrument Sans", ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      .h   { font-family: Unbounded, "Helvetica Neue", Arial, sans-serif; font-size: 17px; font-weight: 700; fill: #f1e4d8; }
+      .s   { font-size: 13.5px; fill: #d9c8bb; }
+      .n   { font-size: 13px; fill: #a48d80; }
+      .nb  { font-family: "JetBrains Mono", ui-monospace, Menlo, monospace; font-size: 13px; font-weight: 700; }
+      .num { font-family: Unbounded, "Helvetica Neue", Arial, sans-serif; font-size: 13px; font-weight: 700; }
+      .box { fill: #1c1210; stroke-width: 1.5; }
     </style>
   </defs>
 
-  <!-- 1 TRIGGER -->
-  <rect x="310" y="14" width="260" height="60" rx="12" fill="#6366f1"/>
-  <text class="t num" x="328" y="38">1</text>
-  <text class="t h"   x="346" y="40">TRIGGER</text>
-  <text class="t s"   x="346" y="60">a push, 2am, an alert</text>
-  <line x1="440" y1="74" x2="440" y2="106" stroke="#94a3b8" stroke-width="2" marker-end="url(#b)"/>
+  <rect width="880" height="610" rx="16" fill="#140c0b"/>
 
-  <!-- 2 CHECK -->
-  <rect x="268" y="108" width="344" height="76" rx="12" fill="#f59e0b"/>
-  <text class="t num" x="286" y="134" style="fill:#3b2a05">2</text>
-  <text class="t h"   x="304" y="136" style="fill:#3b2a05">CHECK</text>
-  <text class="t s"   x="304" y="158" style="fill:#3b2a05; font-weight:600">Is there work? It has three answers,</text>
-  <text class="t s"   x="304" y="175" style="fill:#3b2a05; font-weight:600">and only one of them costs you anything.</text>
+  <!-- 1 trigger -->
+  <rect class="box" x="310" y="14" width="260" height="60" rx="10" stroke="#a48d80"/>
+  <text class="num" x="328" y="39" fill="#a48d80">1</text>
+  <text class="h"   x="346" y="40">Trigger</text>
+  <text class="t s" x="346" y="60">a push, 2am, an alert</text>
+  <line x1="440" y1="74" x2="440" y2="106" stroke="#7a645b" stroke-width="2" marker-end="url(#b)"/>
+
+  <!-- 2 check -->
+  <rect class="box" x="268" y="108" width="344" height="76" rx="10" stroke="#f1e4d8" style="stroke-width:2"/>
+  <text class="num" x="286" y="135" fill="#f1e4d8">2</text>
+  <text class="h"   x="304" y="136">Check</text>
+  <text class="t s" x="304" y="158">Is there work? It has three answers,</text>
+  <text class="t s" x="304" y="175">and only one of them costs you anything.</text>
 
   <!-- three branches -->
-  <path d="M440,184 L440,206 L140,206 L140,242" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#g)"/>
-  <path d="M440,184 L440,242" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#b)"/>
-  <path d="M440,184 L440,206 L740,206 L740,242" fill="none" stroke="#e0668a" stroke-width="2" marker-end="url(#r)"/>
-  <text class="t nb" x="186" y="200" style="fill:#10b981">exit 0</text>
-  <text class="t nb" x="452" y="228" style="fill:#94a3b8">exit 1</text>
-  <text class="t nb" x="652" y="200" style="fill:#e0668a">exit 2</text>
+  <path d="M440,184 L440,206 L140,206 L140,242" fill="none" stroke="#86b86b" stroke-width="2" marker-end="url(#g)"/>
+  <path d="M440,184 L440,242" fill="none" stroke="#d9a441" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M440,184 L440,206 L740,206 L740,242" fill="none" stroke="#e6503d" stroke-width="2" marker-end="url(#r)"/>
+  <text class="nb" x="186" y="200" fill="#86b86b">exit 0</text>
+  <text class="nb" x="452" y="228" fill="#d9a441">exit 1</text>
+  <text class="nb" x="652" y="200" fill="#e6503d">exit 2</text>
 
   <!-- exit 0 -->
-  <rect x="20" y="244" width="240" height="84" rx="12" fill="#10b981"/>
-  <text class="t h" x="40" y="272" style="font-size:16px; fill:#04301f">NOTHING TO DO</text>
-  <text class="t s" x="40" y="295" style="fill:#04301f; font-weight:600">The run ends here.</text>
-  <text class="t s" x="40" y="313" style="fill:#04301f; font-weight:600">You spend nothing.</text>
+  <rect class="box" x="20" y="244" width="240" height="84" rx="10" stroke="#86b86b"/>
+  <text class="h"   x="40" y="272" style="font-size:15px; fill:#86b86b">Nothing to do</text>
+  <text class="t s" x="40" y="295">The run ends here.</text>
+  <text class="t s" x="40" y="313">You spend nothing.</text>
 
   <!-- exit 2 -->
-  <rect x="620" y="244" width="240" height="84" rx="12" fill="#e0668a"/>
-  <text class="t h" x="640" y="272" style="font-size:16px; fill:#3d0b1c">NOT WIRED</text>
-  <text class="t s" x="640" y="295" style="fill:#3d0b1c; font-weight:600">It cannot tell. Fails loudly</text>
-  <text class="t s" x="640" y="313" style="fill:#3d0b1c; font-weight:600">and says what it needs.</text>
+  <rect class="box" x="620" y="244" width="240" height="84" rx="10" stroke="#e6503d"/>
+  <text class="h"   x="640" y="272" style="font-size:15px; fill:#e6503d">Not wired</text>
+  <text class="t s" x="640" y="295">It cannot tell. Fails loudly</text>
+  <text class="t s" x="640" y="313">and says what it needs.</text>
 
-  <!-- 3 AGENT -->
-  <rect x="310" y="244" width="260" height="84" rx="12" fill="#3b82f6"/>
-  <text class="t num" x="328" y="270">3</text>
-  <text class="t h"   x="346" y="272">AGENT</text>
-  <text class="t s"   x="346" y="295">It does the job, fenced.</text>
-  <text class="t s"   x="346" y="313">Capped turns. Capped spend.</text>
-  <line x1="440" y1="328" x2="440" y2="358" stroke="#94a3b8" stroke-width="2" marker-end="url(#b)"/>
+  <!-- 3 agent -->
+  <rect class="box" x="310" y="244" width="260" height="84" rx="10" stroke="#d9a441"/>
+  <text class="num" x="328" y="271" fill="#d9a441">3</text>
+  <text class="h"   x="346" y="272">Agent</text>
+  <text class="t s" x="346" y="295">It does the job, fenced.</text>
+  <text class="t s" x="346" y="313">Capped turns. Capped spend.</text>
+  <line x1="440" y1="328" x2="440" y2="358" stroke="#7a645b" stroke-width="2" marker-end="url(#b)"/>
 
-  <!-- 4 GATE -->
-  <rect x="258" y="360" width="364" height="96" rx="12" fill="#8b5cf6"/>
-  <text class="t num" x="276" y="386">4</text>
-  <text class="t h"   x="294" y="388">GATE</text>
-  <rect x="276" y="400" width="160" height="44" rx="8" fill="#ffffff" fill-opacity=".16"/>
-  <text class="t s" x="290" y="419" style="font-weight:700">Ships on green</text>
-  <text class="t n" x="290" y="436" style="fill:#e8dcff">reversible. Opens a PR.</text>
-  <rect x="446" y="400" width="160" height="44" rx="8" fill="#ffffff" fill-opacity=".16"/>
-  <text class="t s" x="460" y="419" style="font-weight:700">Flags, you decide</text>
-  <text class="t n" x="460" y="436" style="fill:#e8dcff">a human owns it.</text>
-  <line x1="440" y1="456" x2="440" y2="486" stroke="#94a3b8" stroke-width="2" marker-end="url(#b)"/>
+  <!-- 4 gate -->
+  <rect class="box" x="258" y="360" width="364" height="96" rx="10" stroke="#a48d80"/>
+  <text class="num" x="276" y="387" fill="#a48d80">4</text>
+  <text class="h"   x="294" y="388">Gate</text>
+  <rect x="276" y="400" width="160" height="44" rx="4" fill="#0d0807" stroke="#3a2622"/>
+  <text class="t s" x="290" y="419" style="font-weight:700; fill:#86b86b">Ships on green</text>
+  <text class="t n" x="290" y="436">reversible. Opens a PR.</text>
+  <rect x="446" y="400" width="160" height="44" rx="4" fill="#0d0807" stroke="#3a2622"/>
+  <text class="t s" x="460" y="419" style="font-weight:700; fill:#e6503d">Flags, you decide</text>
+  <text class="t n" x="460" y="436">a human owns it.</text>
+  <line x1="440" y1="456" x2="440" y2="486" stroke="#7a645b" stroke-width="2" marker-end="url(#b)"/>
 
-  <!-- 5 MEMORY -->
-  <rect x="310" y="488" width="260" height="70" rx="12" fill="#64748b"/>
-  <text class="t num" x="328" y="514">5</text>
-  <text class="t h"   x="346" y="516">MEMORY</text>
-  <text class="t s"   x="346" y="537">It writes down what it learned,</text>
-  <text class="t s"   x="346" y="553">so tomorrow is not today again.</text>
+  <!-- 5 memory -->
+  <rect class="box" x="310" y="488" width="260" height="70" rx="10" stroke="#a48d80"/>
+  <text class="num" x="328" y="515" fill="#a48d80">5</text>
+  <text class="h"   x="346" y="516">Memory</text>
+  <text class="t s" x="346" y="537">It writes down what it learned,</text>
+  <text class="t s" x="346" y="553">so tomorrow is not today again.</text>
 
-  <text class="t n" x="20" y="582" style="font-style:italic; fill:#a8b3c2">Miss the check and you have an expensive cron job. Miss the gate and you have a liability.</text>
-  <text class="t n" x="20" y="600" style="font-style:italic; fill:#a8b3c2">Leave out exit 2 and every loop you cannot wire still wakes an agent, on a schedule, to find nothing.</text>
+  <text class="t n" x="20" y="582" style="font-style:italic">Miss the check and you have an expensive cron job. Miss the gate and you have a liability.</text>
+  <text class="t n" x="20" y="600" style="font-style:italic">Leave out exit 2 and every loop you cannot wire still wakes an agent, on a schedule, to find nothing.</text>
 </svg>
