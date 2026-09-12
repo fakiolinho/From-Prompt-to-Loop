@@ -1,0 +1,22 @@
+[
+  { "utterance": "hi there", "intent": "greeting" },
+  { "utterance": "hello, good morning", "intent": "greeting" },
+  { "utterance": "hey", "intent": "greeting" },
+  { "utterance": "what is my balance", "intent": "check_balance" },
+  { "utterance": "how much do I have left", "intent": "check_balance" },
+  { "utterance": "show my funds please", "intent": "check_balance" },
+  { "utterance": "can you tell me my balance", "intent": "check_balance" },
+  { "utterance": "transfer 50 to John", "intent": "transfer" },
+  { "utterance": "send money to my landlord", "intent": "transfer" },
+  { "utterance": "move 200 to savings", "intent": "transfer" },
+  { "utterance": "cancel my subscription", "intent": "cancel" },
+  { "utterance": "please stop my plan", "intent": "cancel" },
+  { "utterance": "close my account", "intent": "cancel" },
+  { "utterance": "I need help", "intent": "help" },
+  { "utterance": "can I speak to someone", "intent": "help" },
+  { "utterance": "get me a human agent", "intent": "help" },
+  { "utterance": "goodbye", "intent": "goodbye" },
+  { "utterance": "see you later", "intent": "goodbye" },
+  { "utterance": "that is all, thanks", "intent": "goodbye" },
+  { "utterance": "bye now", "intent": "goodbye" }
+]

@@ -1,0 +1,11 @@
+{
+  "name": "eval-loop-example",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A runnable eval loop: keeps an intent classifier at or above a baseline. Zero dependencies.",
+  "scripts": {
+    "test": "node run-evals.js; rc=$?; [ $rc -eq 0 ] || [ $rc -eq 3 ]",
+    "evals": "node run-evals.js",
+    "raise-baseline": "node raise-baseline.js"
+  }
+}

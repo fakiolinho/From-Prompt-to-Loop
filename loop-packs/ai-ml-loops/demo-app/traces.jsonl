@@ -1,0 +1,3 @@
+{"id":"c1","model":"small","inputTokens":120,"outputTokens":30,"costUsd":0.002,"task":"check_balance"}
+{"id":"c2","model":"big-expensive","inputTokens":80,"outputTokens":10,"costUsd":0.012,"task":"greeting"}
+{"id":"c3","model":"small","inputTokens":4000,"outputTokens":2000,"costUsd":0.08,"task":"summarise"}

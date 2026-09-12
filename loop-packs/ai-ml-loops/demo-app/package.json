@@ -1,0 +1,11 @@
+{
+  "name": "ai-ml-loops-demo-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A playground seeded with real work for the AI/ML loops (20-26). Zero dependencies; the checks are pure Node.",
+  "scripts": {
+    "loop20": "node loops.js 20", "loop21": "node loops.js 21", "loop22": "node loops.js 22",
+    "loop23": "node loops.js 23", "loop24": "node loops.js 24", "loop25": "node loops.js 25",
+    "loop26": "node loops.js 26", "check": "node loops.js all"
+  }
+}

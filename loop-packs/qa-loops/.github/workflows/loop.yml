@@ -1,0 +1,123 @@
+name: qa-loop
+
+on:
+  workflow_dispatch:
+    inputs:
+      loop:
+        description: "loop folder, e.g. 28-flaky-test-detection-and-quarantine"
+        required: true
+      agent:
+        description: "claude or codex"
+        default: "claude"
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: loop-${{ github.event.inputs.loop }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    outputs:
+      work: ${{ steps.check.outputs.code }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci || echo "no lockfile or no deps, continuing"
+
+      # The check answers one question: is there work?
+      #   0 = nothing to do, the job ends here and spends nothing
+      #   1 = there is work, wake the agent
+      #   2+ = the check is not wired to this repo. Fail loudly. Never wake the agent
+      #        for a broken check, or you pay tokens to fix nothing.
+      - id: check
+        run: |
+          set +e
+          bash "loops/${{ github.event.inputs.loop }}/check.sh"
+          code=$?
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          case "$code" in
+            0) echo "Nothing to do. No agent, no tokens spent." ;;
+            1) echo "Work found. Waking the agent." ;;
+            *) echo "::error::check.sh exited $code. It is not wired to this repo. Not waking the agent."
+               exit "$code" ;;
+          esac
+
+      - name: Run with Claude
+        if: steps.check.outputs.code == '1' && github.event.inputs.agent != 'codex'
+        run: |
+          npx @anthropic-ai/claude-code -p "Read CLAUDE.md and loops/${{ github.event.inputs.loop }}/ORDERS.md. \
+            Do exactly what those orders say, nothing outside them. Run \
+            bash loops/${{ github.event.inputs.loop }}/check.sh and finish only when it exits 0 \
+            (for "Flags, you decide" loops, when the report or issue is posted). Append one line to \
+            memory/${{ github.event.inputs.loop }}.md. If the orders say open a PR, use the single \
+            branch loop/${{ github.event.inputs.loop }} and never open a second. Never delete or \
+            weaken a test to go green: quarantine and flag instead. If two runs of the check fail the same way, stop and open an issue; \
+            do not try a third time. If you cannot proceed without \
+            guessing intent, open an issue and stop." \
+            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(npx:*),Bash(node:*),Bash(git:*),Bash(gh:*),Bash(bash loops/*/check.sh)" \
+            --max-turns 30 --max-budget-usd 2
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run with Codex
+        if: steps.check.outputs.code == '1' && github.event.inputs.agent == 'codex'
+        run: |
+          npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and loops/${{ github.event.inputs.loop }}/ORDERS.md. \
+            Do exactly what those orders say. Run bash loops/${{ github.event.inputs.loop }}/check.sh \
+            and finish only when it exits 0. If two runs of the check fail the same way, stop and open an issue; \
+            do not try a third time. Append one line to memory/${{ github.event.inputs.loop }}.md. \
+            If the orders say open a PR, use branch loop/${{ github.event.inputs.loop }}, never a second. \
+            Never delete or weaken a test to go green: quarantine and flag instead."
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # The maker does the work. The checker proves it, on a clean machine the maker never touched.
+  # An agent that grades its own homework shares its own blind spot. This job costs pennies
+  # and it is the difference between "the agent says it is green" and "it is green".
+  verify:
+    name: verify
+    needs: run
+    if: needs.run.outputs.work == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: branch
+        run: |
+          b="loop/${{ github.event.inputs.loop }}"
+          if git ls-remote --exit-code --heads origin "$b" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "No $b branch. This loop flags rather than ships, so there is nothing to verify."
+          fi
+
+      - name: Take the agent's branch, fresh
+        if: steps.branch.outputs.exists == 'true'
+        run: git checkout "loop/${{ github.event.inputs.loop }}"
+
+      - name: Install
+        if: steps.branch.outputs.exists == 'true'
+        run: npm ci || echo "no lockfile or no deps, continuing"
+
+      - name: Run the check again, with no agent in the room
+        if: steps.branch.outputs.exists == 'true'
+        run: bash "loops/${{ github.event.inputs.loop }}/check.sh"
+
+      - name: Say what that proved
+        if: steps.branch.outputs.exists == 'true'
+        run: echo "The check passed on a clean clone. This PR is safe to review."
+
+# To let loops open PRs with the default token, enable Settings > Actions > General >
+# "Allow GitHub Actions to create and approve pull requests", or pass a PAT as GH_TOKEN.

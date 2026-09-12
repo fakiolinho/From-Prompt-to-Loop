@@ -1,0 +1,6 @@
+{ "_comment": "The matrix the loop keeps covered. The farm (BrowserStack/Sauce/Playwright) runs the tests; the loop governs this list and reports gaps. required:true configs must stay green.",
+  "matrix": [
+    { "browser": "chrome",  "os": "windows", "required": true },
+    { "browser": "safari",  "os": "ios",     "required": true },
+    { "browser": "firefox", "os": "linux",   "required": false },
+    { "browser": "samsung", "os": "android", "required": true } ] }

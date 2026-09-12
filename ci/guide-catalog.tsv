@@ -1,0 +1,43 @@
+# The catalog exactly as the field guide prints it (pages 22-25 of the PDF).
+# This file is the source of truth the repo is tested against. Change the guide,
+# change this file, then run ci/test-docs.sh and fix whatever it reports.
+#
+# tag  = the guide's own words. ships = "Ships on green". flags = "Flags, you decide".
+# star = the guide's star, the three easiest first builds.
+#
+# num	pack	tag	star	name
+01	engineering-loops	ships	no	Docs and examples sync
+02	engineering-loops	ships	yes	Dependency upgrades
+03	engineering-loops	ships	no	Codemod and framework migrations
+04	engineering-loops	ships	no	Test backfill on changed code
+05	engineering-loops	ships	no	Dead code and unused dependency removal
+06	engineering-loops	ships	yes	Lint, format, and type fixes
+07	engineering-loops	ships	yes	Release notes and changelog
+08	engineering-loops	flags	no	First pass code review
+09	engineering-loops	flags	no	Issue triage and routing
+10	cloud-loops	ships	no	Container and base image bumps
+11	cloud-loops	ships	no	Backup restore drills
+12	cloud-loops	flags	no	Orphaned resource cleanup
+13	cloud-loops	flags	no	Certificate and secret rotation
+14	cloud-loops	flags	no	Infrastructure drift reconciliation
+15	cloud-loops	flags	no	Cost and spend anomaly watch
+16	cloud-loops	flags	no	Alert and on-call noise tuning
+17	cloud-loops	flags	no	Known alert auto-remediation
+18	cloud-loops	flags	no	IAM and permission audit
+19	ai-ml-loops	ships	no	Eval suite on every prompt or model change
+20	ai-ml-loops	ships	no	RAG knowledge base sync
+21	ai-ml-loops	ships	no	Structured output conformance
+22	ai-ml-loops	flags	no	Model version upgrade testing
+23	ai-ml-loops	flags	no	Golden set growth from production failures
+24	ai-ml-loops	flags	no	Prompt cost and routing optimisation
+25	ai-ml-loops	flags	no	Safety and red team regression
+26	ai-ml-loops	flags	no	Data quality and drift monitoring
+27	qa-loops	ships	no	Bug report to failing test
+28	qa-loops	ships	no	Flaky test detection and quarantine
+29	qa-loops	ships	no	Self healing UI tests
+30	qa-loops	ships	no	Test data and fixtures
+31	qa-loops	ships	no	Smoke tests on every deploy
+32	qa-loops	ships	no	Cross browser and device matrix
+33	qa-loops	flags	no	Visual regression triage
+34	qa-loops	flags	no	E2E coverage from real user flows
+35	qa-loops	flags	no	Synthetic uptime and journey monitoring

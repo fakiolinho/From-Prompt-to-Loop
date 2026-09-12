@@ -1,0 +1,4 @@
+{"intent":"transfer","confidence":0.91,"entities":["alex"]}
+{"intent":"check_balance","confidence":0.78}
+{"confidence":0.6}
+{"intent":"greeting","confidence":1.4}

@@ -1,0 +1,12 @@
+[
+  { "utterance": "hi there", "intent": "greeting" },
+  { "utterance": "good morning", "intent": "greeting" },
+  { "utterance": "bye", "intent": "farewell" },
+  { "utterance": "see you later", "intent": "farewell" },
+  { "utterance": "what's my balance", "intent": "check_balance" },
+  { "utterance": "how much is in my account", "intent": "check_balance" },
+  { "utterance": "transfer 50 to alex", "intent": "transfer" },
+  { "utterance": "send money to mom", "intent": "transfer" },
+  { "utterance": "i need help", "intent": "support" },
+  { "utterance": "get me an agent", "intent": "support" }
+]

@@ -1,0 +1,2 @@
+{ "required": ["id", "email", "active"],
+  "properties": { "id": { "type": "number" }, "email": { "type": "string" }, "active": { "type": "boolean" } } }

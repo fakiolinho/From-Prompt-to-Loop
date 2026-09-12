@@ -1,0 +1,19 @@
+{
+  "name": "loops-demo-app",
+  "version": "1.1.0",
+  "private": true,
+  "description": "A deliberately messy little project so you can watch the engineering loops find real work. Zero dev dependencies; the checks are pure Node.",
+  "scripts": {
+    "loop2": "node loops.js 2",
+    "loop4": "node loops.js 4",
+    "loop5": "node loops.js 5",
+    "loop6": "node loops.js 6",
+    "loop7": "node loops.js 7",
+    "check": "node loops.js all",
+    "test": "node src/total.test.js && node src/messy.test.js"
+  },
+  "dependencies": {
+    "ms": "2.0.0",
+    "is-odd": "1.0.0"
+  }
+}

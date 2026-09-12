@@ -1,0 +1,5 @@
+{ "baseUrl": "https://app.example.com",
+  "checks": [
+    { "path": "/healthz",  "expectStatus": 200, "maxMs": 500 },
+    { "path": "/login",    "expectStatus": 200, "maxMs": 1500 },
+    { "path": "/api/cart", "expectStatus": 200, "maxMs": 1000 } ] }

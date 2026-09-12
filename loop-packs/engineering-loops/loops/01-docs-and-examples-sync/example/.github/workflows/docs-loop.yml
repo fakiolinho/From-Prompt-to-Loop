@@ -1,0 +1,69 @@
+name: docs-loop
+
+# Trigger: the API changed (the real signal), plus a nightly safety net and manual runs.
+on:
+  push:
+    paths: ["src/**"]
+  schedule: [{ cron: "0 2 * * *" }]
+  workflow_dispatch:
+    inputs:
+      agent:
+        description: "which agent to run: claude or codex"
+        default: "claude"
+
+# The loop opens PRs, so it needs write. Nothing more.
+permissions:
+  contents: write
+  pull-requests: write
+
+# One run at a time. A push mid-run will not race a second agent on the same drift.
+concurrency:
+  group: docs-loop
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15          # blast radius: a runaway run dies here, not on your bill
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+
+      # The check. If it passes, nothing drifted and the job ends green right here.
+      - id: check
+        run: npm test
+        continue-on-error: true
+
+      - name: In sync, nothing to do
+        if: steps.check.outcome == 'success'
+        run: echo "docs match the code. No agent run, no tokens spent."
+
+      # Only a FAILED check wakes the agent. Scoped tools, capped turns, capped spend.
+      - name: Sync with Claude
+        if: steps.check.outcome == 'failure' && github.event.inputs.agent != 'codex'
+        run: |
+          npx @anthropic-ai/claude-code -p "Read CLAUDE.md and memory/docs-loop.md. \
+            Sync /docs and /examples to the API in /src. Run npm test until green. \
+            Open or update the single PR on branch docs-loop/sync, never a second, and append one line to memory/docs-loop.md describing what drifted. \
+            If you cannot map the API without guessing, open an issue and stop." \
+            --allowedTools "Read,Edit,Bash(npm:*),Bash(git:*),Bash(gh:*)" \
+            --max-turns 30 \
+            --max-budget-usd 2
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync with Codex
+        if: steps.check.outcome == 'failure' && github.event.inputs.agent == 'codex'
+        run: |
+          npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and memory/docs-loop.md. \
+            Sync /docs and /examples to the API in /src. Run npm test until green. \
+            Open or update the single PR on branch docs-loop/sync, never a second, and append one line to memory/docs-loop.md describing what drifted. \
+            If you cannot map the API without guessing, open an issue and stop."
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Note: to let the loop open PRs with the default GITHUB_TOKEN, enable
+# Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
+# Or pass a fine-grained PAT or GitHub App token as GH_TOKEN instead.

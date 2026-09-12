@@ -1,0 +1,80 @@
+name: tests
+
+# Proves the packs still work, one job per loop category, so a red square tells you
+# exactly which chapter broke. No API key, no AWS account, no network beyond npm.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 6 * * 1"     # Monday 06:00 UTC: catches rot from upstream npm changes
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  packs:
+    name: ${{ matrix.pack }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false        # one broken chapter must not hide the other three
+      matrix:
+        pack:
+          - engineering-loops
+          - cloud-loops
+          - ai-ml-loops
+          - qa-loops
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # loop 7 reads git tags, loop 4 diffs against a base
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install demo-app dependencies
+        run: |
+          for d in loop-packs/${{ matrix.pack }}/demo-app \
+                   loop-packs/${{ matrix.pack }}/loops/*/example; do
+            [ -f "$d/package.json" ] || continue
+            npm install --prefix "$d" --silent --no-audit --no-fund
+          done
+      - name: Test ${{ matrix.pack }}
+        run: ./ci/test-pack.sh ${{ matrix.pack }}
+
+  docs:
+    name: docs and guide alignment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check the repo against the field guide catalog
+        run: ./ci/test-docs.sh
+      # style is checked inside test-docs.sh too; run it alone so a style break
+      # reads as a style break in the log, not as one failure among 300
+      - name: House style
+        if: always()
+        run: python3 ci/check-style.py
+      - name: The pack workflows parse and are wired correctly
+        if: always()
+        run: python3 ci/check-workflows.py
+
+  demos:
+    name: run-all-demos
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [packs]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: The one command from the README must work
+        run: ./run-all-demos.sh
