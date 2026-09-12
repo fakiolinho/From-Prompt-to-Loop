@@ -5,7 +5,7 @@
 **Trigger:** Daily
 **Ships:** Flags, you decide. It investigates and proposes. Anything irreversible waits for a human.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/14-infrastructure-drift-reconciliation/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/14-infrastructure-drift-reconciliation/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
 
 ## Owns, and never touches
 - Owns:  Infrastructure-as code reconciliation PRs

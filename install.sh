@@ -75,11 +75,29 @@ if [ -n "$extra" ]; then
   echo "  Easiest path: adopt one chapter, prove it, then add the next. See docs/05-add-the-next.md."
 fi
 
+REPO_URL="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main"
+
+# ORDERS.md carries links that only resolve inside this repo. Four levels up from
+# loop-packs/<chapter>/loops/<loop>/ is our root; from <your-repo>/loops/<loop>/ it is
+# somewhere above your project. Point them at GitHub instead, so they work where they land.
+relink() {
+  f="$1"
+  [ -f "$f" ] || return 0
+  sed -i.bak \
+    -e "s#\.\./\.\./\.\./\.\./README\.md#$REPO_URL/README.md#g" \
+    -e "s#\.\./\.\./\.\./\.\./docs/#$REPO_URL/docs/#g" \
+    -e "s#\.\./\.\./LOOPS\.md#$REPO_URL/loop-packs/PACKNAME/LOOPS.md#g" \
+    -e "s#\.\./\.\./\.\./\.\./WIRING\.md#$REPO_URL/WIRING.md#g" \
+    "$f" && rm -f "$f.bak"
+  sed -i.bak "s#PACKNAME#$2#g" "$f" && rm -f "$f.bak"
+}
+
 echo; echo "loops:"
 for p in $picks; do
   pack="${p%%/*}"; loop="${p#*/}"
   copy "$HERE/loop-packs/$pack/loops/$loop" "$TARGET/loops/$loop"
   copy "$HERE/loop-packs/$pack/memory/$loop.md" "$TARGET/memory/$loop.md"
+  relink "$TARGET/loops/$loop/ORDERS.md" "$pack"
 done
 
 # loops.env: exactly the settings these loops read, with the example from each check

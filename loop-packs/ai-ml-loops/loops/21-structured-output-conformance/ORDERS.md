@@ -5,7 +5,8 @@
 **Trigger:** A prompt or schema change
 **Ships:** Ships on green. Opens a PR you can revert in one click. A regression blocks and opens an issue.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/21-structured-output-conformance/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/21-structured-output-conformance/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
+**Needs:** `LOOP_SCHEMA` (e.g. `npx ajv validate -s schema.json -d `) in your `loops.env`. Without it the check exits 2 and this loop never runs. See [WIRING.md](../../../../WIRING.md).
 
 ## Owns, and never touches
 - Owns:  The output schema and the conformance tests

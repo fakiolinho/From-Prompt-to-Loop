@@ -5,7 +5,7 @@
 **Trigger:** On push
 **Ships:** Ships on green. Opens a PR you can revert in one click, and merges once the check is green.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/06-lint-format-and-type-fixes/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/06-lint-format-and-type-fixes/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
 
 ## Owns, and never touches
 - Owns:  Formatting, lint, and mechanically safe type fixes across the repo

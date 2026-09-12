@@ -5,7 +5,8 @@
 **Trigger:** Weekly
 **Ships:** Flags, you decide. It triages and reports. A human makes the call before anything is accepted.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/34-e2e-coverage-from-real-user-flows/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/34-e2e-coverage-from-real-user-flows/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
+**Needs:** `LOOP_JOURNEYS` (e.g. `node scripts/top-journeys.js`) in your `loops.env`. Without it the check exits 2 and this loop never runs. See [WIRING.md](../../../../WIRING.md).
 
 ## Owns, and never touches
 - Owns:  end to end tests

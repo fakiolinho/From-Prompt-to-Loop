@@ -5,7 +5,7 @@
 **Trigger:** Weekly schedule
 **Ships:** Flags, you decide. It reports candidates and opens an issue. A human presses delete.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/05-dead-code-and-unused-dependency-removal/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/05-dead-code-and-unused-dependency-removal/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
 
 ## Owns, and never touches
 - Owns:  Unreachable code and unused dependencies the tools and the build agree are dead

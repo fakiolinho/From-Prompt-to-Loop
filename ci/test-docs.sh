@@ -143,6 +143,27 @@ for pack in engineering-loops cloud-loops ai-ml-loops qa-loops; do
     || bad "$pack CLAUDE.md and AGENTS.md have drifted apart"
 done
 
+head2 "every ORDERS explains the three answers and what it needs"
+for f in loop-packs/*/loops/*/ORDERS.md; do
+  n=$(basename "$(dirname "$f")")
+  grep -q 'not wired to this repo yet' "$f" \
+    && ok "$n describes all three answers" \
+    || bad "$n still describes a check with two answers"
+  # if its check reads a setting, the orders must name it: that page is what a human reads
+  v=$(grep -ohE 'LOOP_[A-Z_]+' "$(dirname "$f")/check.sh" 2>/dev/null \
+      | grep -vE 'LOOP_MAX_COMMITS|LOOP_RUNS' | sort -u | head -1)
+  if [ -n "$v" ]; then
+    grep -q "$v" "$f" && ok "$n names $v" || bad "$n needs $v and never says so"
+  fi
+done
+
+head2 "chapters are named, not numbered, where a reader has to choose"
+for f in docs/*.md README.md; do
+  grep -qE '\[Ch [0-9]\]\(|\[Chapter [0-9]\]\(' "$f" \
+    && bad "$f offers '[Ch 1]' as a link label, which tells a reader nothing" \
+    || ok "$(basename "$f") names its chapters"
+done
+
 head2 "every loop has an owner"
 for f in loop-packs/*/loops/*/ORDERS.md; do
   n=$(basename "$(dirname "$f")")

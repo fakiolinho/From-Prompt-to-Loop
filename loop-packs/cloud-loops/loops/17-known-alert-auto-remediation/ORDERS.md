@@ -7,7 +7,7 @@
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
 **AWS agent engine:** DevOps Agent (GA) for autonomous root cause; the loop gates the remediation. Plain CLI fallback: match the alarm to a runbook by name.
 **Gate:** this loop can change infra, data, or access. Run it under the protected `cloud-loops` environment (see SETUP.md). Irreversible steps stop for a human.
-**The check:** `loops/17-known-alert-auto-remediation/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/17-known-alert-auto-remediation/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
 
 ## Owns, and never touches
 - Owns:  Runbook remediation for KNOWN alarms only

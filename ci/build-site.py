@@ -262,7 +262,7 @@ def main():
         )
 
     chapter_pills = "".join(
-        f'<button class="pill" data-f="ch" data-v="{n}">Ch {n} · {t}</button>'
+        f'<button class="pill" data-f="ch" data-v="{n}">{t}</button>'
         for _, (n, t, _) in sorted(CHAPTERS.items(), key=lambda kv: kv[1][0])
     )
 

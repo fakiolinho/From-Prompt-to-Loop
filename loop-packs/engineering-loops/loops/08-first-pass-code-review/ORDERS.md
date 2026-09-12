@@ -5,7 +5,8 @@
 **Trigger:** On pull request opened
 **Ships:** Flags, you decide. It comments or labels only. It never writes code and never merges.
 **Owner:** unassigned. Put a name here before this runs on a real repo. A loop nobody owns is a loop nobody maintains.
-**The check:** `loops/08-first-pass-code-review/check.sh`. Exits 0 when there is nothing to do, non zero when there is work.
+**The check:** `loops/08-first-pass-code-review/check.sh`. Run it from your project root. **0** nothing to do, **1** there is work, **2** not wired to this repo yet (it will say what it needs, and no agent runs).
+**Needs:** `LOOP_PR` or `LOOP_PR_DIFF` in your `loops.env`. Without it the check exits 2 and this loop never runs. See [WIRING.md](../../../../WIRING.md).
 
 ## Owns, and never touches
 - Owns:  Nothing. This loop comments, it does not write code

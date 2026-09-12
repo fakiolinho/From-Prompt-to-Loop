@@ -74,7 +74,7 @@ Nothing irreversible happens without a person. That is the whole reason you can 
 |---|---|
 | **Run all four chapters now** | `./run-all-demos.sh` (1 minute, no setup) |
 | **Read a real loop's orders** | [loop 2, dependency upgrades](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) |
-| **Browse all 35** | [Chapter 1](../loop-packs/engineering-loops/LOOPS.md) · [Chapter 2](../loop-packs/cloud-loops/LOOPS.md) · [Chapter 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Chapter 4](../loop-packs/qa-loops/LOOPS.md) |
+| **Browse all 35** | [Engineering](../loop-packs/engineering-loops/LOOPS.md) · [Cloud](../loop-packs/cloud-loops/LOOPS.md) · [AI and ML](../loop-packs/ai-ml-loops/LOOPS.md) · [QA](../loop-packs/qa-loops/LOOPS.md) |
 
 
 ## Is your idea actually a loop?
@@ -87,4 +87,4 @@ tool already doing it? Four yeses buy you the right to walk away.
 
 [← Read this first](00-start-here.md) · [Contents](../README.md) · [Next: Plain words →](02-plain-words.md)
 
-**The 35 loops:** [Ch 1](../loop-packs/engineering-loops/LOOPS.md) · [Ch 2](../loop-packs/cloud-loops/LOOPS.md) · [Ch 3](../loop-packs/ai-ml-loops/LOOPS.md) · [Ch 4](../loop-packs/qa-loops/LOOPS.md)
+**The 35 loops:** [Engineering](../loop-packs/engineering-loops/LOOPS.md) · [Cloud](../loop-packs/cloud-loops/LOOPS.md) · [AI and ML](../loop-packs/ai-ml-loops/LOOPS.md) · [QA](../loop-packs/qa-loops/LOOPS.md)
