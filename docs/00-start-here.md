@@ -43,6 +43,10 @@ the operations chapters. This repo is the working code that guide points at.
 
 Read the guide for *why*. Read these pages for *how*.
 
+Before you point a loop at anything you care about, read
+[SECURITY.md](../SECURITY.md). It is short, and it is the honest version: what the fences
+actually stop, what they do not, and which parts stay your job.
+
 ---
 
 [Contents](../README.md) · [Next: What a loop is →](01-what-is-a-loop.md)

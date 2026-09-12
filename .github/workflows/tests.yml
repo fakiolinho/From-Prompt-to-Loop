@@ -53,8 +53,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - name: The site generator's one dependency
-        run: pip install --quiet markdown-it-py
+      - name: The two Python dependencies
+        run: pip install --quiet markdown-it-py pyyaml
       # On main, build-site.yml commits the rendered site right after this. Render here
       # too so the tests read what the markdown actually says.
       - name: Render the site before testing it

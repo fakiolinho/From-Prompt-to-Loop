@@ -11,6 +11,12 @@ These prove the packs still work. No API key, no AWS account, no agent runs.
     python3 ci/check-style.py              # house style
     python3 ci/check-workflows.py          # the four pack runners
 
+## What these need
+
+    pip install markdown-it-py pyyaml
+
+Nothing else. The loops themselves stay on Node 18 and bash; Python is for the tooling here.
+
 ## The generators
 
 Two files in `docs/` and one at the root are generated. Run these after changing anything they

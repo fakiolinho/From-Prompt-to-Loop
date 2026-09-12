@@ -129,6 +129,9 @@ Every one of these is already in [the chapter runner](../loop-packs/engineering-
 
 ## Securing the fleet
 
+> The full threat model for this repository, including what these controls do **not** cover,
+> is in [SECURITY.md](../SECURITY.md).
+
 A loop is an autonomous worker with your credentials and the freedom to act while you sleep.
 That is the point, and it is the risk.
 

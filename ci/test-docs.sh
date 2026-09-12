@@ -218,6 +218,41 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "every python dependency is declared where someone will look"
+# an import that only works because the CI image happens to ship it is a dependency
+# you have by luck, and one you will lose without warning
+for m in $(python3 -c "
+import ast, glob, sys
+mods = set()
+for f in glob.glob('ci/*.py'):
+    for node in ast.walk(ast.parse(open(f).read())):
+        if isinstance(node, ast.Import):
+            mods.update(a.name.split('.')[0] for a in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            mods.add(node.module.split('.')[0])
+print(' '.join(sorted(mods)))"); do
+  case "$m" in
+    glob|html|os|re|sys|json|subprocess|pathlib|textwrap) continue ;;   # standard library
+  esac
+  pkg=$(echo "$m" | sed 's/markdown_it/markdown-it-py/; s/^yaml$/pyyaml/')
+  for f in CONTRIBUTING.md ci/README.md .github/workflows/tests.yml; do
+    grep -qi "$pkg" "$f" && ok "$pkg declared in $(basename "$f")" \
+      || bad "ci/ imports $m but $f never mentions $pkg"
+  done
+done
+
+head2 "the repo says how to report a problem and how to contribute"
+for f in SECURITY.md CONTRIBUTING.md; do
+  [ -f "$f" ] && ok "$f present" || bad "$f is missing from an MIT repo people will fork"
+  grep -q "$f" README.md && ok "README links $f" || bad "$f exists but nothing links to it"
+done
+grep -qi "report a vulnerability" SECURITY.md && ok "SECURITY says how to report" \
+  || bad "SECURITY.md never says how to report anything"
+grep -qi "do not cover" SECURITY.md && ok "SECURITY says what it does NOT cover" \
+  || bad "SECURITY.md only lists controls, never their limits"
+grep -q "exit 2" CONTRIBUTING.md && ok "CONTRIBUTING states the check contract" \
+  || bad "CONTRIBUTING never tells a contributor the three answer contract"
+
 head2 "memory teaches what a good entry looks like"
 for f in loop-packs/*/memory/*.md; do
   grep -q 'A good line is specific' "$f" \
