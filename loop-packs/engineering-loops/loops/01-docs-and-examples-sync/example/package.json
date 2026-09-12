@@ -1,0 +1,12 @@
+{
+  "name": "docs-loop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A reference loop that keeps an SDK's docs and examples in sync with the code. Zero dependencies.",
+  "scripts": {
+    "examples": "node examples/run-all.js",
+    "check:docs": "node scripts/check-docs.js",
+    "test": "npm run examples && npm run check:docs",
+    "check-docs": "npm run examples && npm run check:docs"
+  }
+}

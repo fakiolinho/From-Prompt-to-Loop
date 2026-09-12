@@ -1,0 +1,19 @@
+diff --git a/src/payments.js b/src/payments.js
+new file mode 100644
+index 0000000..1111111
+--- /dev/null
++++ b/src/payments.js
+@@ -0,0 +1,12 @@
++const API_KEY = "sk_live_8fk2c9d11examplekey"
++
++function charge(amount, currency) {
++  console.log("charging", amount)
++  if (currency == "usd") {
++    try {
++      return gateway.charge(amount, API_KEY)
++    } catch (e) {}
++  }
++  // TODO: handle other currencies
++  return null
++}
++module.exports = { charge }

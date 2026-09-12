@@ -1,0 +1,130 @@
+name: cloud-loop
+
+on:
+  workflow_dispatch:
+    inputs:
+      loop:
+        description: "loop folder, e.g. 15-cost-and-spend-anomaly-watch"
+        required: true
+      agent:
+        description: "claude or codex"
+        default: "claude"
+
+# Cloud loops touch real infrastructure. Keep this minimal and assume a scoped role via OIDC.
+permissions:
+  id-token: write          # for AWS OIDC, no long-lived keys
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: loop-${{ github.event.inputs.loop }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    outputs:
+      work: ${{ steps.check.outputs.code }}
+    # For irreversible loops (11,12,13,18), set this to a protected Environment with required
+    # reviewers so the human gate is enforced by GitHub, not just by the orders.
+    environment: cloud-loops
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # Assume the least-privilege loop role. No access keys live in the repo.
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.LOOP_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      # The check answers one question: is there work?
+      #   0 = nothing to do, the job ends here and spends nothing
+      #   1 = there is work, wake the agent
+      #   2+ = the check is not wired to this repo. Fail loudly. Never wake the agent
+      #        for a broken check, or you pay tokens to fix nothing.
+      - id: check
+        run: |
+          set +e
+          bash "loops/${{ github.event.inputs.loop }}/check.sh"
+          code=$?
+          set -e
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          case "$code" in
+            0) echo "Nothing to do. No agent, no tokens spent." ;;
+            1) echo "Work found. Waking the agent." ;;
+            *) echo "::error::check.sh exited $code. It is not wired to this repo. Not waking the agent."
+               exit "$code" ;;
+          esac
+
+      - name: Run with Claude
+        if: steps.check.outputs.code == '1' && github.event.inputs.agent != 'codex'
+        run: |
+          npx @anthropic-ai/claude-code -p "Read CLAUDE.md and loops/${{ github.event.inputs.loop }}/ORDERS.md. \
+            Do exactly what those orders say, nothing outside them. Investigate with read-only AWS calls \
+            first. Reversible fixes ship as a PR on branch loop/${{ github.event.inputs.loop }}; anything \
+            irreversible (delete, IAM change, prod secret, capacity) STOPS and opens an issue for a human. \
+            If the orders name an AWS agent (FinOps/DevOps/Security), use it for the analysis and govern \
+            the result. If two runs of the check fail the same way, stop and open an issue; do not try a third time. \
+            Append one line to memory/${{ github.event.inputs.loop }}.md." \
+            --allowedTools "Read,Edit,Write,Bash(aws:*),Bash(npm:*),Bash(git:*),Bash(gh:*),Bash(bash loops/*/check.sh)" \
+            --max-turns 30 --max-budget-usd 2
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run with Codex
+        if: steps.check.outputs.code == '1' && github.event.inputs.agent == 'codex'
+        run: |
+          npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and loops/${{ github.event.inputs.loop }}/ORDERS.md. \
+            Investigate read-only first. Reversible fixes ship as a PR on loop/${{ github.event.inputs.loop }}; \
+            anything irreversible STOPS and opens an issue. Use the named AWS agent for analysis and govern \
+            the result. If two runs of the check fail the same way, stop and open an issue; do not try a third time. \
+            Append one line to memory/${{ github.event.inputs.loop }}.md."
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # The maker does the work. The checker proves it, on a clean machine the maker never touched.
+  # An agent that grades its own homework shares its own blind spot. This job costs pennies
+  # and it is the difference between "the agent says it is green" and "it is green".
+  verify:
+    name: verify
+    needs: run
+    if: needs.run.outputs.work == '1'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: branch
+        run: |
+          b="loop/${{ github.event.inputs.loop }}"
+          if git ls-remote --exit-code --heads origin "$b" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "No $b branch. This loop flags rather than ships, so there is nothing to verify."
+          fi
+
+      - name: Take the agent's branch, fresh
+        if: steps.branch.outputs.exists == 'true'
+        run: git checkout "loop/${{ github.event.inputs.loop }}"
+
+      # Same scoped role. The checker reads, it never writes.
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.LOOP_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Run the check again, with no agent in the room
+        if: steps.branch.outputs.exists == 'true'
+        run: bash "loops/${{ github.event.inputs.loop }}/check.sh"
+
+      - name: Say what that proved
+        if: steps.branch.outputs.exists == 'true'
+        run: echo "The check passed on a clean clone. This PR is safe to review."
+

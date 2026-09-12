@@ -1,0 +1,9 @@
+node_modules/
+*.log
+
+# Secrets. A loop needs a key; the key never belongs in the repo.
+.env
+.env.*
+!.env.example
+*.pem
+*.key

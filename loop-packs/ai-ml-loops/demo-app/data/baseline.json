@@ -1,0 +1,7 @@
+[
+  {"age":34,"country":"GR","label":"ok"}, {"age":41,"country":"GR","label":"ok"},
+  {"age":29,"country":"GR","label":"ok"}, {"age":52,"country":"GR","label":"ok"},
+  {"age":38,"country":"GR","label":"ok"}, {"age":45,"country":"GR","label":"ok"},
+  {"age":31,"country":"GR","label":"ok"}, {"age":60,"country":"US","label":"ok"},
+  {"age":27,"country":"US","label":"ok"}, {"age":48,"country":"US","label":"ok"}
+]

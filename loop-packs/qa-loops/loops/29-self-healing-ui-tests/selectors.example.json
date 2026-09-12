@@ -1,0 +1,7 @@
+{
+  "_comment": "Logical locators the UI tests use. Loop 29 heals THESE when an element moves; it never touches assertions. Prefer stable data-testid hooks over brittle CSS paths.",
+  "loginButton": "[data-testid=login-submit]",
+  "searchInput": "[data-testid=search-q]",
+  "cartIcon": "[data-testid=cart]",
+  "checkoutButton": "[data-testid=checkout-confirm]"
+}

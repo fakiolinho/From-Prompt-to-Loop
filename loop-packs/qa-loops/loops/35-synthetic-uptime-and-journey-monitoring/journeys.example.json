@@ -1,0 +1,5 @@
+{ "_comment": "Synthetic journeys run continuously against production by Checkly/Pingdom/Datadog. The loop owns these definitions and the alert routing; it never touches prod.",
+  "journeys": [
+    { "name": "login",    "steps": ["open /login", "submit creds", "see dashboard"],    "maxMs": 4000 },
+    { "name": "checkout", "steps": ["add to cart", "checkout", "see confirmation"],     "maxMs": 8000 } ],
+  "alert": { "after": "2 consecutive failures", "route": "pagerduty:oncall", "confirmFromSecondRegion": true } }

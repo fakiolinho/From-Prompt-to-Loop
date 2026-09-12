@@ -1,0 +1,36 @@
+name: flaky
+on:
+  schedule: [{ cron: "0 3 * * *" }]
+  workflow_dispatch:
+    inputs:
+      agent: { description: "claude or codex", default: "claude" }
+permissions: { contents: write, pull-requests: write, issues: write }
+concurrency: { group: flaky, cancel-in-progress: false }
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: node detect-flaky.js
+        continue-on-error: true
+      - name: Suite stable or quarantined
+        if: steps.check.outcome == 'success'
+        run: echo "no unquarantined flaky tests."
+      - name: Quarantine with Claude
+        if: steps.check.outcome == 'failure' && github.event.inputs.agent != 'codex'
+        run: |
+          npx @anthropic-ai/claude-code -p "Read CLAUDE.md. The detector found unquarantined FLAKY \
+            test(s). For each, open a tracking issue, add it to quarantine.json with that issue URL \
+            (npm run quarantine -- <name>), and open a PR on branch loop/28-quarantine for review. \
+            Never delete or weaken a test." \
+            --allowedTools "Read,Edit,Bash(npm:*),Bash(git:*),Bash(gh:*)" --max-turns 20 --max-budget-usd 1
+        env: { ANTHROPIC_API_KEY: "${{ secrets.ANTHROPIC_API_KEY }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      - name: Quarantine with Codex
+        if: steps.check.outcome == 'failure' && github.event.inputs.agent == 'codex'
+        run: |
+          npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md. The detector found \
+            unquarantined FLAKY test(s). For each, open a tracking issue, add it to quarantine.json \
+            with that issue URL, and open a PR on branch loop/28-quarantine. Never delete a test."
+        env: { OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }

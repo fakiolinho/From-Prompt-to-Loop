@@ -1,0 +1,54 @@
+name: evals
+on:
+  push: { paths: ["src/**", "evals/**"] }
+  workflow_dispatch:
+    inputs:
+      agent: { description: "claude or codex", default: "claude" }
+permissions: { contents: write, pull-requests: write, issues: write }
+concurrency: { group: evals, cancel-in-progress: false }
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - id: evals
+        run: |
+          set +e
+          node run-evals.js
+          echo "code=$?" >> "$GITHUB_OUTPUT"
+
+      # accuracy > baseline: ratchet the bar up and open a PR you approve. Deterministic, no agent.
+      - name: Raise baseline on improvement
+        if: steps.evals.outputs.code == '3'
+        run: |
+          npm run raise-baseline
+          git config user.name "eval-loop"
+          git config user.email "eval-loop@users.noreply.github.com"
+          git checkout -B loop/19-raise-baseline
+          git add baseline.json
+          git commit -m "Raise eval baseline to current accuracy"
+          git push -u origin loop/19-raise-baseline --force
+          gh pr list --head loop/19-raise-baseline --state open | grep -q . || \
+            gh pr create --head loop/19-raise-baseline --title "Raise eval baseline" \
+              --body "Accuracy held above the baseline. Ratcheting the bar up so smaller regressions get caught. Review and merge."
+        env: { GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+
+      # accuracy < baseline: a regression. Wake the agent to open an issue. Never lower the baseline.
+      - name: Investigate regression with Claude
+        if: steps.evals.outputs.code == '1' && github.event.inputs.agent != 'codex'
+        run: |
+          npx @anthropic-ai/claude-code -p "Read CLAUDE.md. The evals regressed. Open an issue \
+            with the MISS lines and stop. Never lower baseline.json to pass." \
+            --allowedTools "Read,Edit,Bash(npm:*),Bash(git:*),Bash(gh:*)" --max-turns 20 --max-budget-usd 1
+        env: { ANTHROPIC_API_KEY: "${{ secrets.ANTHROPIC_API_KEY }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+      - name: Investigate regression with Codex
+        if: steps.evals.outputs.code == '1' && github.event.inputs.agent == 'codex'
+        run: |
+          npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md. The evals regressed. \
+            Open an issue with the MISS lines and stop. Never lower baseline.json to pass."
+        env: { OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}", GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
+
+      - name: At baseline, nothing to do
+        if: steps.evals.outputs.code == '0'
+        run: echo "evals exactly at baseline."

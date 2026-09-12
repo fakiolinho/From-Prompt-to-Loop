@@ -1,0 +1,5 @@
+{ "flows": [
+  { "name": "login", "weight": 0.40 },
+  { "name": "checkout", "weight": 0.30 },
+  { "name": "search", "weight": 0.20 },
+  { "name": "profile-edit", "weight": 0.10 } ] }

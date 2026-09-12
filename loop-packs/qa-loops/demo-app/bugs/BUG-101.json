@@ -1,0 +1,3 @@
+{ "id": "BUG-101",
+  "title": "Discount over 100% yields a negative total",
+  "fn": "applyDiscount", "args": [100, 120], "expected": 0 }

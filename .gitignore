@@ -1,0 +1,14 @@
+# JetBrains IDEs
+.idea/
+
+# macOS
+.DS_Store
+
+# Secrets. Loops need an API key; none of it belongs in git.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+credentials
+.aws/

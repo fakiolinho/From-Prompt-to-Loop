@@ -1,0 +1,10 @@
+{
+  "name": "qa-loops-demo-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A playground seeded with real work for QA loops 27, 30, 33, 34. Zero dependencies; the checks are pure Node.",
+  "scripts": {
+    "loop27": "node loops.js 27", "loop30": "node loops.js 30",
+    "loop33": "node loops.js 33", "loop34": "node loops.js 34", "check": "node loops.js all"
+  }
+}
