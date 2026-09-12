@@ -208,15 +208,26 @@ weeks. <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/WIRI
 real person. Ten seconds, and it decides whether this is a fleet somebody runs or a fleet
 nobody maintains. An unowned loop is the one still running badly a year from now, because
 nobody ever felt responsible for turning it off.</p>
-<h2>Step 3. Add one secret</h2>
+<h2>Step 3. Run it here, before you touch GitHub</h2>
+<pre><code>./run-loop.sh 02 --check     is there work?
+./run-loop.sh 02 --dry-run   what would be handed to the agent, without running it
+./run-loop.sh 02             hand it over and watch
+</code></pre>
+<p>This is the same thing the workflow does, on your machine: it loads <code>loops.env</code>, runs the
+check, and only if the answer is 1 does it wake the agent, under the same orders and the same
+caps. Afterwards it runs the check again, so the agent never marks its own work.</p>
+<p>No secret, no schedule, nothing committed. Read the diff with <code>git diff</code> and throw it away if
+you do not like it. Do this once and the rest of this page is just moving the same thing onto a
+clock.</p>
+<h2>Step 4. Add one secret</h2>
 <p>In your repo: <strong>Settings &gt; Secrets and variables &gt; Actions &gt; New repository secret.</strong></p>
 <p>Name it <code>ANTHROPIC_API_KEY</code>, or <code>OPENAI_API_KEY</code> if you will run Codex.</p>
 <p><code>GITHUB_TOKEN</code> is provided for you. You do not add it.</p>
-<h2>Step 4. Let it open PRs</h2>
+<h2>Step 5. Let it open PRs</h2>
 <p><strong>Settings &gt; Actions &gt; General &gt; Workflow permissions.</strong> Turn on <em>&quot;Allow GitHub Actions to create
 and approve pull requests&quot;</em>.</p>
 <p>Skip this and you get the quietest failure there is: a green run that shipped nothing.</p>
-<h2>Step 5. Commit, push, and run it</h2>
+<h2>Step 6. Commit, push, and run it</h2>
 <ul>
 <li>Actions tab, pick <strong>engineering-loop</strong>, click <strong>Run workflow</strong>.</li>
 <li>Set <code>loop</code> to <code>02-dependency-upgrades</code> and <code>agent</code> to <code>claude</code>.</li>
@@ -228,7 +239,7 @@ and approve pull requests&quot;</em>.</p>
 Review it and merge.</li>
 </ul>
 <p>That is one full loop, end to end, on your code.</p>
-<h2>Step 6. Make it run on its own</h2>
+<h2>Step 7. Make it run on its own</h2>
 <p>The runner starts out manual so your first runs are deliberate. When you trust it, add a
 schedule to <code>.github/workflows/loop.yml</code>:</p>
 <pre><code>on:
@@ -260,7 +271,7 @@ the loop step into a small dedicated workflow per scheduled loop.</p>
 </tr>
 <tr>
 <td>Green, but nothing shipped</td>
-<td>Almost always Step 4. Check the PR actually exists before you trust the silence.</td>
+<td>Almost always Step 5. Check the PR actually exists before you trust the silence.</td>
 </tr>
 <tr>
 <td>You do not trust it yet</td>

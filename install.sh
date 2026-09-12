@@ -65,6 +65,7 @@ copy "$HERE/loop-packs/$primary/AGENTS.md"  "$TARGET/AGENTS.md"
 copy "$HERE/loop-packs/$primary/.github/workflows/loop.yml" "$TARGET/.github/workflows/loop.yml"
 copy "$HERE/loop-packs/$primary/.github/PULL_REQUEST_TEMPLATE.md" "$TARGET/.github/PULL_REQUEST_TEMPLATE.md"
 [ -d "$HERE/loop-packs/$primary/lib" ] && copy "$HERE/loop-packs/$primary/lib" "$TARGET/lib"
+copy "$HERE/run-loop.sh" "$TARGET/run-loop.sh"
 
 if [ -n "$extra" ]; then
   echo
@@ -75,6 +76,7 @@ if [ -n "$extra" ]; then
   echo "  Easiest path: adopt one chapter, prove it, then add the next. See docs/05-add-the-next.md."
 fi
 
+first=$(echo $picks | awk '{print $1}' | cut -d/ -f2)
 REPO_URL="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main"
 
 # ORDERS.md carries links that only resolve inside this repo. Four levels up from
@@ -108,35 +110,59 @@ ENV="$TARGET/loops.env"
   '#' \
   '# Commit this file. These are commands, not secrets, and CI has to read it.' \
   '# Secrets go in Settings > Secrets and variables > Actions, never here.' > "$ENV"
-echo; echo "settings:"
+# Write every setting these loops can read into loops.env, commented out.
 for p in $picks; do
-  pack="${p%%/*}"; loop="${p#*/}"
-  vars=$(grep -ohE '\$\{(LOOP_[A-Z_]+|MIGRATION|BASE_REF|BASE_TAG)(:-[^}]*)?\}' \
-          "$HERE/loop-packs/$pack/loops/$loop/check.sh" 2>/dev/null \
+  pack="${p%%/*}"; loop="${p#*/}"; chk="$HERE/loop-packs/$pack/loops/$loop/check.sh"
+  vars=$(grep -ohE '\$\{(LOOP_[A-Z_]+|MIGRATION|BASE_REF|BASE_TAG)(:-[^}]*)?\}' "$chk" 2>/dev/null \
          | sed -E 's/\$\{([A-Z_]+).*/\1/' | sort -u)
   [ -n "$vars" ] || continue
+  grep -q "^## loop ${loop%%-*}:" "$ENV" && continue
+  { echo; echo "## loop ${loop%%-*}: ${loop#*-}"; } >> "$ENV"
+  n=$(echo $vars | wc -w | tr -d ' ')
+  [ "$n" -gt 1 ] && echo "# any one of these wires it:" >> "$ENV"
   for v in $vars; do
-    grep -q "^#\? *$v=" "$ENV" && continue
-    ex=$(grep -oE "$v='[^']*'" "$HERE/loop-packs/$pack/loops/$loop/check.sh" | head -1 | sed "s/^$v=//")
-    [ -n "$ex" ] || ex="''"
-    { echo; echo "# loop ${loop%%-*}: ${loop#*-}"; echo "# $v=$ex"; } >> "$ENV"
-    echo "  loops.env needs $v  (loop ${loop%%-*})"
+    ex=$(grep -oE "$v='[^']*'" "$chk" | head -1 | sed "s/^$v=//")
+    echo "# $v=${ex:-}" >> "$ENV"
   done
 done
 
+# Now ask the loops themselves, in this repo, rather than guessing from the source.
+echo; echo "where each loop stands in your repo right now:"
+ready=0; wants=0; suggest=""
+for p in $picks; do
+  loop="${p#*/}"
+  out=$( cd "$TARGET" && bash "loops/$loop/check.sh" 2>&1 ); rc=$?
+  case "$rc" in
+    0) printf '  %-46s nothing to do\n'  "${loop}"; ready=$((ready+1))
+       [ -z "${suggest:-}" ] && suggest="${loop%%-*}" ;;
+    1) printf '  %-46s THERE IS WORK\n'  "${loop}"; ready=$((ready+1))
+       suggest="${loop%%-*}" ;;
+    *) printf '  %-46s %s\n' "${loop}" "$(printf '%s' "$out" | head -1 | cut -c1-46)"; wants=$((wants+1)) ;;
+  esac
+done
+echo
+echo "  $ready ready to run, $wants waiting on a line in loops.env"
+
 cat <<EOF
 
-Done. Three things left, and only you can do them:
+Installed. Now run one, right here, before you touch GitHub:
 
-  1. Open loops.env and fill in the settings above. Each one is commented out with an
-     example. A loop you leave unset simply exits 2 and tells you what it wanted.
-  2. Add ANTHROPIC_API_KEY (or OPENAI_API_KEY) in Settings > Secrets and variables > Actions.
+  cd $TARGET
+  ./run-loop.sh ${suggest:-${first%%-*}} --check     just ask: is there work?
+  ./run-loop.sh ${suggest:-${first%%-*}}             and hand it to Claude if there is
+
+  0 = nothing to do    1 = there is work    2 = not wired yet, and it says what it needs
+
+Anything that says 2 wants a line in loops.env. Every setting is listed there,
+commented out with an example. WIRING.md has the full reference.
+
+When you want it running without you, three more things:
+
+  1. Commit loops.env and the loops/ folder.
+  2. Add ANTHROPIC_API_KEY (or OPENAI_API_KEY) in
+     Settings > Secrets and variables > Actions.
   3. Settings > Actions > General > Workflow permissions:
      turn on "Allow GitHub Actions to create and approve pull requests".
 
-Then try a check by hand before you ever run the workflow:
-
-  cd $TARGET && bash loops/$(echo $picks | awk '{print $1}' | cut -d/ -f2)/check.sh
-
-  0 = nothing to do    1 = there is work    2 = not wired yet, and it will say what it needs
+Then Actions > ${primary%-loops}-loop > Run workflow.
 EOF

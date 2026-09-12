@@ -24,12 +24,13 @@ the right door.
 
 ### Putting a loop in your own repo
 
-    ./install.sh ~/code/my-app 02            one loop
-    ./install.sh ~/code/my-app engineering   a whole chapter
+    ./install.sh ~/code/my-app 02            put one loop in your repo
+    cd ~/code/my-app && ./run-loop.sh 02     run it there, right now
 
-That copies the loop, the standing orders, the runner and the PR template into the right
-places, and writes a `loops.env` listing the settings that loop needs. It never overwrites
-anything of yours without asking.
+The first copies the loop, the standing orders, the runner and the PR template into place, and
+writes a `loops.env` with the settings that loop needs. The second runs it: check, then the
+agent if there is work, then the check again so nothing marks its own homework. No secret, no
+schedule, nothing committed.
 
 [WIRING.md](WIRING.md) lists every setting for all thirty five loops. Anything you leave unset
 is fine: that loop exits 2, says what it wanted, and never wakes an agent. Walk through it all
@@ -109,6 +110,7 @@ repo they were never wired to and you get a schedule full of agent runs that can
         .github/workflows/loop.yml   one runner for the whole chapter
     ci/                   this repo's own tests, one per chapter
     install.sh            put loops into your own repo
+    run-loop.sh           run one there, without GitHub Actions
     WIRING.md             every setting every loop reads
 
 `cloud-loops` also has a `SETUP.md`, because it runs against AWS rather than a repo.

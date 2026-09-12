@@ -100,7 +100,21 @@ real person. Ten seconds, and it decides whether this is a fleet somebody runs o
 nobody maintains. An unowned loop is the one still running badly a year from now, because
 nobody ever felt responsible for turning it off.
 
-## Step 3. Add one secret
+## Step 3. Run it here, before you touch GitHub
+
+    ./run-loop.sh 02 --check     is there work?
+    ./run-loop.sh 02 --dry-run   what would be handed to the agent, without running it
+    ./run-loop.sh 02             hand it over and watch
+
+This is the same thing the workflow does, on your machine: it loads `loops.env`, runs the
+check, and only if the answer is 1 does it wake the agent, under the same orders and the same
+caps. Afterwards it runs the check again, so the agent never marks its own work.
+
+No secret, no schedule, nothing committed. Read the diff with `git diff` and throw it away if
+you do not like it. Do this once and the rest of this page is just moving the same thing onto a
+clock.
+
+## Step 4. Add one secret
 
 In your repo: **Settings > Secrets and variables > Actions > New repository secret.**
 
@@ -108,14 +122,14 @@ Name it `ANTHROPIC_API_KEY`, or `OPENAI_API_KEY` if you will run Codex.
 
 `GITHUB_TOKEN` is provided for you. You do not add it.
 
-## Step 4. Let it open PRs
+## Step 5. Let it open PRs
 
 **Settings > Actions > General > Workflow permissions.** Turn on *"Allow GitHub Actions to create
 and approve pull requests"*.
 
 Skip this and you get the quietest failure there is: a green run that shipped nothing.
 
-## Step 5. Commit, push, and run it
+## Step 6. Commit, push, and run it
 
 - Actions tab, pick **engineering-loop**, click **Run workflow**.
 - Set `loop` to `02-dependency-upgrades` and `agent` to `claude`.
@@ -128,7 +142,7 @@ Two things can happen, and both are correct:
 
 That is one full loop, end to end, on your code.
 
-## Step 6. Make it run on its own
+## Step 7. Make it run on its own
 
 The runner starts out manual so your first runs are deliberate. When you trust it, add a
 schedule to `.github/workflows/loop.yml`:
@@ -150,7 +164,7 @@ the loop step into a small dedicated workflow per scheduled loop.
 |---|---|
 | It opened a PR you disagree with | Do not fix it by hand. Add the missing rule to `CLAUDE.md` and run it again. That is the only way the loop gets better. |
 | Two runs, two PRs | The branch rule was ignored, or the concurrency group is missing. One branch per loop. |
-| Green, but nothing shipped | Almost always Step 4. Check the PR actually exists before you trust the silence. |
+| Green, but nothing shipped | Almost always Step 5. Check the PR actually exists before you trust the silence. |
 | You do not trust it yet | Correct. Review the first several PRs properly. Take your hands off when it has earned it. |
 
 ---

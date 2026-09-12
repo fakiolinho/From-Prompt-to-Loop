@@ -218,6 +218,19 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "a loop can be run without GitHub"
+[ -x run-loop.sh ] && ok "run-loop.sh is executable" || bad "nothing lets a user run a loop locally"
+grep -q 'run-loop.sh' install.sh && ok "install.sh ships it into the target repo" \
+  || bad "install.sh never copies run-loop.sh, so an installed repo cannot run a loop by hand"
+grep -q 'check.sh' run-loop.sh && ok "it runs the check first" || bad "run-loop.sh skips the check"
+grep -q 'max-budget-usd' run-loop.sh && ok "it caps spend like the workflow" \
+  || bad "run-loop.sh wakes an agent with no budget cap"
+grep -q 'verifying, with no agent' run-loop.sh && ok "it re-checks afterwards" \
+  || bad "run-loop.sh lets the agent mark its own work"
+grep -q 'run-loop.sh' README.md && ok "README says it exists" || bad "README never mentions run-loop.sh"
+grep -q 'run-loop.sh' docs/04-your-first-loop.md && ok "the walkthrough uses it" \
+  || bad "docs/04 never tells anyone they can run a loop without Actions"
+
 head2 "pushing markdown is enough"
 W=.github/workflows/build-site.yml
 [ -f "$W" ] && ok "build-site.yml exists" || bad "nothing rebuilds the site on push, so markdown edits never reach the page"
