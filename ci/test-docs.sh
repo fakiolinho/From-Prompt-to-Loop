@@ -197,6 +197,22 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "the landing page and the README tell the same story"
+# docs/index.html is hand written in the generator, so it drifts from README.md unless
+# something watches. These are the claims a reader must meet on either surface.
+for claim in "install.sh" "WIRING.md" "run-all-demos.sh"; do
+  inr=$(grep -c "$claim" README.md); inh=$(grep -c "$claim" docs/index.html)
+  if [ "$inr" -gt 0 ] && [ "$inh" -gt 0 ]; then ok "both mention $claim"
+  elif [ "$inr" -eq 0 ] && [ "$inh" -eq 0 ]; then ok "neither mentions $claim"
+  else bad "$claim is in README ($inr) but not the landing page ($inh), or the other way round"
+  fi
+done
+grep -q 'not wired' docs/index.html && ok "the landing page explains exit 2" \
+  || bad "the landing page never mentions the third answer a check can give"
+# the anatomy diagram has to show all three branches too
+grep -q 'NOT WIRED' docs/img/loop-anatomy.svg && ok "the anatomy diagram shows all three answers" \
+  || bad "docs/img/loop-anatomy.svg still draws a check with only two branches"
+
 head2 "the published landing page is not stale"
 # docs/index.html is generated from the catalog and each chapter's LOOPS.md. If a loop
 # changes and nobody regenerates, the page GitHub Pages serves starts lying.

@@ -23,6 +23,15 @@ Locally, the same file works by hand:
 
 The eleven loops not listed below read nothing. They work as soon as they are installed.
 
+## Commit loops.env
+
+These are commands, not secrets, and the runner has to read the file in CI, so `loops.env`
+belongs in git alongside the loops it configures. That is also what makes it reviewable: a
+change to what a loop runs shows up in a diff like any other change.
+
+Keep secrets out of it. Anything that needs an API key or a token goes in
+**Settings > Secrets and variables > Actions** and is referenced by name, never pasted here.
+
 
 ## Chapter 1 · Software engineering
 

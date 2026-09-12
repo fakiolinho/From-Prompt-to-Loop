@@ -12,17 +12,17 @@ question: *is there work?* Exit 0 means nothing to do. Non zero wakes the agent.
 The law of this chapter: **never delete or weaken a test to go green.** Quarantine and flag
 instead. And reproduce before you fix, a bug is not understood until a test fails for it.
 
-| # | Loop | Trigger | Ships | The check looks for | Runnable now |
+| # | Loop | Trigger | Ships | The check looks for | To run it here |
 |---|------|---------|-------|---------------------|--------------|
-| 27 | [Bug report to failing test](loops/27-bug-report-to-failing-test/ORDERS.md) | bug filed | Ships on green | reports with no reproducing test | wire your issues |
-| 28 | [Flaky test detection and quarantine](loops/28-flaky-test-detection-and-quarantine/ORDERS.md) | nightly | Ships on green | a flaky or broken test | **yes, runnable example in `loops/28-flaky-test-detection-and-quarantine/example`** |
-| 29 | [Self healing UI tests](loops/29-self-healing-ui-tests/ORDERS.md) | UI test fails on a locator | Ships on green | selector-only failures | wire your UI runner |
-| 30 | [Test data and fixtures](loops/30-test-data-and-fixtures/ORDERS.md) | schema change | Ships on green | fixtures that no longer fit the schema | wire your schema |
-| 31 | [Smoke tests on every deploy](loops/31-smoke-tests-on-every-deploy/ORDERS.md) | on deploy | Ships on green | a failing critical path post deploy | wire your deploy target |
-| 32 | [Cross browser and device matrix](loops/32-cross-browser-and-device-matrix/ORDERS.md) | nightly / release | Ships on green | failures by config | wire your grid |
-| 33 | [Visual regression triage](loops/33-visual-regression-triage/ORDERS.md) | on PR | **Flags, you decide** | screenshot diffs | wire your visual tool |
-| 34 | [E2E coverage from real user flows](loops/34-e2e-coverage-from-real-user-flows/ORDERS.md) | weekly | **Flags, you decide** | top journeys with no e2e test | wire your analytics |
-| 35 | [Synthetic uptime and journey monitoring](loops/35-synthetic-uptime-and-journey-monitoring/ORDERS.md) | continuous | **Flags, you decide** | a failing or slow prod journey | wire your prod monitors |
+| 27 | [Bug report to failing test](loops/27-bug-report-to-failing-test/ORDERS.md) | bug filed | Ships on green | reports with no reproducing test | set LOOP_BUGS |
+| 28 | [Flaky test detection and quarantine](loops/28-flaky-test-detection-and-quarantine/ORDERS.md) | nightly | Ships on green | a flaky or broken test | **worked example inside**, or set LOOP_TEST |
+| 29 | [Self healing UI tests](loops/29-self-healing-ui-tests/ORDERS.md) | UI test fails on a locator | Ships on green | selector-only failures | set LOOP_UI_TESTS |
+| 30 | [Test data and fixtures](loops/30-test-data-and-fixtures/ORDERS.md) | schema change | Ships on green | fixtures that no longer fit the schema | set LOOP_FIXTURES |
+| 31 | [Smoke tests on every deploy](loops/31-smoke-tests-on-every-deploy/ORDERS.md) | on deploy | Ships on green | a failing critical path post deploy | set LOOP_SMOKE |
+| 32 | [Cross browser and device matrix](loops/32-cross-browser-and-device-matrix/ORDERS.md) | nightly / release | Ships on green | failures by config | set LOOP_MATRIX |
+| 33 | [Visual regression triage](loops/33-visual-regression-triage/ORDERS.md) | on PR | **Flags, you decide** | screenshot diffs | set LOOP_VISUAL |
+| 34 | [E2E coverage from real user flows](loops/34-e2e-coverage-from-real-user-flows/ORDERS.md) | weekly | **Flags, you decide** | top journeys with no e2e test | set LOOP_JOURNEYS |
+| 35 | [Synthetic uptime and journey monitoring](loops/35-synthetic-uptime-and-journey-monitoring/ORDERS.md) | continuous | **Flags, you decide** | a failing or slow prod journey | set LOOP_SYNTHETIC |
 
 **Ships on green** loops open a PR on `loop/<name>` and merge once the check passes. A bad
 one is one click back. **Flags, you decide** loops stop and hand you the call; they never merge.

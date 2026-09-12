@@ -12,16 +12,16 @@ question: *is there work?* Exit 0 means nothing to do. Non zero wakes the agent.
 The rule that governs the whole chapter: **a regression never ships.** If quality, accuracy,
 or safety drops below the baseline, the loop stops and opens an issue. It never lowers the bar.
 
-| # | Loop | Trigger | Ships | The check looks for | Runnable now |
+| # | Loop | Trigger | Ships | The check looks for | To run it here |
 |---|------|---------|-------|---------------------|--------------|
-| 19 | [Eval suite on every prompt or model change](loops/19-eval-suite-on-prompt-or-model-change/ORDERS.md) | prompt/model change | Ships on green | an accuracy regression | **yes, runnable example in `loops/19-eval-suite-on-prompt-or-model-change/example`** |
-| 20 | [RAG knowledge base sync](loops/20-rag-knowledge-base-sync/ORDERS.md) | a source changes | Ships on green | a source newer than its index | yes (mtime heuristic), wire your store |
-| 21 | [Structured output conformance](loops/21-structured-output-conformance/ORDERS.md) | prompt/schema change | Ships on green | outputs that break the schema | wire a validator (ajv/zod) |
-| 22 | [Model version upgrade testing](loops/22-model-version-upgrade-testing/ORDERS.md) | new version available | **Flags, you decide** | (you point it at a version) | wire your provider |
-| 23 | [Golden set growth from production failures](loops/23-golden-set-growth-from-production-failures/ORDERS.md) | new prod failures | **Flags, you decide** | failures not yet in the golden set | wire your logs |
-| 24 | [Prompt cost and routing optimisation](loops/24-prompt-cost-and-routing-optimisation/ORDERS.md) | weekly / cost spike | **Flags, you decide** | cost above baseline | wire your telemetry |
-| 25 | [Safety and red team regression](loops/25-safety-and-red-team-regression/ORDERS.md) | prompt/model change | **Flags, you decide** | a red team regression | reuse loop 19's harness, wire your set |
-| 26 | [Data quality and drift monitoring](loops/26-data-quality-and-drift-monitoring/ORDERS.md) | scheduled | **Flags, you decide** | drift over threshold | wire your data |
+| 19 | [Eval suite on every prompt or model change](loops/19-eval-suite-on-prompt-or-model-change/ORDERS.md) | prompt/model change | Ships on green | an accuracy regression | **worked example inside**, or set LOOP_EVALS |
+| 20 | [RAG knowledge base sync](loops/20-rag-knowledge-base-sync/ORDERS.md) | a source changes | Ships on green | a source newer than its index | set LOOP_RAG |
+| 21 | [Structured output conformance](loops/21-structured-output-conformance/ORDERS.md) | prompt/schema change | Ships on green | outputs that break the schema | set LOOP_SCHEMA |
+| 22 | [Model version upgrade testing](loops/22-model-version-upgrade-testing/ORDERS.md) | new version available | **Flags, you decide** | (you point it at a version) | set LOOP_CANDIDATE |
+| 23 | [Golden set growth from production failures](loops/23-golden-set-growth-from-production-failures/ORDERS.md) | new prod failures | **Flags, you decide** | failures not yet in the golden set | set LOOP_FAILURES |
+| 24 | [Prompt cost and routing optimisation](loops/24-prompt-cost-and-routing-optimisation/ORDERS.md) | weekly / cost spike | **Flags, you decide** | cost above baseline | set LOOP_COST |
+| 25 | [Safety and red team regression](loops/25-safety-and-red-team-regression/ORDERS.md) | prompt/model change | **Flags, you decide** | a red team regression | set LOOP_REDTEAM |
+| 26 | [Data quality and drift monitoring](loops/26-data-quality-and-drift-monitoring/ORDERS.md) | scheduled | **Flags, you decide** | drift over threshold | set LOOP_DRIFT |
 
 **Ships on green** loops open a PR on `loop/<name>` and merge once the check passes. A bad
 one is one click back. **Flags, you decide** loops stop and hand you the call; they never merge.

@@ -84,7 +84,12 @@ done
 
 # loops.env: exactly the settings these loops read, with the example from each check
 ENV="$TARGET/loops.env"
-[ -f "$ENV" ] || printf '# Settings for the loops in this repo. The runner loads this before every check.\n# A loop whose setting is missing exits 2 and says so, rather than guessing.\n' > "$ENV"
+[ -f "$ENV" ] || printf '%s\n' \
+  '# Settings for the loops in this repo. The runner loads this before every check.' \
+  '# A loop whose setting is missing exits 2 and says so, rather than guessing.' \
+  '#' \
+  '# Commit this file. These are commands, not secrets, and CI has to read it.' \
+  '# Secrets go in Settings > Secrets and variables > Actions, never here.' > "$ENV"
 echo; echo "settings:"
 for p in $picks; do
   pack="${p%%/*}"; loop="${p#*/}"

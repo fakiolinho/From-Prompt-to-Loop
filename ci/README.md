@@ -8,6 +8,21 @@ These prove the packs still work. No API key, no AWS account, no agent runs.
     ./ci/test-pack.sh qa-loops
     ./ci/test-docs.sh                      # the book and the catalog
     python3 ci/check-links.py              # just the links
+    python3 ci/check-style.py              # house style
+    python3 ci/check-workflows.py          # the four pack runners
+
+## The generators
+
+Two files in `docs/` and one at the root are generated. Run these after changing anything they
+read, and commit the result. `ci/test-docs.sh` fails if what is committed has gone stale.
+
+    python3 ci/build-site.py       docs/index.html and the eight guide pages
+    python3 ci/build-wiring.py     WIRING.md, from the settings the checks actually read
+
+`build-site.py` renders each `docs/*.md` to HTML and rewrites the links for the web. The
+markdown stays the single source of truth, so never edit `docs/*.html` by hand. The landing
+page is the exception: its content lives in the generator's template, which is why a test
+checks it still tells the same story as `README.md`.
 
 `.github/workflows/tests.yml` runs all of them on every push, one job per chapter, so a red
 square tells you which chapter broke.

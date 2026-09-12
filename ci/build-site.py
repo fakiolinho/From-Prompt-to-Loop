@@ -336,6 +336,16 @@ TEMPLATE = r"""<!doctype html>
     padding:20px; overflow-x:auto; font-family:var(--mono); font-size:13px;
     line-height:1.55; color:#c7d0de; margin:0; }}
 
+  .answers {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(238px,1fr)); gap:12px; }}
+  .ans {{ background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px;
+    border-top-width:3px; }}
+  .ans b {{ display:block; font-family:var(--mono); font-size:14px; }}
+  .ans span {{ display:block; font-weight:650; margin:2px 0 6px; }}
+  .ans em {{ font-style:normal; color:var(--dim); font-size:14px; }}
+  .a0 {{ border-top-color:var(--green); }} .a0 b {{ color:var(--green); }}
+  .a1 {{ border-top-color:var(--blue); }}  .a1 b {{ color:var(--blue); }}
+  .a2 {{ border-top-color:#e0668a; }}      .a2 b {{ color:#e0668a; }}
+
   .guide {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(232px,1fr)); gap:10px; }}
   .guide a {{ display:flex; gap:12px; align-items:baseline; text-decoration:none;
     background:var(--panel); border:1px solid var(--line); border-radius:10px;
@@ -384,9 +394,15 @@ TEMPLATE = r"""<!doctype html>
   once. It runs without you after that.</p>
 
   <div class="run">
-    <span class="step">Node 18 and bash. No API key, no AWS account.</span>
+    <span class="step">See all four chapters find real work. Node 18 and bash, no API key, no AWS account.</span>
     <code id="cmd">git clone {repo}.git &amp;&amp; cd From-Prompt-to-Loop &amp;&amp; ./run-all-demos.sh</code>
     <button class="copy" id="copy">Copy</button>
+  </div>
+
+  <div class="run" style="margin-top:12px">
+    <span class="step">Then put one in your own repo. It writes a loops.env with the settings that loop needs.</span>
+    <code id="cmd2">./install.sh ~/code/my-app 02</code>
+    <button class="copy" id="copy2">Copy</button>
   </div>
 
   <div class="cta">
@@ -396,6 +412,21 @@ TEMPLATE = r"""<!doctype html>
     <a href="{repo}/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf">The field guide (free PDF)</a>
   </div>
 </div></header>
+
+<section><div class="wrap">
+  <h2>A check has three answers, not two</h2>
+  <p class="sub">Every loop starts with one question, and how it answers decides what you pay.
+  The third answer is the one most people leave out, and it is the expensive one: a check with
+  only two will say &ldquo;there is work&rdquo; when it means &ldquo;I cannot tell&rdquo;.</p>
+  <div class="answers">
+    <div class="ans a0"><b>exit 0</b><span>no work</span><em>The run ends. You spend nothing.</em></div>
+    <div class="ans a1"><b>exit 1</b><span>there is work</span><em>The agent wakes, fenced and capped.</em></div>
+    <div class="ans a2"><b>exit 2</b><span>not wired here</span><em>Fails loudly and says what it needs. No agent.</em></div>
+  </div>
+  <p class="sub" style="margin-top:18px"><a href="{repo}/blob/main/WIRING.md">WIRING.md</a> lists
+  every setting all thirty five loops read. Anything you leave unset simply exits 2 and tells you
+  what it wanted, so you can install everything and wire it up over weeks.</p>
+</div></section>
 
 <section><div class="wrap">
   <h2>The guide</h2>
@@ -441,11 +472,13 @@ TEMPLATE = r"""<!doctype html>
 
 <script>
 (function () {{
-  var copy = document.getElementById('copy');
-  copy.addEventListener('click', function () {{
-    var t = document.getElementById('cmd').textContent;
-    navigator.clipboard.writeText(t).then(function () {{
-      copy.textContent = 'Copied'; setTimeout(function () {{ copy.textContent = 'Copy'; }}, 1600);
+  [['copy','cmd'], ['copy2','cmd2']].forEach(function (pair) {{
+    var btn = document.getElementById(pair[0]), src = document.getElementById(pair[1]);
+    if (!btn || !src) return;
+    btn.addEventListener('click', function () {{
+      navigator.clipboard.writeText(src.textContent).then(function () {{
+        btn.textContent = 'Copied'; setTimeout(function () {{ btn.textContent = 'Copy'; }}, 1600);
+      }});
     }});
   }});
 

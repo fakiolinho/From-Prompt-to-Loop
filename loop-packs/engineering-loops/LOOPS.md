@@ -9,17 +9,17 @@ Nine loops from the engineering chapter of *From Prompt to Loop*. One shared run
 folder of standing orders plus a check that answers one question: *is there work?*
 Exit 0 means nothing to do and no agent runs. Non zero wakes the agent.
 
-| # | Loop | Trigger | Ships | The check looks for | Runnable now |
+| # | Loop | Trigger | Ships | The check looks for | To run it here |
 |---|------|---------|-------|---------------------|--------------|
-| 1 | [Docs and examples sync](loops/01-docs-and-examples-sync/ORDERS.md) | push to src | Ships on green | docs drift | **yes, full runnable example in `loops/01-docs-and-examples-sync/example`** |
-| 2 | **★** [Dependency upgrades](loops/02-dependency-upgrades/ORDERS.md) | weekly | Ships on green | outdated deps (`npm outdated`) | yes |
-| 3 | [Codemod and framework migrations](loops/03-codemod-and-framework-migrations/ORDERS.md) | dispatch | Ships on green | (you point it at a migration) | wire the codemod |
-| 4 | [Test backfill on changed code](loops/04-test-backfill-on-changed-code/ORDERS.md) | on PR | Ships on green | changed code with no test | yes (heuristic) |
-| 5 | [Dead code and unused dependency removal](loops/05-dead-code-and-unused-dependency-removal/ORDERS.md) | weekly | **Flags, you decide** | dead code (`knip`), once knip is configured | reports only |
-| 6 | **★** [Lint, format, and type fixes](loops/06-lint-format-and-type-fixes/ORDERS.md) | on push | Ships on green | the project's own lint, format and typecheck scripts | yes |
-| 7 | **★** [Release notes and changelog](loops/07-release-notes-and-changelog/ORDERS.md) | on tag | Ships on green | commits since the last release tag | yes |
-| 8 | [First pass code review](loops/08-first-pass-code-review/ORDERS.md) | PR opened | **Flags, you decide** | a PR to review | runnable example (review.js) |
-| 9 | [Issue triage and routing](loops/09-issue-triage-and-routing/ORDERS.md) | issue opened | **Flags, you decide** | an issue to triage | runnable example (triage.js) |
+| 1 | [Docs and examples sync](loops/01-docs-and-examples-sync/ORDERS.md) | push to src | Ships on green | docs drift | **worked example inside**, or set LOOP_DOCS |
+| 2 | **★** [Dependency upgrades](loops/02-dependency-upgrades/ORDERS.md) | weekly | Ships on green | outdated deps (`npm outdated`) | works, or set LOOP_VERIFY |
+| 3 | [Codemod and framework migrations](loops/03-codemod-and-framework-migrations/ORDERS.md) | dispatch | Ships on green | (you point it at a migration) | set MIGRATION |
+| 4 | [Test backfill on changed code](loops/04-test-backfill-on-changed-code/ORDERS.md) | on PR | Ships on green | changed code with no test | works on a PR branch |
+| 5 | [Dead code and unused dependency removal](loops/05-dead-code-and-unused-dependency-removal/ORDERS.md) | weekly | **Flags, you decide** | dead code (`knip`), once knip is configured | needs a knip config |
+| 6 | **★** [Lint, format, and type fixes](loops/06-lint-format-and-type-fixes/ORDERS.md) | on push | Ships on green | the project's own lint, format and typecheck scripts | needs a lint or format script |
+| 7 | **★** [Release notes and changelog](loops/07-release-notes-and-changelog/ORDERS.md) | on tag | Ships on green | commits since the last release tag | needs a release tag |
+| 8 | [First pass code review](loops/08-first-pass-code-review/ORDERS.md) | PR opened | **Flags, you decide** | a PR to review | set LOOP_PR |
+| 9 | [Issue triage and routing](loops/09-issue-triage-and-routing/ORDERS.md) | issue opened | **Flags, you decide** | an issue to triage | set LOOP_ISSUE |
 
 **Ships on green** loops open a PR on `loop/<name>` and merge once the check passes. A bad
 one is one click back. **Flags, you decide** loops stop and hand you the call; they never merge.
