@@ -336,6 +336,14 @@ grep -q 'Global standing orders' "$T/CLAUDE.md" && ok "the loops' standing order
 [ -d "$T/loops/02-dependency-upgrades/02-dependency-upgrades" ] \
   && bad "a rerun nested the loop inside itself" || ok "a rerun does not nest the loop folder"
 rm -rf "$T"
+T=$(mktemp -d); git -C "$T" init -q; R=$PWD
+( cd "$T" && "$R/install.sh" . 02 >/dev/null 2>&1 </dev/null )
+[ -f "$T/loops/02-dependency-upgrades/check.sh" ] && [ ! -e "$R/loops.env" ] \
+  && ok "'install.sh . 02' from inside a project installs there" \
+  || bad "'install.sh . 02' resolved '.' after moving, and installed into this repo instead"
+rm -rf "$T"
+./install.sh . 02 >/dev/null 2>&1 </dev/null && bad "install.sh installed loops into its own repo" \
+  || ok "install.sh refuses to install into its own repo"
 for s in install.sh run-loop.sh; do
   usage=$(./$s 2>&1 </dev/null)   # captured first: it exits 1, which pipefail would pass on
   printf '%s' "$usage" | grep -q 'set -uo' && bad "$s usage prints its own source" || ok "$s usage is only the usage"

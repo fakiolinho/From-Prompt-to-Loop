@@ -9,14 +9,15 @@
 # a loops.env listing exactly the settings those loops need. Nothing is overwritten
 # without asking. Run it again later to add more.
 set -uo pipefail
-cd "$(dirname "$0")"
-HERE=$(pwd)
-
 TARGET="${1:-}"; shift 2>/dev/null || true
 [ -n "$TARGET" ] || { sed -n '2,/^[^#]/s/^# \{0,1\}//p' "$0"; exit 1; }
 [ -d "$TARGET" ] || { echo "no such directory: $TARGET"; exit 1; }
 [ $# -gt 0 ] || { echo "name at least one loop (02) or a chapter (engineering)"; exit 1; }
 TARGET=$(cd "$TARGET" && pwd)
+# Resolve the target before moving into this repo: "." means where you ran it, not here.
+cd "$(dirname "$0")"
+HERE=$(pwd)
+[ "$TARGET" != "$HERE" ] || { echo "that is this repo, not your project. Name your project's folder."; exit 1; }
 git -C "$TARGET" rev-parse --git-dir >/dev/null 2>&1 || { echo "$TARGET is not a git repo"; exit 1; }
 
 chapter_of() { case "$1" in engineering*) echo engineering-loops;; cloud*) echo cloud-loops;;
