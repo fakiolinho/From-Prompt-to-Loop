@@ -34,6 +34,9 @@ them.
 **Standing orders.** [`CLAUDE.md`](../loop-packs/engineering-loops/CLAUDE.md) (or `AGENTS.md` for Codex) at the top of a chapter. The rules
 that apply to every loop in it, read on every single run.
 
+**Generated page.** Every `docs/*.html` is rendered from the `.md` beside it. Edit the
+markdown; a push to main rebuilds the rest.
+
 **Memory.** [`memory/NN-name.md`](../loop-packs/engineering-loops/memory/02-dependency-upgrades.md). One line per run, written by the agent, kept in git so a wrong
 lesson is one revert away.
 

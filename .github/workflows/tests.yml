@@ -55,6 +55,14 @@ jobs:
       - uses: actions/checkout@v4
       - name: The site generator's one dependency
         run: pip install --quiet markdown-it-py
+      # On main, build-site.yml commits the rendered site right after this. Render here
+      # too so the tests read what the markdown actually says.
+      - name: Render the site before testing it
+        if: github.event_name != 'pull_request'
+        run: |
+          python3 ci/build-site.py
+          python3 ci/build-wiring.py
+
       - name: Check the repo against the field guide catalog
         run: ./ci/test-docs.sh
       # style is checked inside test-docs.sh too; run it alone so a style break
@@ -65,12 +73,15 @@ jobs:
       - name: The pack workflows parse and are wired correctly
         if: always()
         run: python3 ci/check-workflows.py
-      - name: The published landing page is current
-        if: always()
+      # A pull request should carry its own rendered output, so a reviewer sees the real
+      # page. On main this is not enforced: build-site.yml renders and commits instead.
+      - name: The published site is current (pull requests only)
+        if: github.event_name == 'pull_request'
         run: |
           python3 ci/build-site.py
-          git diff --exit-code -- docs/ \
-            || { echo "::error::the published site is stale. Run python3 ci/build-site.py and commit."; exit 1; }
+          python3 ci/build-wiring.py
+          git diff --exit-code -- docs/ WIRING.md \
+            || { echo "::error::the rendered site is stale. Run: python3 ci/build-site.py && python3 ci/build-wiring.py, then commit."; exit 1; }
 
   demos:
     name: run-all-demos

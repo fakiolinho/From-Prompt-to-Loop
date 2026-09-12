@@ -197,6 +197,16 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "pushing markdown is enough"
+W=.github/workflows/build-site.yml
+[ -f "$W" ] && ok "build-site.yml exists" || bad "nothing rebuilds the site on push, so markdown edits never reach the page"
+grep -q 'build-site.py' "$W" && ok "it runs the site generator" || bad "$W does not run ci/build-site.py"
+grep -q 'build-wiring.py' "$W" && ok "it runs the wiring generator" || bad "$W does not run ci/build-wiring.py"
+grep -q "contents: write" "$W" && ok "it can commit what it renders" || bad "$W cannot push its own output"
+# it must not react to the files it writes, or it runs forever
+grep -qE "^ *- 'docs/\*\*\.html'" "$W" && bad "$W triggers on the HTML it generates: that is a loop" \
+  || ok "it does not trigger on its own output"
+
 head2 "the landing page and the README tell the same story"
 # docs/index.html is hand written in the generator, so it drifts from README.md unless
 # something watches. These are the claims a reader must meet on either surface.

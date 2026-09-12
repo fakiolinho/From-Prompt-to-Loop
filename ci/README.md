@@ -20,7 +20,14 @@ read, and commit the result. `ci/test-docs.sh` fails if what is committed has go
     python3 ci/build-wiring.py     WIRING.md, from the settings the checks actually read
 
 `build-site.py` renders each `docs/*.md` to HTML and rewrites the links for the web. The
-markdown stays the single source of truth, so never edit `docs/*.html` by hand. The landing
+markdown stays the single source of truth, so never edit `docs/*.html` by hand.
+
+**On main you do not have to run them.** `.github/workflows/build-site.yml` renders and commits
+the result on every push that touches the markdown, the diagrams, the catalog or a check. Edit
+the markdown, push, and the page GitHub Pages serves follows a moment later.
+
+On a pull request it is not automatic, because a bot cannot push to your fork's branch. There
+the tests ask you to run both generators and commit, so a reviewer reads the real page. The landing
 page is the exception: its content lives in the generator's template, which is why a test
 checks it still tells the same story as `README.md`.
 
