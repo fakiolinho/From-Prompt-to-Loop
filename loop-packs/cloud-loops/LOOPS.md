@@ -55,4 +55,4 @@ and when it is not a loop at all.
 
 ---
 
-[← Chapter 1: General engineering](../engineering-loops/LOOPS.md) · [Contents](../../README.md) · [Chapter 3: AI and ML engineering →](../ai-ml-loops/LOOPS.md)
+[← Chapter 1: Software engineering](../engineering-loops/LOOPS.md) · [Contents](../../README.md) · [Chapter 3: AI and ML engineering →](../ai-ml-loops/LOOPS.md)

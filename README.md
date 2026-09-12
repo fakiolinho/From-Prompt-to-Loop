@@ -45,7 +45,7 @@ The guide numbers the loops 1 to 35 straight through. The chapters just split th
 
 | | Chapter | Loops | What is in it |
 |---|---|---|---|
-| 1 | [General engineering](loop-packs/engineering-loops/LOOPS.md) | 1-9 | docs and examples sync, dependency upgrades, codemods, test backfill, dead code, lint and types, release notes, code review, issue triage |
+| 1 | [Software engineering](loop-packs/engineering-loops/LOOPS.md) | 1-9 | docs and examples sync, dependency upgrades, codemods, test backfill, dead code, lint and types, release notes, code review, issue triage |
 | 2 | [Cloud and platform](loop-packs/cloud-loops/LOOPS.md) | 10-18 | base image bumps, backup restore drills, orphaned resources, cert rotation, infra drift, cost anomalies, alert noise, auto remediation, IAM audit |
 | 3 | [AI and ML engineering](loop-packs/ai-ml-loops/LOOPS.md) | 19-26 | eval suite on every change, RAG sync, structured output, model upgrades, golden set growth, prompt cost, red team, data drift |
 | 4 | [QA and testing](loop-packs/qa-loops/LOOPS.md) | 27-35 | bug to failing test, flaky tests, self healing UI tests, fixtures, smoke tests, browser matrix, visual diffs, e2e coverage, synthetic monitoring |

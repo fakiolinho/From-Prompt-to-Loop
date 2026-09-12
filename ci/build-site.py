@@ -12,7 +12,7 @@ import html, os, re, sys
 
 REPO = "https://github.com/fakiolinho/From-Prompt-to-Loop"
 CHAPTERS = {
-    "engineering-loops": (1, "General engineering", "1-9"),
+    "engineering-loops": (1, "Software engineering", "1-9"),
     "cloud-loops":       (2, "Cloud and platform", "10-18"),
     "ai-ml-loops":       (3, "AI and ML engineering", "19-26"),
     "qa-loops":          (4, "QA and testing", "27-35"),

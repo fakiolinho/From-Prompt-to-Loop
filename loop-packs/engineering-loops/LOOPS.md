@@ -1,6 +1,6 @@
 *[Contents](../../README.md) · Chapter 1 of 4*
 
-# Chapter 1 · General engineering
+# Chapter 1 · Software engineering
 
 **Loops 1-9.** The chapter's loops, one row each. New to all this? Start at [what a loop is](../../docs/01-what-is-a-loop.md).
 

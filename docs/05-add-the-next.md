@@ -26,7 +26,7 @@ have.
 
 | Chapter | Loops | Adopt it when | Start here |
 |---|---|---|---|
-| **1 · General engineering** | 1-9 | your maintenance backlog never shrinks | [chapter](../loop-packs/engineering-loops/LOOPS.md) |
+| **1 · Software engineering** | 1-9 | your maintenance backlog never shrinks | [chapter](../loop-packs/engineering-loops/LOOPS.md) |
 | **2 · Cloud and platform** | 10-18 | your cloud bill or your on call is the problem | [SETUP.md first](../loop-packs/cloud-loops/SETUP.md) |
 | **3 · AI and ML engineering** | 19-26 | you ship prompts or models and have no evals | [chapter](../loop-packs/ai-ml-loops/LOOPS.md) |
 | **4 · QA and testing** | 27-35 | your CI signal is not trusted any more | [chapter](../loop-packs/qa-loops/LOOPS.md) |

@@ -54,4 +54,4 @@ check report real findings. See `LOOPS.md` for the order, the engine, and the ch
 
 ---
 
-[← Chapter 1: General engineering](../engineering-loops/README.md) · [Contents](../../README.md) · [Chapter 3: AI and ML engineering →](../ai-ml-loops/README.md)
+[← Chapter 1: Software engineering](../engineering-loops/README.md) · [Contents](../../README.md) · [Chapter 3: AI and ML engineering →](../ai-ml-loops/README.md)

@@ -1,4 +1,4 @@
-*[Contents](../../../../README.md) · [Chapter 1: General engineering](../../LOOPS.md)*
+*[Contents](../../../../README.md) · [Chapter 1: Software engineering](../../LOOPS.md)*
 
 # Loop 09. Issue triage and routing
 
@@ -25,4 +25,4 @@
 
 ---
 
-[← All general engineering loops](../../LOOPS.md) · [Contents](../../../../README.md) · [What a loop is](../../../../docs/01-what-is-a-loop.md)
+[← All software engineering loops](../../LOOPS.md) · [Contents](../../../../README.md) · [What a loop is](../../../../docs/01-what-is-a-loop.md)

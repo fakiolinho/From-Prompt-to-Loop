@@ -1,6 +1,6 @@
 *[Contents](../../README.md) · Chapter 1 of 4 · [the loops in this chapter](LOOPS.md)*
 
-# Chapter 1 · General engineering
+# Chapter 1 · Software engineering
 
 **Loops 1-9.** How this chapter works: the runner, the rules, the fences.
 
