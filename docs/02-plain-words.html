@@ -104,7 +104,10 @@ this list. The field guide has a longer version on page 6.</p>
 <p><strong>Loop.</strong> A small system that finds work, hands it to an agent, checks the result, writes down
 what it learned, and exits. You build the loop. The loop runs the agent.</p>
 <p><strong>Check.</strong> The script that answers one question: is there work? <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/02-dependency-upgrades/check.sh"><code>check.sh</code></a> in every loop folder.
-Exit 0 means no, exit 1 means yes. Nothing is spent until it says yes.</p>
+Exit 0 means no, exit 1 means yes, and exit 2 means <strong>not wired</strong>: the check cannot see what
+it needs in this repo, so it fails loudly instead of guessing. Nothing is spent unless it says
+yes. That third answer matters more than it sounds: a check with only two will say &quot;there is
+work&quot; when it means &quot;I cannot tell&quot;.</p>
 <p><strong>Orders.</strong> <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md"><code>ORDERS.md</code></a> in every loop folder. What this loop owns, what it must never touch, and
 when to stop and ask a person. The agent reads this every run.</p>
 <p><strong>Agent.</strong> A model that does not just answer. It reads your files, runs commands, edits code,

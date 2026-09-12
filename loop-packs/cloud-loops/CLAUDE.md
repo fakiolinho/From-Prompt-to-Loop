@@ -18,6 +18,14 @@
 - Never print or commit credentials, private account IDs, or customer data.
 - Use AWS CLI v2. v1 is in maintenance mode.
 
+## Run the project's commands, never your own
+- A project has already written down what it checks and how far that reaches, in its scripts.
+  Use those. The check tells you which ones it found.
+- Never substitute a command you invented. On one real repo, `prettier --check .` flagged
+  10,762 files where the project's own format script passed, because it walked into vendored
+  third party code. Same tools, opposite answer, and a pull request nobody wanted.
+- A scope that looks too narrow is a decision, not an oversight. Do not widen it.
+
 ## What proves a change is safe
 - Every loop names a verify command: the tests, the build, or whatever the check reported.
   A change is done when that command is green, not when the diff looks right.

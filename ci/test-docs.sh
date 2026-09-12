@@ -90,6 +90,21 @@ for f in loop-packs/*/.github/workflows/loop.yml; do
     || bad "$c verify does not re-check the agent's branch on a clean machine"
 done
 
+head2 "every chapter tells the agent to run the project's own commands"
+for pack in engineering-loops cloud-loops ai-ml-loops qa-loops; do
+  for f in "loop-packs/$pack/CLAUDE.md" "loop-packs/$pack/AGENTS.md"; do
+    grep -q "Run the project's commands" "$f" \
+      && ok "$(echo "$f" | sed 's#loop-packs/##')" \
+      || bad "$f does not tell the agent to use the project's own commands"
+  done
+done
+
+head2 "the three answer contract is on the front door"
+grep -q 'not wired' README.md && ok "README explains exit 2" \
+  || bad "README never mentions the third answer a check can give"
+grep -q 'exit 2 means' docs/02-plain-words.md && ok "the glossary explains exit 2" \
+  || bad "docs/02-plain-words.md defines a check with only two answers"
+
 head2 "every loop stops on the third identical failure"
 for pack in engineering-loops cloud-loops ai-ml-loops qa-loops; do
   for f in "loop-packs/$pack/CLAUDE.md" "loop-packs/$pack/AGENTS.md"; do

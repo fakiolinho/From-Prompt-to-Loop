@@ -16,8 +16,8 @@ Exit 0 means nothing to do and no agent runs. Non zero wakes the agent.
 | 3 | [Codemod and framework migrations](loops/03-codemod-and-framework-migrations/ORDERS.md) | dispatch | Ships on green | (you point it at a migration) | wire the codemod |
 | 4 | [Test backfill on changed code](loops/04-test-backfill-on-changed-code/ORDERS.md) | on PR | Ships on green | changed code with no test | yes (heuristic) |
 | 5 | [Dead code and unused dependency removal](loops/05-dead-code-and-unused-dependency-removal/ORDERS.md) | weekly | **Flags, you decide** | dead code (`knip`), once knip is configured | reports only |
-| 6 | **★** [Lint, format, and type fixes](loops/06-lint-format-and-type-fixes/ORDERS.md) | on push | Ships on green | eslint / prettier / tsc dirty | yes |
-| 7 | **★** [Release notes and changelog](loops/07-release-notes-and-changelog/ORDERS.md) | on tag | Ships on green | commits since last tag not logged | yes |
+| 6 | **★** [Lint, format, and type fixes](loops/06-lint-format-and-type-fixes/ORDERS.md) | on push | Ships on green | the project's own lint, format and typecheck scripts | yes |
+| 7 | **★** [Release notes and changelog](loops/07-release-notes-and-changelog/ORDERS.md) | on tag | Ships on green | commits since the last release tag | yes |
 | 8 | [First pass code review](loops/08-first-pass-code-review/ORDERS.md) | PR opened | **Flags, you decide** | a PR to review | runnable example (review.js) |
 | 9 | [Issue triage and routing](loops/09-issue-triage-and-routing/ORDERS.md) | issue opened | **Flags, you decide** | an issue to triage | runnable example (triage.js) |
 

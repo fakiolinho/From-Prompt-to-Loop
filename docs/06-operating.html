@@ -135,7 +135,7 @@ The loops that touch your production cloud need your network and your credential
 on a self hosted runner inside your VPC, not a managed one.</p>
 <p><strong>State does not live in the loop.</strong> It lives in the repo and the tracker. Each loop writes a PR,
 an issue, or a line to one channel.</p>
-<h2>Two rules that pay for themselves</h2>
+<h2>Three rules that pay for themselves</h2>
 <p>Everything else on this page is about not losing money. These two are about earning the right
 to walk away, which is where the return actually comes from.</p>
 <h3>The maker is not the checker</h3>
@@ -164,6 +164,24 @@ money is the smaller half of the cost. The bigger half is that nobody finds out 
 until the bill arrives, and by then it has been stuck for a week.</p>
 <p>A run that stops early and opens an honest issue is a good run. That is the loop telling you it
 needs a person, which is exactly what you built the gate for.</p>
+<h3>Run the project's commands, never your own</h3>
+<p>A project has already decided what it lints, what it formats, and how far each of those
+reaches. It wrote that down in its scripts. A loop that invents its own command throws that
+decision away, and it always reaches further than the team meant.</p>
+<p>This is not theoretical. On a real Laravel and Vite service the project's own commands are
+scoped on purpose:</p>
+<pre><code>lint        eslint &quot;resources/**/*.{tsx,jsx,js,ts}&quot;
+prettify    prettier --check &quot;resources/**/*.{tsx,jsx,js}&quot;
+</code></pre>
+<p>All of them pass. An invented <code>prettier --check .</code> on the same repo, at the same moment,
+flagged <strong>10,762 files, of which 10,434 were vendored third party PHP</strong>. Same tools, opposite
+answer, and a pull request reformatting somebody else's dependencies.</p>
+<p>So every loop here runs what the project defines and names it in the output:</p>
+<pre><code>clean, by this project's own commands: lint format types
+</code></pre>
+<p>A scope that looks too narrow is a decision, not an oversight. If a project defines no such
+command at all, the check exits 2 and says so, because the alternative is a loop picking a
+house style for a team that never asked for one.</p>
 <h2>What it costs</h2>
 <p>Cost is tokens per run times runs per month. Payoff is the hours removed at a loaded rate, plus
 the failures prevented. Do this on a napkin before you build.</p>

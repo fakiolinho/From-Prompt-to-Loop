@@ -12,13 +12,20 @@
 - Never: Application logic. A fix that changes behavior is not a lint fix
 
 ## What to do
-- Auto-fix the lint, format, and type errors that have a safe mechanical fix.
-- The check passes only when eslint, prettier, and tsc all exit clean.
+- Run the commands this project already defines: its lint, format and typecheck scripts.
+  The check names the ones it found. Never invent a command of your own.
+- Apply the mechanical fixes those commands ask for, using the project's own write variants
+  (`format:fix`, `prettify:write`) where they exist.
+- The loop is done when those same commands exit clean. Not a command you substituted.
 - Open one PR on branch loop/06-lint-format-and-type-fixes.
 
 ## When to stop and call a human
-- A type error you can only silence with a disable comment or an any. Never suppress to go green. Flag it.
-- A fix that would change runtime behavior. That is not formatting. Flag it.
+- A type error with no safe mechanical fix. Flag it; never silence it with `any` or a
+  suppression comment.
+- Any file outside the scope the project's own commands cover. If a command is scoped to
+  `resources/**`, that scope is the team's decision, not an oversight to correct.
+- A project with no lint, format or typecheck script. The check exits 2 there. Do not offer
+  to pick a style for them; a formatter nobody adopted rewrites every file it can see.
 
 ## Memory
 - Read `memory/06-lint-format-and-type-fixes.md` at the start. Append one durable lesson at the end.

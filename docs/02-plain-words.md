@@ -9,7 +9,10 @@ this list. The field guide has a longer version on page 6.
 what it learned, and exits. You build the loop. The loop runs the agent.
 
 **Check.** The script that answers one question: is there work? [`check.sh`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/check.sh) in every loop folder.
-Exit 0 means no, exit 1 means yes. Nothing is spent until it says yes.
+Exit 0 means no, exit 1 means yes, and exit 2 means **not wired**: the check cannot see what
+it needs in this repo, so it fails loudly instead of guessing. Nothing is spent unless it says
+yes. That third answer matters more than it sounds: a check with only two will say "there is
+work" when it means "I cannot tell".
 
 **Orders.** [`ORDERS.md`](../loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md) in every loop folder. What this loop owns, what it must never touch, and
 when to stop and ask a person. The agent reads this every run.

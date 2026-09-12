@@ -12,13 +12,17 @@
 - Never: Source, version numbers, anything but the notes
 
 ## What to do
-- From the git log since the last tag, write human changelog entries grouped by type: features, fixes, breaking.
+- From the git log since the last **release** tag, write human changelog entries grouped by
+  type: features, fixes, breaking.
 - Every entry traces to a real commit. Never invent a change that is not in the log.
-- Open one PR on branch loop/07-release-notes-and-changelog that updates CHANGELOG.md.
+- Open one PR on branch loop/07-release-notes-and-changelog that updates the changelog.
 
 ## When to stop and call a human
-- Commits too cryptic to summarize honestly. Note them under an 'unreviewed' heading and flag, do not guess intent.
-- A breaking change you are unsure about. Flag it for a human to confirm the migration note.
+- A range that covers hundreds of commits. That is not a release, it is a wrong baseline.
+  The check refuses it; do not work around the refusal.
+- A tag that is not a release. The nearest tag is not always a release: one real repo's only
+  tag was called `patch`, and measuring from it meant 710 commits of "release notes".
+- A breaking change you cannot describe from the log alone. Flag it rather than guessing.
 
 ## Memory
 - Read `memory/07-release-notes-and-changelog.md` at the start. Append one durable lesson at the end.

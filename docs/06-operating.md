@@ -22,7 +22,7 @@ on a self hosted runner inside your VPC, not a managed one.
 **State does not live in the loop.** It lives in the repo and the tracker. Each loop writes a PR,
 an issue, or a line to one channel.
 
-## Two rules that pay for themselves
+## Three rules that pay for themselves
 
 Everything else on this page is about not losing money. These two are about earning the right
 to walk away, which is where the return actually comes from.
@@ -62,6 +62,30 @@ until the bill arrives, and by then it has been stuck for a week.
 
 A run that stops early and opens an honest issue is a good run. That is the loop telling you it
 needs a person, which is exactly what you built the gate for.
+
+### Run the project's commands, never your own
+
+A project has already decided what it lints, what it formats, and how far each of those
+reaches. It wrote that down in its scripts. A loop that invents its own command throws that
+decision away, and it always reaches further than the team meant.
+
+This is not theoretical. On a real Laravel and Vite service the project's own commands are
+scoped on purpose:
+
+    lint        eslint "resources/**/*.{tsx,jsx,js,ts}"
+    prettify    prettier --check "resources/**/*.{tsx,jsx,js}"
+
+All of them pass. An invented `prettier --check .` on the same repo, at the same moment,
+flagged **10,762 files, of which 10,434 were vendored third party PHP**. Same tools, opposite
+answer, and a pull request reformatting somebody else's dependencies.
+
+So every loop here runs what the project defines and names it in the output:
+
+    clean, by this project's own commands: lint format types
+
+A scope that looks too narrow is a decision, not an oversight. If a project defines no such
+command at all, the check exits 2 and says so, because the alternative is a loop picking a
+house style for a team that never asked for one.
 
 ## What it costs
 

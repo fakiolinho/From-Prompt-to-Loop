@@ -64,6 +64,20 @@ Every loop is one or the other. Its `ORDERS.md` says which.
 
 Nothing irreversible happens without a person. That is the whole reason you can walk away.
 
+## Three answers, not two
+
+Every `check.sh` answers one question, and it has three ways to answer it.
+
+| Exit | Means | What happens |
+|---|---|---|
+| **0** | no work | The run ends. You spend nothing. |
+| **1** | there is work | The agent wakes, fenced and capped. |
+| **2** | not wired here | The run fails loudly and says what to wire. The agent never wakes. |
+
+The third one is the one most people leave out, and it is the expensive one. A check with only
+two answers says "there is work" when it means "I cannot tell". Point a few dozen of those at a
+repo they were never wired to and you get a schedule full of agent runs that can only fail.
+
 ---
 
 ## How this is laid out
