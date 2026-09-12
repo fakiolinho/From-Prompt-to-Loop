@@ -8,9 +8,15 @@ to reformat 10,000 files"* is worth more than a patch.
 
 ## Run the tests first
 
+    npm test                               # everything: four chapters and the docs
+    npm run demos                          # all four chapters against seeded data
+    npm run build                          # regenerate the site and WIRING.md
+
+Or the scripts directly, which is what those wrap:
+
     ./ci/test-pack.sh engineering-loops    # one chapter
     ./ci/test-docs.sh                      # the book, the catalog, the site
-    ./run-all-demos.sh                     # all four chapters against seeded data
+    ./run-all-demos.sh
 
 No API key, no AWS account. Node 18 or newer, bash, and Python 3 for the `ci/` scripts. Two
 Python packages, and that is the entire dependency list for the project:

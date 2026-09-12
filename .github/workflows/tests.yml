@@ -36,7 +36,7 @@ jobs:
           fetch-depth: 0      # loop 7 reads git tags, loop 4 diffs against a base
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18      # the floor package.json declares, so CI proves the claim
       - name: Install demo-app dependencies
         run: |
           for d in loop-packs/${{ matrix.pack }}/demo-app \
@@ -94,6 +94,6 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18      # the floor package.json declares, so CI proves the claim
       - name: The one command from the README must work
         run: ./run-all-demos.sh

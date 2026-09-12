@@ -218,6 +218,20 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "the Node floor this repo claims is the one CI proves"
+[ -f package.json ] && ok "root package.json exists" || bad "no root package.json, so npm test does not work"
+declared=$(node -e 'console.log((require("./package.json").engines||{}).node||"")' 2>/dev/null)
+[ -n "$declared" ] && ok "package.json declares engines.node $declared" \
+  || bad "package.json makes no Node version claim, but the docs do"
+floor=$(printf '%s' "$declared" | tr -dc '0-9')
+grep -q "node-version: $floor" .github/workflows/tests.yml \
+  && ok "CI runs on Node $floor, the floor it claims" \
+  || bad "package.json says node $declared but CI never tests on it"
+grep -q "Node $floor or newer" README.md docs/00-start-here.md \
+  && ok "the docs name the same floor" || bad "the docs and package.json disagree on the Node floor"
+node -e 'const s=require("./package.json").scripts||{};process.exit(s.test&&s.demos&&s.build?0:1)' \
+  && ok "npm test, demos and build all exist" || bad "package.json is missing an entry point the docs promise"
+
 head2 "every python dependency is declared where someone will look"
 # an import that only works because the CI image happens to ship it is a dependency
 # you have by luck, and one you will lose without warning

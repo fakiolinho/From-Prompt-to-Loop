@@ -132,6 +132,7 @@ repo they were never wired to and you get a schedule full of agent runs that can
         memory/NN-name.md   what the loop learned, one line per run
         .github/workflows/loop.yml   one runner for the whole chapter
     ci/                   this repo's own tests, one per chapter
+    package.json          npm test, npm run demos, npm run build
     install.sh            put loops into your own repo
     run-loop.sh           run one there, without GitHub Actions
     WIRING.md             every setting every loop reads
@@ -151,8 +152,9 @@ actually are, and what they do not cover.
 
 ## Is it still working?
 
-    ./ci/test-pack.sh engineering-loops    # one chapter
-    ./ci/test-docs.sh                      # the docs against the field guide
+    npm test                               # everything
+    ./ci/test-pack.sh engineering-loops    # just one chapter
+    ./ci/test-docs.sh                      # just the docs against the field guide
 
 CI runs both on every push, one job per chapter, so a red square tells you which chapter broke.
 See [`ci/README.md`](ci/README.md).

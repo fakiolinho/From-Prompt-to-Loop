@@ -1,0 +1,37 @@
+{
+  "name": "from-prompt-to-loop",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Thirty five runnable loops that keep a product alive after it ships. The companion code to the field guide From Prompt to Loop.",
+  "homepage": "https://fakiolinho.github.io/From-Prompt-to-Loop/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fakiolinho/From-Prompt-to-Loop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fakiolinho/From-Prompt-to-Loop/issues"
+  },
+  "author": "Marios Fakiolas (https://mariosfakiolas.com)",
+  "license": "MIT",
+  "keywords": [
+    "ai-agents",
+    "claude-code",
+    "codex",
+    "automation",
+    "loop-engineering",
+    "devops",
+    "continuous-integration"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "demos": "./run-all-demos.sh",
+    "test": "./ci/test-pack.sh engineering-loops && ./ci/test-pack.sh cloud-loops && ./ci/test-pack.sh ai-ml-loops && ./ci/test-pack.sh qa-loops && ./ci/test-docs.sh",
+    "test:docs": "./ci/test-docs.sh",
+    "build": "python3 ci/build-site.py && python3 ci/build-wiring.py",
+    "lint:style": "python3 ci/check-style.py",
+    "lint:links": "python3 ci/check-links.py",
+    "lint:workflows": "python3 ci/check-workflows.py"
+  }
+}
