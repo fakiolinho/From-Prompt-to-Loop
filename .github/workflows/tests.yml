@@ -53,6 +53,8 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+      - name: The site generator's one dependency
+        run: pip install --quiet markdown-it-py
       - name: Check the repo against the field guide catalog
         run: ./ci/test-docs.sh
       # style is checked inside test-docs.sh too; run it alone so a style break
@@ -67,8 +69,8 @@ jobs:
         if: always()
         run: |
           python3 ci/build-site.py
-          git diff --exit-code -- docs/index.html \
-            || { echo "::error::docs/index.html is stale. Run python3 ci/build-site.py and commit."; exit 1; }
+          git diff --exit-code -- docs/ \
+            || { echo "::error::the published site is stale. Run python3 ci/build-site.py and commit."; exit 1; }
 
   demos:
     name: run-all-demos

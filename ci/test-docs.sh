@@ -168,14 +168,16 @@ FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 head2 "the published landing page is not stale"
 # docs/index.html is generated from the catalog and each chapter's LOOPS.md. If a loop
 # changes and nobody regenerates, the page GitHub Pages serves starts lying.
-cp docs/index.html /tmp/site-committed.$$ 2>/dev/null
+rm -rf /tmp/site-was.$$ && mkdir -p /tmp/site-was.$$ && cp docs/*.html /tmp/site-was.$$/ 2>/dev/null
 python3 ci/build-site.py >/dev/null 2>&1
-if diff -q /tmp/site-committed.$$ docs/index.html >/dev/null 2>&1; then
-  ok "docs/index.html matches the repo"
-else
-  bad "docs/index.html is stale. Run: python3 ci/build-site.py, then commit it"
-fi
-rm -f /tmp/site-committed.$$
+for f in docs/*.html; do
+  if diff -q "/tmp/site-was.$$/$(basename "$f")" "$f" >/dev/null 2>&1; then
+    ok "$(basename "$f") is current"
+  else
+    bad "$(basename "$f") is stale. Run: python3 ci/build-site.py, then commit it"
+  fi
+done
+rm -rf /tmp/site-was.$$
 [ -f docs/.nojekyll ] && ok "docs/.nojekyll present, Pages serves the page as written" \
   || bad "docs/.nojekyll missing, GitHub Pages would try to run Jekyll over the markdown"
 

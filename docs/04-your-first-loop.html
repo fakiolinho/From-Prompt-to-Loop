@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your first loop &middot; From Prompt to Loop</title>
+<meta name="description" content="Your first loop. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+<style>
+  :root {
+    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
+    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16.5px/1.72 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  a { color:#8ab4ff; }
+  a:hover { color:#b9d0ff; }
+
+  .top { border-bottom:1px solid var(--line); background:#090c12; }
+  .top .wrap { display:flex; align-items:center; gap:16px; padding:14px 20px; }
+  .top a.home { color:var(--ink); text-decoration:none; font-weight:700; }
+  .top .kicker { color:var(--amber); font-size:11.5px; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; }
+  .top .gh { margin-left:auto; font-size:14px; }
+
+  .shell { display:grid; grid-template-columns:246px minmax(0,1fr);
+    gap:44px; max-width:1120px; margin:0 auto; padding:34px 20px 80px; }
+  nav { position:sticky; top:22px; align-self:start; }
+  nav .lbl { color:var(--dim); font-size:11.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; margin:0 0 10px; }
+  nav a { display:flex; gap:10px; text-decoration:none; color:var(--dim);
+    padding:7px 11px; border-radius:8px; font-size:14.5px; }
+  nav a em { font-style:normal; color:#55627a; font-family:var(--mono); font-size:12.5px; }
+  nav a:hover { background:var(--panel); color:var(--ink); }
+  nav a.here { background:var(--panel); color:var(--ink); font-weight:650;
+    box-shadow:inset 2px 0 0 var(--amber); }
+  nav .loops { margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+
+  article { min-width:0; }
+  article h1 { font-size:clamp(27px,4vw,38px); line-height:1.16; margin:0 0 6px;
+    letter-spacing:-.02em; }
+  .meta { color:var(--dim); font-size:13.5px; margin:0 0 30px; }
+  article h2 { font-size:23px; margin:40px 0 10px; letter-spacing:-.01em; }
+  article h3 { font-size:18.5px; margin:30px 0 8px; }
+  article p, article li { color:#d3d9e4; }
+  article strong { color:var(--ink); }
+  article img { max-width:100%; height:auto; display:block; margin:26px 0; }
+  article hr { border:0; border-top:1px solid var(--line); margin:34px 0; }
+  article blockquote { margin:24px 0; padding:2px 20px; border-left:3px solid var(--amber);
+    color:#c7d0de; font-style:italic; }
+  article code { font-family:var(--mono); font-size:.88em; background:var(--panel);
+    border:1px solid var(--line); border-radius:5px; padding:1px 5px; }
+  article pre { background:#05070b; border:1px solid var(--line); border-radius:10px;
+    padding:17px 19px; overflow-x:auto; }
+  article pre code { background:none; border:0; padding:0; font-size:13.2px;
+    color:#c7d0de; line-height:1.62; }
+  .tw { overflow-x:auto; margin:22px 0; }
+  article table { border-collapse:collapse; width:100%; font-size:15px; }
+  article th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 13px;
+    border-bottom:1px solid var(--line); white-space:nowrap; }
+  article td { padding:11px 13px; border-bottom:1px solid var(--line);
+    vertical-align:top; color:#d3d9e4; }
+
+  .pager { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    margin-top:52px; padding-top:22px; border-top:1px solid var(--line); font-size:15px; }
+  .cta { margin-top:34px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:19px 21px; }
+  .cta p { margin:0 0 10px; color:var(--dim); font-size:14.5px; }
+  .cta code { color:var(--green); }
+
+  @media (max-width:860px) {
+    .shell { grid-template-columns:1fr; gap:26px; }
+    nav { position:static; }
+    nav a { display:inline-flex; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <a class="home" href="index.html"><span class="kicker">The Warship CTO</span><br>From Prompt to Loop</a>
+  <span class="gh"><a href="https://github.com/fakiolinho/From-Prompt-to-Loop">View on GitHub</a></span>
+</div></div>
+
+<div class="shell">
+  <nav>
+    <p class="lbl">The guide</p>
+    <a class="" href="00-start-here.html"><em>0</em>Read this first</a><a class="" href="01-what-is-a-loop.html"><em>1</em>What a loop is</a><a class="" href="02-plain-words.html"><em>2</em>Plain words</a><a class="" href="03-run-the-demos.html"><em>3</em>Run the demos</a><a class="here" href="04-your-first-loop.html"><em>4</em>Your first loop</a><a class="" href="05-add-the-next.html"><em>5</em>Add the next one</a><a class="" href="06-operating.html"><em>6</em>Operating a fleet</a><a class="" href="07-where-these-fit.html"><em>7</em>Where these fit</a>
+    <div class="loops">
+      <p class="lbl">The loops</p>
+      <a href="index.html#loops"><em>35</em>All chapters</a>
+      <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf"><em>pdf</em>Field guide</a>
+    </div>
+  </nav>
+
+  <article>
+    <h1>Your first loop</h1>
+    <p class="meta">Page 4 of 7 &middot; From Prompt to Loop</p>
+    <p>From watching demos to a loop running on your own repo and opening a real PR. About ten minutes.</p>
+<h2>Which loop, and why that one</h2>
+<p><strong>Engineering loop 2, dependency upgrades.</strong> Do not start with all thirty five. Start with the
+one that is hardest to get wrong.</p>
+<ul>
+<li>Its check is <code>npm outdated</code>, which only reads.</li>
+<li>Its change is a version bump. The maintainer wrote the code and the world reviewed it.</li>
+<li>Its PR is three lines and easy to review.</li>
+<li>If it gets something wrong, you close the PR and nothing happened.</li>
+</ul>
+<p>The field guide stars it for exactly that reason. Once you trust the shape, <a href="05-add-the-next.html">add the next
+one</a>.</p>
+<h2>What stops it running away</h2>
+<p>These are in the workflow file, not in a promise.</p>
+<table>
+<thead>
+<tr>
+<th>Limit</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The check runs first</td>
+<td>No work means the agent never wakes, so nothing is spent.</td>
+</tr>
+<tr>
+<td><code>--max-budget-usd 2</code></td>
+<td>The run ends before it can get expensive.</td>
+</tr>
+<tr>
+<td><code>--max-turns 30</code></td>
+<td>It cannot grind forever.</td>
+</tr>
+<tr>
+<td><code>timeout-minutes: 20</code></td>
+<td>A stuck run dies on its own.</td>
+</tr>
+<tr>
+<td><code>--allowedTools</code></td>
+<td>A fixed list of tools. This is enforced, not requested.</td>
+</tr>
+<tr>
+<td>One branch, one PR</td>
+<td>It never opens a second PR for the same work.</td>
+</tr>
+<tr>
+<td>It never merges</td>
+<td>You review and merge. Always.</td>
+</tr>
+<tr>
+<td>A check that exits 2</td>
+<td>Fails the run. You do not pay tokens for a check that was never wired.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Off switch:</strong> cancel the run in the Actions tab, or delete the workflow file. Nothing keeps
+running in the background.</p>
+<h2>Step 1. Copy five things into your repo</h2>
+<p>Keep the paths.</p>
+<pre><code>CLAUDE.md  and  AGENTS.md              the rules the agent reads every run
+.github/workflows/loop.yml             one runner for the whole chapter
+loops/02-dependency-upgrades/          the loop you are adopting
+memory/02-dependency-upgrades.md       where the loop writes what it learned
+.github/PULL_REQUEST_TEMPLATE.md       what the agent's PR has to tell you
+</code></pre>
+<p>Copying the whole <code>engineering-loops</code> folder is fine too. You still start with one loop.</p>
+<p>The PR template is the one people skip. It is what turns the agent's pull request into evidence
+you can rule on, instead of a diff you have to reverse engineer at the end of a long day.</p>
+<h2>Step 2. Name an owner</h2>
+<p>Open <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md"><code>loops/02-dependency-upgrades/ORDERS.md</code></a> and replace the <code>**Owner:**</code> line with a real
+person. Ten seconds, and it decides whether this is a fleet somebody runs or a fleet nobody
+maintains. An unowned loop is the one still running badly a year from now, because nobody ever
+felt responsible for turning it off.</p>
+<h2>Step 3. Add one secret</h2>
+<p>In your repo: <strong>Settings &gt; Secrets and variables &gt; Actions &gt; New repository secret.</strong></p>
+<p>Name it <code>ANTHROPIC_API_KEY</code>, or <code>OPENAI_API_KEY</code> if you will run Codex.</p>
+<p><code>GITHUB_TOKEN</code> is provided for you. You do not add it.</p>
+<h2>Step 4. Let it open PRs</h2>
+<p><strong>Settings &gt; Actions &gt; General &gt; Workflow permissions.</strong> Turn on <em>&quot;Allow GitHub Actions to create
+and approve pull requests&quot;</em>.</p>
+<p>Skip this and you get the quietest failure there is: a green run that shipped nothing.</p>
+<h2>Step 5. Commit, push, and run it</h2>
+<ul>
+<li>Actions tab, pick <strong>engineering-loop</strong>, click <strong>Run workflow</strong>.</li>
+<li>Set <code>loop</code> to <code>02-dependency-upgrades</code> and <code>agent</code> to <code>claude</code>.</li>
+</ul>
+<p>Two things can happen, and both are correct:</p>
+<ul>
+<li><strong>Nothing is outdated.</strong> The run ends at the check. No agent, no spend.</li>
+<li><strong>Something is outdated.</strong> The agent opens a PR on branch <code>loop/02-dependency-upgrades</code>.
+Review it and merge.</li>
+</ul>
+<p>That is one full loop, end to end, on your code.</p>
+<h2>Step 6. Make it run on its own</h2>
+<p>The runner starts out manual so your first runs are deliberate. When you trust it, add a
+schedule to <code>.github/workflows/loop.yml</code>:</p>
+<pre><code>on:
+  schedule:
+    - cron: &quot;0 6 * * 1&quot;      # Mondays 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      loop:  { description: &quot;loop folder&quot;, required: true }
+      agent: { description: &quot;claude or codex&quot;, default: &quot;claude&quot; }
+</code></pre>
+<p>A scheduled run has nobody to type the <code>loop</code> input, so it needs the loop name hard coded. Copy
+the loop step into a small dedicated workflow per scheduled loop.</p>
+<h2>When the first runs go sideways, and they will</h2>
+<table>
+<thead>
+<tr>
+<th>What happened</th>
+<th>What it means</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>It opened a PR you disagree with</td>
+<td>Do not fix it by hand. Add the missing rule to <code>CLAUDE.md</code> and run it again. That is the only way the loop gets better.</td>
+</tr>
+<tr>
+<td>Two runs, two PRs</td>
+<td>The branch rule was ignored, or the concurrency group is missing. One branch per loop.</td>
+</tr>
+<tr>
+<td>Green, but nothing shipped</td>
+<td>Almost always Step 4. Check the PR actually exists before you trust the silence.</td>
+</tr>
+<tr>
+<td>You do not trust it yet</td>
+<td>Correct. Review the first several PRs properly. Take your hands off when it has earned it.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p><a href="03-run-the-demos.html">← Run the demos</a> · <a href="index.html">Contents</a> · <a href="05-add-the-next.html">Next: Add the next one →</a></p>
+<p><strong>The 35 loops:</strong> <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/LOOPS.md">Ch 1</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/LOOPS.md">Ch 2</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/LOOPS.md">Ch 3</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/LOOPS.md">Ch 4</a></p>
+
+
+    <div class="cta">
+      <p>Reading is the slow way round. This runs all four chapters against seeded data:</p>
+      <code>git clone https://github.com/fakiolinho/From-Prompt-to-Loop.git &amp;&amp; cd From-Prompt-to-Loop &amp;&amp; ./run-all-demos.sh</code>
+    </div>
+
+    <div class="pager"><a href="03-run-the-demos.html">&larr; Run the demos</a><a href="05-add-the-next.html">Add the next one &rarr;</a></div>
+  </article>
+</div>
+
+</body>
+</html>

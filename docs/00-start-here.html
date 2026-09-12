@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Read this first &middot; From Prompt to Loop</title>
+<meta name="description" content="Read this first. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+<style>
+  :root {
+    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
+    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16.5px/1.72 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  a { color:#8ab4ff; }
+  a:hover { color:#b9d0ff; }
+
+  .top { border-bottom:1px solid var(--line); background:#090c12; }
+  .top .wrap { display:flex; align-items:center; gap:16px; padding:14px 20px; }
+  .top a.home { color:var(--ink); text-decoration:none; font-weight:700; }
+  .top .kicker { color:var(--amber); font-size:11.5px; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; }
+  .top .gh { margin-left:auto; font-size:14px; }
+
+  .shell { display:grid; grid-template-columns:246px minmax(0,1fr);
+    gap:44px; max-width:1120px; margin:0 auto; padding:34px 20px 80px; }
+  nav { position:sticky; top:22px; align-self:start; }
+  nav .lbl { color:var(--dim); font-size:11.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; margin:0 0 10px; }
+  nav a { display:flex; gap:10px; text-decoration:none; color:var(--dim);
+    padding:7px 11px; border-radius:8px; font-size:14.5px; }
+  nav a em { font-style:normal; color:#55627a; font-family:var(--mono); font-size:12.5px; }
+  nav a:hover { background:var(--panel); color:var(--ink); }
+  nav a.here { background:var(--panel); color:var(--ink); font-weight:650;
+    box-shadow:inset 2px 0 0 var(--amber); }
+  nav .loops { margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+
+  article { min-width:0; }
+  article h1 { font-size:clamp(27px,4vw,38px); line-height:1.16; margin:0 0 6px;
+    letter-spacing:-.02em; }
+  .meta { color:var(--dim); font-size:13.5px; margin:0 0 30px; }
+  article h2 { font-size:23px; margin:40px 0 10px; letter-spacing:-.01em; }
+  article h3 { font-size:18.5px; margin:30px 0 8px; }
+  article p, article li { color:#d3d9e4; }
+  article strong { color:var(--ink); }
+  article img { max-width:100%; height:auto; display:block; margin:26px 0; }
+  article hr { border:0; border-top:1px solid var(--line); margin:34px 0; }
+  article blockquote { margin:24px 0; padding:2px 20px; border-left:3px solid var(--amber);
+    color:#c7d0de; font-style:italic; }
+  article code { font-family:var(--mono); font-size:.88em; background:var(--panel);
+    border:1px solid var(--line); border-radius:5px; padding:1px 5px; }
+  article pre { background:#05070b; border:1px solid var(--line); border-radius:10px;
+    padding:17px 19px; overflow-x:auto; }
+  article pre code { background:none; border:0; padding:0; font-size:13.2px;
+    color:#c7d0de; line-height:1.62; }
+  .tw { overflow-x:auto; margin:22px 0; }
+  article table { border-collapse:collapse; width:100%; font-size:15px; }
+  article th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 13px;
+    border-bottom:1px solid var(--line); white-space:nowrap; }
+  article td { padding:11px 13px; border-bottom:1px solid var(--line);
+    vertical-align:top; color:#d3d9e4; }
+
+  .pager { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    margin-top:52px; padding-top:22px; border-top:1px solid var(--line); font-size:15px; }
+  .cta { margin-top:34px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:19px 21px; }
+  .cta p { margin:0 0 10px; color:var(--dim); font-size:14.5px; }
+  .cta code { color:var(--green); }
+
+  @media (max-width:860px) {
+    .shell { grid-template-columns:1fr; gap:26px; }
+    nav { position:static; }
+    nav a { display:inline-flex; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <a class="home" href="index.html"><span class="kicker">The Warship CTO</span><br>From Prompt to Loop</a>
+  <span class="gh"><a href="https://github.com/fakiolinho/From-Prompt-to-Loop">View on GitHub</a></span>
+</div></div>
+
+<div class="shell">
+  <nav>
+    <p class="lbl">The guide</p>
+    <a class="here" href="00-start-here.html"><em>0</em>Read this first</a><a class="" href="01-what-is-a-loop.html"><em>1</em>What a loop is</a><a class="" href="02-plain-words.html"><em>2</em>Plain words</a><a class="" href="03-run-the-demos.html"><em>3</em>Run the demos</a><a class="" href="04-your-first-loop.html"><em>4</em>Your first loop</a><a class="" href="05-add-the-next.html"><em>5</em>Add the next one</a><a class="" href="06-operating.html"><em>6</em>Operating a fleet</a><a class="" href="07-where-these-fit.html"><em>7</em>Where these fit</a>
+    <div class="loops">
+      <p class="lbl">The loops</p>
+      <a href="index.html#loops"><em>35</em>All chapters</a>
+      <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf"><em>pdf</em>Field guide</a>
+    </div>
+  </nav>
+
+  <article>
+    <h1>Read this first</h1>
+    <p class="meta">Page 0 of 7 &middot; From Prompt to Loop</p>
+    <p><strong>You are three commands away from watching an agent find real work on its own.</strong></p>
+<p>A loop is a small system that finds work, hands it to an agent, checks the result, and writes
+down what it learned. You build it once. It runs without you after that.</p>
+<p>This repo is thirty five of them. That number is the point of the book and the problem with the
+repo, so here is the honest advice: <strong>do not look at thirty five loops.</strong> Look at one. The rest
+are a catalog you come back to.</p>
+<h2>Pick your door</h2>
+<table>
+<thead>
+<tr>
+<th>If you want to…</th>
+<th>Go to</th>
+<th>Time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>See it work, right now, no setup</td>
+<td><a href="03-run-the-demos.html">Run the demos</a></td>
+<td>1 minute</td>
+</tr>
+<tr>
+<td>Understand what you are looking at first</td>
+<td><a href="01-what-is-a-loop.html">What a loop is</a></td>
+<td>5 minutes</td>
+</tr>
+<tr>
+<td>Put one on your own repo and get a real PR</td>
+<td><a href="04-your-first-loop.html">Your first loop</a></td>
+<td>10 minutes</td>
+</tr>
+<tr>
+<td>Browse all thirty five</td>
+<td><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/LOOPS.md">Ch 1</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/LOOPS.md">Ch 2</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/LOOPS.md">Ch 3</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/LOOPS.md">Ch 4</a></td>
+<td>browse</td>
+</tr>
+</tbody>
+</table>
+<p>If a word here is unfamiliar, it is in <a href="02-plain-words.html">plain words</a>. Nothing is assumed.</p>
+<h2>What you need</h2>
+<ul>
+<li><strong>Node 18 or newer</strong> and <strong>bash</strong>. That is all the demos need.</li>
+<li><strong>git</strong> and the GitHub CLI <code>gh</code>, only when you want an agent to open a real PR.</li>
+<li>An <strong>Anthropic or OpenAI API key</strong>, only for that same step. Every check in this repo runs
+without one.</li>
+</ul>
+<h2>The book this came from</h2>
+<p><strong><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf">From Prompt to Loop</a></strong> sits in the root of this
+repo, and it is free. It has
+the thinking: the nine rules, the five question test for whether something is really a loop, and
+the operations chapters. This repo is the working code that guide points at.</p>
+<p>Read the guide for <em>why</em>. Read these pages for <em>how</em>.</p>
+<hr />
+<p><a href="index.html">Contents</a> · <a href="01-what-is-a-loop.html">Next: What a loop is →</a></p>
+<p><strong>The 35 loops:</strong> <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/LOOPS.md">Ch 1</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/LOOPS.md">Ch 2</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/LOOPS.md">Ch 3</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/LOOPS.md">Ch 4</a></p>
+
+
+    <div class="cta">
+      <p>Reading is the slow way round. This runs all four chapters against seeded data:</p>
+      <code>git clone https://github.com/fakiolinho/From-Prompt-to-Loop.git &amp;&amp; cd From-Prompt-to-Loop &amp;&amp; ./run-all-demos.sh</code>
+    </div>
+
+    <div class="pager"><span></span><a href="01-what-is-a-loop.html">What a loop is &rarr;</a></div>
+  </article>
+</div>
+
+</body>
+</html>

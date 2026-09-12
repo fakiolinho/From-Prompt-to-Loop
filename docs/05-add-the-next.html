@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add the next one &middot; From Prompt to Loop</title>
+<meta name="description" content="Add the next one. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+<style>
+  :root {
+    --bg:#0b0e14; --panel:#131823; --line:#232b3b; --ink:#e6e9ef; --dim:#93a0b5;
+    --amber:#f59e0b; --green:#10b981; --violet:#8b5cf6;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+    font:16.5px/1.72 ui-sans-serif,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  a { color:#8ab4ff; }
+  a:hover { color:#b9d0ff; }
+
+  .top { border-bottom:1px solid var(--line); background:#090c12; }
+  .top .wrap { display:flex; align-items:center; gap:16px; padding:14px 20px; }
+  .top a.home { color:var(--ink); text-decoration:none; font-weight:700; }
+  .top .kicker { color:var(--amber); font-size:11.5px; font-weight:700;
+    letter-spacing:.14em; text-transform:uppercase; }
+  .top .gh { margin-left:auto; font-size:14px; }
+
+  .shell { display:grid; grid-template-columns:246px minmax(0,1fr);
+    gap:44px; max-width:1120px; margin:0 auto; padding:34px 20px 80px; }
+  nav { position:sticky; top:22px; align-self:start; }
+  nav .lbl { color:var(--dim); font-size:11.5px; font-weight:700;
+    letter-spacing:.12em; text-transform:uppercase; margin:0 0 10px; }
+  nav a { display:flex; gap:10px; text-decoration:none; color:var(--dim);
+    padding:7px 11px; border-radius:8px; font-size:14.5px; }
+  nav a em { font-style:normal; color:#55627a; font-family:var(--mono); font-size:12.5px; }
+  nav a:hover { background:var(--panel); color:var(--ink); }
+  nav a.here { background:var(--panel); color:var(--ink); font-weight:650;
+    box-shadow:inset 2px 0 0 var(--amber); }
+  nav .loops { margin-top:20px; padding-top:16px; border-top:1px solid var(--line); }
+
+  article { min-width:0; }
+  article h1 { font-size:clamp(27px,4vw,38px); line-height:1.16; margin:0 0 6px;
+    letter-spacing:-.02em; }
+  .meta { color:var(--dim); font-size:13.5px; margin:0 0 30px; }
+  article h2 { font-size:23px; margin:40px 0 10px; letter-spacing:-.01em; }
+  article h3 { font-size:18.5px; margin:30px 0 8px; }
+  article p, article li { color:#d3d9e4; }
+  article strong { color:var(--ink); }
+  article img { max-width:100%; height:auto; display:block; margin:26px 0; }
+  article hr { border:0; border-top:1px solid var(--line); margin:34px 0; }
+  article blockquote { margin:24px 0; padding:2px 20px; border-left:3px solid var(--amber);
+    color:#c7d0de; font-style:italic; }
+  article code { font-family:var(--mono); font-size:.88em; background:var(--panel);
+    border:1px solid var(--line); border-radius:5px; padding:1px 5px; }
+  article pre { background:#05070b; border:1px solid var(--line); border-radius:10px;
+    padding:17px 19px; overflow-x:auto; }
+  article pre code { background:none; border:0; padding:0; font-size:13.2px;
+    color:#c7d0de; line-height:1.62; }
+  .tw { overflow-x:auto; margin:22px 0; }
+  article table { border-collapse:collapse; width:100%; font-size:15px; }
+  article th { text-align:left; color:var(--dim); font-size:12.5px; font-weight:700;
+    letter-spacing:.06em; text-transform:uppercase; padding:9px 13px;
+    border-bottom:1px solid var(--line); white-space:nowrap; }
+  article td { padding:11px 13px; border-bottom:1px solid var(--line);
+    vertical-align:top; color:#d3d9e4; }
+
+  .pager { display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap;
+    margin-top:52px; padding-top:22px; border-top:1px solid var(--line); font-size:15px; }
+  .cta { margin-top:34px; background:var(--panel); border:1px solid var(--line);
+    border-radius:12px; padding:19px 21px; }
+  .cta p { margin:0 0 10px; color:var(--dim); font-size:14.5px; }
+  .cta code { color:var(--green); }
+
+  @media (max-width:860px) {
+    .shell { grid-template-columns:1fr; gap:26px; }
+    nav { position:static; }
+    nav a { display:inline-flex; }
+  }
+</style>
+</head>
+<body>
+
+<div class="top"><div class="wrap">
+  <a class="home" href="index.html"><span class="kicker">The Warship CTO</span><br>From Prompt to Loop</a>
+  <span class="gh"><a href="https://github.com/fakiolinho/From-Prompt-to-Loop">View on GitHub</a></span>
+</div></div>
+
+<div class="shell">
+  <nav>
+    <p class="lbl">The guide</p>
+    <a class="" href="00-start-here.html"><em>0</em>Read this first</a><a class="" href="01-what-is-a-loop.html"><em>1</em>What a loop is</a><a class="" href="02-plain-words.html"><em>2</em>Plain words</a><a class="" href="03-run-the-demos.html"><em>3</em>Run the demos</a><a class="" href="04-your-first-loop.html"><em>4</em>Your first loop</a><a class="here" href="05-add-the-next.html"><em>5</em>Add the next one</a><a class="" href="06-operating.html"><em>6</em>Operating a fleet</a><a class="" href="07-where-these-fit.html"><em>7</em>Where these fit</a>
+    <div class="loops">
+      <p class="lbl">The loops</p>
+      <a href="index.html#loops"><em>35</em>All chapters</a>
+      <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/raw/main/From-Prompt-to-Loop_The-Warship-CTO.pdf"><em>pdf</em>Field guide</a>
+    </div>
+  </nav>
+
+  <article>
+    <h1>Add the next one</h1>
+    <p class="meta">Page 5 of 7 &middot; From Prompt to Loop</p>
+    <p>You have one loop running. This is the order to add the rest, so you never face thirty five at
+once.</p>
+<blockquote>
+<p><strong>Launch one, prove it, add a second, then fan out.</strong> Five engineers each quietly building
+their own docs loop is five bills and five sets of rules drifting apart.</p>
+</blockquote>
+<h2>The next two, same chapter, same runner</h2>
+<p>Both are starred in the field guide for the same reason loop 2 is: mechanical, fully checkable,
+trivially reversible.</p>
+<table>
+<thead>
+<tr>
+<th>Next</th>
+<th>Loop</th>
+<th>Why it is safe</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2nd</td>
+<td><strong>6</strong> lint, format, and type fixes</td>
+<td>Pure busywork. The tools decide what is right, not the agent.</td>
+</tr>
+<tr>
+<td>3rd</td>
+<td><strong>7</strong> release notes and changelog</td>
+<td>It writes prose from your commit log. Nothing executable changes.</td>
+</tr>
+</tbody>
+</table>
+<p>Same four steps as <a href="04-your-first-loop.html">your first loop</a>. Copy the loop folder and its memory
+file, set the <code>loop</code> input, run it. The runner and the secret are already there.</p>
+<h2>Then adopt a whole chapter</h2>
+<p>Once three loops feel boring, take a chapter. Pick the one that matches the pain you actually
+have.</p>
+<table>
+<thead>
+<tr>
+<th>Chapter</th>
+<th>Loops</th>
+<th>Adopt it when</th>
+<th>Start here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1 · Software engineering</strong></td>
+<td>1-9</td>
+<td>your maintenance backlog never shrinks</td>
+<td><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/LOOPS.md">chapter</a></td>
+</tr>
+<tr>
+<td><strong>2 · Cloud and platform</strong></td>
+<td>10-18</td>
+<td>your cloud bill or your on call is the problem</td>
+<td><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/SETUP.md">SETUP.md first</a></td>
+</tr>
+<tr>
+<td><strong>3 · AI and ML engineering</strong></td>
+<td>19-26</td>
+<td>you ship prompts or models and have no evals</td>
+<td><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/LOOPS.md">chapter</a></td>
+</tr>
+<tr>
+<td><strong>4 · QA and testing</strong></td>
+<td>27-35</td>
+<td>your CI signal is not trusted any more</td>
+<td><a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/LOOPS.md">chapter</a></td>
+</tr>
+</tbody>
+</table>
+<p>Each chapter has its own <code>README.md</code> (how the pack works) and <code>LOOPS.md</code> (one row per loop, with
+which ones ship working code today).</p>
+<h2>Cloud is the one that is different</h2>
+<p>Cloud loops act on your AWS account, not a git repo. They sign in with a scoped OIDC role rather
+than an API key in a secret, and most of them are <strong>Flags, you decide</strong>, because most cloud
+actions cannot be taken back.</p>
+<p>Do <code>loop-packs/cloud-loops/SETUP.md</code> first, and try everything with <code>DRY_RUN=1</code> before you point
+anything at a live account.</p>
+<h2>Before you build one of your own</h2>
+<p>The catalog is thirty five loops, not a limit. When you want to add your own, run it through the
+guide's five question test (page 19) first:</p>
+<ol>
+<li>Does it recur, and does it actually hurt?</li>
+<li>Can it check its own work, cheaply and honestly?</li>
+<li>Can you undo a miss?</li>
+<li>Is a boring deterministic tool already doing it?</li>
+<li>Bonus: does the output compound?</li>
+</ol>
+<p>One &quot;no&quot; on the first four and it is not a loop. It is a chore in a loop costume, and building it
+burns money you will not get back.</p>
+<p>Then do the napkin: cost is tokens per run times runs per month. Payoff is the hours removed plus
+the failures prevented. If the payoff does not clear the cost by a wide margin, do not build it.
+More on that in <a href="06-operating.html">operating a fleet</a>.</p>
+<hr />
+<p><a href="04-your-first-loop.html">← Your first loop</a> · <a href="index.html">Contents</a> · <a href="06-operating.html">Next: Operating a fleet →</a></p>
+<p><strong>The 35 loops:</strong> <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/LOOPS.md">Ch 1</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/cloud-loops/LOOPS.md">Ch 2</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/ai-ml-loops/LOOPS.md">Ch 3</a> · <a href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/qa-loops/LOOPS.md">Ch 4</a></p>
+
+
+    <div class="cta">
+      <p>Reading is the slow way round. This runs all four chapters against seeded data:</p>
+      <code>git clone https://github.com/fakiolinho/From-Prompt-to-Loop.git &amp;&amp; cd From-Prompt-to-Loop &amp;&amp; ./run-all-demos.sh</code>
+    </div>
+
+    <div class="pager"><a href="04-your-first-loop.html">&larr; Your first loop</a><a href="06-operating.html">Operating a fleet &rarr;</a></div>
+  </article>
+</div>
+
+</body>
+</html>
