@@ -13,7 +13,7 @@
     "test": "node src/total.test.js && node src/messy.test.js"
   },
   "dependencies": {
-    "ms": "2.0.0",
-    "is-odd": "1.0.0"
+    "ms": "^2.0.0",
+    "is-odd": "^1.0.0"
   }
 }

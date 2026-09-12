@@ -124,8 +124,10 @@
 Loop 2. Dependency upgrades   (pack check: `npm outdated`)
 Package  Current  Wanted  Latest  Location             Depended by
 is-odd     1.0.0   1.0.0   3.0.1  node_modules/is-odd  demo-app
-ms         2.0.0   2.0.0   2.1.3  node_modules/ms      demo-app
-  ^ these have newer releases. The loop would bump patch/minor, run tests, open a PR.
+ms         2.0.0   2.1.3   2.1.3  node_modules/ms      demo-app
+  ^ ms can move inside its range (Wanted 2.1.3), so the loop bumps it, runs the
+    verify command, and opens a PR. is-odd can only go to a major, so the loop
+    leaves it alone and opens an issue. Latest is not always safe, or even newer.
 
 Loop 4. Test backfill on changed code   (pack check: git diff for untested changes)
   NO TEST  src/discount.js  (live code, imported, but no src/discount.test.js)
@@ -134,7 +136,9 @@ Loop 4. Test backfill on changed code   (pack check: git diff for untested chang
 Loop 5. Dead code and unused dependencies   (pack check: `knip`)
   DEAD FILE   src/unused.js  (exported but nothing imports it)
   UNUSED DEP  is-odd  (in package.json, never imported)
-  The loop would remove these, then prove the build and tests still pass.
+  The loop lists these for a human and opens an issue. It never deletes.
+  A green build does not prove a cut was safe, and deleting a test makes the
+  suite pass more easily. That is why loop 5 flags rather than ships.
 
 Loop 6. Lint, format, and type fixes   (pack check: eslint + prettier + tsc)
   src/messy.js: uses == (should be ===); uses var (should be const/let); unused variable &quot;unusedTax&quot;
@@ -142,9 +146,7 @@ Loop 6. Lint, format, and type fixes   (pack check: eslint + prettier + tsc)
 
 Loop 7. Release notes and changelog   (pack check: git log since last tag)
   BEHIND  package.json is 1.1.0 but the changelog tops out at 1.0.0.
-  The loop would write the entries for the new version from the commit log.
-
-5 loop(s) found work in this project.</pre>
+  The loop would write the entries for the new version from the commit log.</pre>
 </div></section>
 
 <section id="loops"><div class="wrap">
@@ -166,7 +168,7 @@ Loop 7. Release notes and changelog   (pack check: git log since last tag)
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/02-dependency-upgrades/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="dependency upgrades outdated deps (npm outdated)"><span class="num">2</span><span class="body"><span class="name">Dependency upgrades<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">outdated deps (npm outdated)</span></span><span class="tag ships">Ships on green</span></a>
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/03-codemod-and-framework-migrations/ORDERS.md" data-ch="1" data-tag="ships" data-ready="0" data-q="codemod and framework migrations (you point it at a migration)"><span class="num">3</span><span class="body"><span class="name">Codemod and framework migrations</span><span class="looks">(you point it at a migration)</span></span><span class="tag ships">Ships on green</span></a>
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/04-test-backfill-on-changed-code/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="test backfill on changed code changed code with no test"><span class="num">4</span><span class="body"><span class="name">Test backfill on changed code<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">changed code with no test</span></span><span class="tag ships">Ships on green</span></a>
-<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/05-dead-code-and-unused-dependency-removal/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="dead code and unused dependency removal dead code (knip)"><span class="num">5</span><span class="body"><span class="name">Dead code and unused dependency removal<span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">dead code (knip)</span></span><span class="tag ships">Ships on green</span></a>
+<a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/05-dead-code-and-unused-dependency-removal/ORDERS.md" data-ch="1" data-tag="flags" data-ready="0" data-q="dead code and unused dependency removal dead code (knip), once knip is configured"><span class="num">5</span><span class="body"><span class="name">Dead code and unused dependency removal</span><span class="looks">dead code (knip), once knip is configured</span></span><span class="tag flags">Flags, you decide</span></a>
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/06-lint-format-and-type-fixes/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="lint, format, and type fixes eslint / prettier / tsc dirty"><span class="num">6</span><span class="body"><span class="name">Lint, format, and type fixes<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">eslint / prettier / tsc dirty</span></span><span class="tag ships">Ships on green</span></a>
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/07-release-notes-and-changelog/ORDERS.md" data-ch="1" data-tag="ships" data-ready="1" data-q="release notes and changelog commits since last tag not logged"><span class="num">7</span><span class="body"><span class="name">Release notes and changelog<span class="star" title="one of the guide's three easiest first builds">★</span><span class="ready" title="ships working code you can run right now">runnable</span></span><span class="looks">commits since last tag not logged</span></span><span class="tag ships">Ships on green</span></a>
 <a class="loop" href="https://github.com/fakiolinho/From-Prompt-to-Loop/blob/main/loop-packs/engineering-loops/loops/08-first-pass-code-review/ORDERS.md" data-ch="1" data-tag="flags" data-ready="0" data-q="first pass code review a pr to review"><span class="num">8</span><span class="body"><span class="name">First pass code review</span><span class="looks">a PR to review</span></span><span class="tag flags">Flags, you decide</span></a>

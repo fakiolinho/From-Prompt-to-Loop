@@ -84,6 +84,9 @@ Nothing irreversible happens without a person. That is the whole reason you can 
 
 `cloud-loops` also has a `SETUP.md`, because it runs against AWS rather than a repo.
 
+[`BOOK-CHANGES.md`](BOOK-CHANGES.md) tracks where the repo has learned something the printed
+field guide does not know yet, with the evidence, so the next revision can catch up.
+
 ---
 
 ## Is it still working?

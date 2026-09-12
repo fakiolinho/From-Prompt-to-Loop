@@ -2,8 +2,10 @@
 Loop 2. Dependency upgrades   (pack check: `npm outdated`)
 Package  Current  Wanted  Latest  Location             Depended by
 is-odd     1.0.0   1.0.0   3.0.1  node_modules/is-odd  demo-app
-ms         2.0.0   2.0.0   2.1.3  node_modules/ms      demo-app
-  ^ these have newer releases. The loop would bump patch/minor, run tests, open a PR.
+ms         2.0.0   2.1.3   2.1.3  node_modules/ms      demo-app
+  ^ ms can move inside its range (Wanted 2.1.3), so the loop bumps it, runs the
+    verify command, and opens a PR. is-odd can only go to a major, so the loop
+    leaves it alone and opens an issue. Latest is not always safe, or even newer.
 
 Loop 4. Test backfill on changed code   (pack check: git diff for untested changes)
   NO TEST  src/discount.js  (live code, imported, but no src/discount.test.js)
@@ -12,7 +14,9 @@ Loop 4. Test backfill on changed code   (pack check: git diff for untested chang
 Loop 5. Dead code and unused dependencies   (pack check: `knip`)
   DEAD FILE   src/unused.js  (exported but nothing imports it)
   UNUSED DEP  is-odd  (in package.json, never imported)
-  The loop would remove these, then prove the build and tests still pass.
+  The loop lists these for a human and opens an issue. It never deletes.
+  A green build does not prove a cut was safe, and deleting a test makes the
+  suite pass more easily. That is why loop 5 flags rather than ships.
 
 Loop 6. Lint, format, and type fixes   (pack check: eslint + prettier + tsc)
   src/messy.js: uses == (should be ===); uses var (should be const/let); unused variable "unusedTax"
@@ -22,4 +26,3 @@ Loop 7. Release notes and changelog   (pack check: git log since last tag)
   BEHIND  package.json is 1.1.0 but the changelog tops out at 1.0.0.
   The loop would write the entries for the new version from the commit log.
 
-5 loop(s) found work in this project.

@@ -28,7 +28,12 @@ function loop2() {
     return 1;
   }
   try { cp.execSync('npm outdated', { cwd: __dirname, stdio: 'inherit' }); console.log('  all dependencies current'); return 0; }
-  catch { console.log('  ^ these have newer releases. The loop would bump patch/minor, run tests, open a PR.'); return 1; }
+  catch {
+    console.log('  ^ ms can move inside its range (Wanted 2.1.3), so the loop bumps it, runs the');
+    console.log('    verify command, and opens a PR. is-odd can only go to a major, so the loop');
+    console.log('    leaves it alone and opens an issue. Latest is not always safe, or even newer.');
+    return 1;
+  }
 }
 const code0 = () => fs.readFileSync(path.join(__dirname, 'package.json'), 'utf8');
 
@@ -52,7 +57,11 @@ function loop5() {
   const unusedDeps = deps.filter(d => !new RegExp(`['"]${d}['"]`).test(allSrc));
   unusedDeps.forEach(d => { console.log(`  UNUSED DEP  ${d}  (in package.json, never imported)`); work = 1; });
   if (!work) console.log('  no dead code or unused dependencies');
-  else console.log('  The loop would remove these, then prove the build and tests still pass.');
+  else {
+    console.log('  The loop lists these for a human and opens an issue. It never deletes.');
+    console.log('  A green build does not prove a cut was safe, and deleting a test makes the');
+    console.log('  suite pass more easily. That is why loop 5 flags rather than ships.');
+  }
   return work;
 }
 

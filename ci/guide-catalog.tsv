@@ -5,12 +5,15 @@
 # tag  = the guide's own words. ships = "Ships on green". flags = "Flags, you decide".
 # star = the guide's star, the three easiest first builds.
 #
+# Where this disagrees with the printed guide, BOOK-CHANGES.md says why and the repo wins.
+# Loop 5 is flags here, ships on green in the guide. Evidence: BOOK-CHANGES.md entry 2.
+#
 # num	pack	tag	star	name
 01	engineering-loops	ships	no	Docs and examples sync
 02	engineering-loops	ships	yes	Dependency upgrades
 03	engineering-loops	ships	no	Codemod and framework migrations
 04	engineering-loops	ships	no	Test backfill on changed code
-05	engineering-loops	ships	no	Dead code and unused dependency removal
+05	engineering-loops	flags	no	Dead code and unused dependency removal
 06	engineering-loops	ships	yes	Lint, format, and type fixes
 07	engineering-loops	ships	yes	Release notes and changelog
 08	engineering-loops	flags	no	First pass code review

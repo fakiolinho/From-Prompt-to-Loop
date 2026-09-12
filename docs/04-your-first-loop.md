@@ -15,6 +15,27 @@ one that is hardest to get wrong.
 The field guide stars it for exactly that reason. Once you trust the shape, [add the next
 one](05-add-the-next.md).
 
+## First, know what proves a change is safe
+
+Before you point any loop at a repo, answer one question: **what command proves this project
+still works?** Tests, a build, a smoke script. The loop is worth exactly as much as that command
+is, and not a penny more.
+
+Loop 2's check looks for it and tells you what it found:
+
+    6 dependency upgrade(s) available within range. Verify command: npm run build
+
+If it finds nothing it exits 2 and refuses to wake the agent, because an upgrade nobody can
+verify is not a loop, it is a gamble on a schedule. Set `LOOP_VERIFY` to name your own command
+if the guess is wrong.
+
+Two things that command cannot prove, on any repo:
+
+- **It cannot vouch for what it does not cover.** A config file read by filename, a package
+  loaded at runtime, a fixture passed to a script as a path: none of them appear in a build.
+- **It cannot verify its own removal.** A suite with fewer tests passes more easily, so no loop
+  here is allowed to delete a test.
+
 ## What stops it running away
 
 These are in the workflow file, not in a promise.
