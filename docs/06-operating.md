@@ -158,6 +158,31 @@ and it is the cheapest thing that works:
 - `git blame` tells you which run wrote a bad lesson
 - it survives the runner being destroyed, because git is the persistence
 
+### What a good one looks like
+
+The format is not the hard part. Writing a line worth reading is.
+
+    ## Log
+    - init: 3 tests, 20 runs each. order-lookup unstable, the other two clean.
+    - 2026-04-02: order-lookup passed 6 times in 20. Quarantined, issue opened. Never
+      deleted: a suite with fewer tests passes more easily.
+    - 2026-04-09: 10 runs was not enough to catch it. At 10 it looked healthy twice in a
+      row. Twenty is the floor for this suite.
+    - 2026-04-30: root cause was a shared fixture, not a race. Two tests wrote the same
+      record under concurrency. Fixed, unquarantined, stable since.
+    - 2026-05-22: a test that fails every run is broken, not flaky. Do not quarantine it,
+      that hides a real failure behind a label.
+
+Every line there changes what the next run does. Compare it with the version most loops
+actually produce, which is a diary nobody reads:
+
+    - 2026-04-02: ran the loop, found a flaky test, quarantined it.
+
+The three worked examples in this repo ship with a filled memory so you can see the shape:
+[loop 1](../loop-packs/engineering-loops/loops/01-docs-and-examples-sync/example/memory/docs-loop.md),
+[loop 19](../loop-packs/ai-ml-loops/loops/19-eval-suite-on-prompt-or-model-change/example/memory/evals.md),
+[loop 28](../loop-packs/qa-loops/loops/28-flaky-test-detection-and-quarantine/example/memory/flaky.md).
+
 **Poisoned memory is the quiet failure.** A loop writes a wrong lesson and every future run obeys
 it. Memory in git means a bad lesson is one revert. Graduate to an object store only when memory
 outgrows git, and to a vector store only when you genuinely need semantic recall.

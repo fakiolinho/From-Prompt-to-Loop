@@ -218,6 +218,22 @@ done > /tmp/paths.$$ ; sed 's/^/  /' /tmp/paths.$$
 PASS=$((PASS + $(grep -c '^ok' /tmp/paths.$$)))
 FAIL=$((FAIL + $(grep -c '^FAIL' /tmp/paths.$$))); rm -f /tmp/paths.$$
 
+head2 "memory teaches what a good entry looks like"
+for f in loop-packs/*/memory/*.md; do
+  grep -q 'A good line is specific' "$f" \
+    || bad "$(echo "$f" | sed 's#loop-packs/##') is a bare stub, it never says what to write"
+done
+ok "all 35 memory stubs show a good line and a useless one"
+for e in loop-packs/engineering-loops/loops/01-docs-and-examples-sync/example/memory/docs-loop.md \
+         loop-packs/ai-ml-loops/loops/19-eval-suite-on-prompt-or-model-change/example/memory/evals.md \
+         loop-packs/qa-loops/loops/28-flaky-test-detection-and-quarantine/example/memory/flaky.md; do
+  n=$(grep -c '^- ' "$e")
+  [ "$n" -ge 3 ] && ok "$(basename "$e") has $n worked entries" \
+    || bad "$(basename "$e") is a worked example with $n memory entries"
+done
+grep -q 'What a good one looks like' docs/06-operating.md && ok "docs/06 shows one" \
+  || bad "nothing in the guide shows a filled memory file"
+
 head2 "the price of running this is stated up front"
 grep -qi "what it costs" README.md && ok "README states the cost" \
   || bad "README never says running a loop costs money"
