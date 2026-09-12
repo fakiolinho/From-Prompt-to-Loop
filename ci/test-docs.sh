@@ -73,6 +73,23 @@ for f in loop-packs/*/loops/*/ORDERS.md; do
   [ -z "$miss" ] && ok "$n" || bad "$n missing:$miss"
 done
 
+head2 "every ORDERS.md says how to run it, installed or not"
+# A reader lands on one loop's page from the catalog. That page has to ask whether
+# install.sh has run, and give the exact commands for either answer, or they guess.
+for f in loop-packs/*/loops/*/ORDERS.md; do
+  d=$(basename "$(dirname "$f")"); nn=${d%%-*}; miss=""
+  grep -qF "## Run this loop" "$f" || miss="$miss heading"
+  grep -qF 'already run `install.sh`' "$f" || miss="$miss install-question"
+  grep -qF "./install.sh ~/code/my-app $nn" "$f" || miss="$miss install-command"
+  grep -qF "./run-loop.sh $nn --check" "$f" || miss="$miss run-command"
+  grep -qF "If you are the agent" "$f" || miss="$miss agent-skip"
+  grep -A40 "## Run this loop" "$f" | grep -qF "WIRING.md)" || miss="$miss wiring-link"
+  case "$f" in
+    loop-packs/cloud-loops/*) grep -A40 "## Run this loop" "$f" | grep -qF "SETUP.md)" || miss="$miss setup-link" ;;
+  esac
+  [ -z "$miss" ] && ok "$d" || bad "$d does not say how to run it:$miss"
+done
+
 head2 "the workflows parse and are wired correctly"
 python3 ci/check-workflows.py > /tmp/wf.$$ 2>&1
 sed 's/^/  /' /tmp/wf.$$

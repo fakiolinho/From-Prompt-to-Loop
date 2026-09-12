@@ -117,6 +117,7 @@ relink() {
     -e "s#\.\./\.\./\.\./\.\./README\.md#$REPO_URL/README.md#g" \
     -e "s#\.\./\.\./\.\./\.\./docs/#$REPO_URL/docs/#g" \
     -e "s#\.\./\.\./LOOPS\.md#$REPO_URL/loop-packs/PACKNAME/LOOPS.md#g" \
+    -e "s#\.\./\.\./SETUP\.md#$REPO_URL/loop-packs/PACKNAME/SETUP.md#g" \
     -e "s#\.\./\.\./\.\./\.\./WIRING\.md#$REPO_URL/WIRING.md#g" \
     "$f" && rm -f "$f.bak"
   sed -i.bak "s#PACKNAME#$2#g" "$f" && rm -f "$f.bak"
