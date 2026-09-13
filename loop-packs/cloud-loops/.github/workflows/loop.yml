@@ -31,10 +31,10 @@ jobs:
     environment: cloud-loops
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       # Assume the least-privilege loop role. No access keys live in the repo.
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.LOOP_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
@@ -107,7 +107,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -126,7 +126,7 @@ jobs:
         run: git checkout "loop/${{ github.event.inputs.loop }}"
 
       # Same scoped role. The checker reads, it never writes.
-      - uses: aws-actions/configure-aws-credentials@v4
+      - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.LOOP_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}

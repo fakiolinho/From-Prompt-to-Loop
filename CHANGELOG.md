@@ -92,6 +92,13 @@ repositories between 12 and 13 September.
 - The eight guide pages, published on GitHub Pages and rebuilt on every push, in the Night
   bridge theme, with both diagrams drawn to match.
 - CI: one job per chapter, and the docs tested against the guide's catalog.
+- A social preview card, so a shared link to the site shows the title and the three answers.
+
+**Changed**
+
+- Every workflow runs on current Actions: `actions/checkout@v7`, `actions/setup-node@v7` and
+  `aws-actions/configure-aws-credentials@v6`, all on Node 24. A self hosted runner needs runner
+  v2.327.1 or later, which the cloud chapter's `SETUP.md` now says.
 
 **Fixed**
 

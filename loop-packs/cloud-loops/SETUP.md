@@ -105,6 +105,13 @@ Loops 11, 12, 13, and 18 can destroy or change access. In GitHub > Settings > En
 create an environment named **cloud-loops** with **required reviewers**. The runner already
 pins `environment: cloud-loops`, so **every** cloud run pauses for human approval before it touches anything. This is deliberate, one gate for the whole pack. The irreversible loops (11, 12, 13, 18) are the reason the gate exists; the reversible ones inherit it as belt and suspenders. If you want reversible loops (10, 14, 15, 16, 17) to run without approval, move them to a second job without the `environment:` line.
 
+## 8. A self hosted runner needs a recent runner version
+The field guide recommends a self hosted runner inside your network for these loops, because
+they need your credentials and your VPC. The runner uses `actions/checkout@v7` and
+`aws-actions/configure-aws-credentials@v6`, which run on Node 24 and need GitHub's runner
+software at **v2.327.1 or later**. GitHub hosted runners already are. Update a self hosted one
+before the first run, or the job fails before the check ever runs.
+
 ## You are ready
 Run any loop from the Actions tab: pick the `loop` folder and the `agent`. The runner assumes
 the scoped role, runs the check, and only wakes the agent if there is work.

@@ -26,7 +26,7 @@ jobs:
       work: ${{ steps.check.outputs.code }}
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: npm ci || echo "no lockfile or no deps, continuing"
 
       # Your repo's loop settings. A check that needs one says so and exits 2.
@@ -100,7 +100,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 

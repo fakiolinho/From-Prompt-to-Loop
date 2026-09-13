@@ -79,6 +79,14 @@ FONTS = """<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@500;600;700&display=swap">
 <meta name="theme-color" content="#140c0b">"""
 
+# What a shared link shows: the card in docs/img, rendered from the site's own look.
+SITE = "https://fakiolinho.github.io/From-Prompt-to-Loop/"
+SHARE = f"""<meta property="og:image" content="{SITE}img/social-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="From Prompt to Loop. 35 runnable loops that keep a product alive after it ships.">
+<meta name="twitter:card" content="summary_large_image">"""
+
 TOKENS = """  :root {
     --hull:#140c0b; --deck:#1c1210; --well:#0d0807; --rivet:#3a2622;
     --ink:#f1e4d8; --text:#d9c8bb; --dim:#a48d80;
@@ -104,6 +112,11 @@ PAGE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title} &middot; From Prompt to Loop</title>
 <meta name="description" content="{title}. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+<meta property="og:title" content="{title} &middot; From Prompt to Loop">
+<meta property="og:description" content="{title}. Part of From Prompt to Loop, thirty five runnable loops that keep a product alive after it ships.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{site}{name}.html">
+{share}
 {fonts}
 <style>
   /* Night bridge: a warship's bridge after dark. Red light to see by, amber for the
@@ -247,7 +260,8 @@ def render_page(name, title, idx):
 
     return PAGE.format(title=html.escape(title), body=body, toc=toc,
                        prev=prev_l, next=next_l, repo=REPO, idx=idx,
-                       total=len(GUIDE) - 1, fonts=FONTS, tokens=TOKENS)
+                       total=len(GUIDE) - 1, fonts=FONTS, tokens=TOKENS,
+                       share=SHARE, site=SITE, name=name)
 
 def main():
     rows, fold = catalog(), folders()
@@ -290,6 +304,8 @@ def main():
         total=len(rows),
         fonts=FONTS,
         tokens=TOKENS,
+        share=SHARE,
+        site=SITE,
     )
     os.makedirs("docs", exist_ok=True)
     open("docs/index.html", "w").write(page)
@@ -310,6 +326,8 @@ TEMPLATE = r"""<!doctype html>
 <meta property="og:title" content="From Prompt to Loop &middot; 35 runnable loops">
 <meta property="og:description" content="Thirty five loops that keep a product alive after it ships. One command to watch them find real work.">
 <meta property="og:type" content="website">
+<meta property="og:url" content="{site}">
+{share}
 {fonts}
 <style>
   /* Night bridge: see the note above PAGE. */
