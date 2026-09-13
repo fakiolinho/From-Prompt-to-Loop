@@ -459,9 +459,5 @@ head2 "one changelog, for the repo and for the guide"
 grep -q '^## The field guide' CHANGELOG.md && grep -q '^## The repo' CHANGELOG.md \
   && ok "it keeps both histories" || bad "CHANGELOG.md must keep the guide's history and the repo's"
 grep -q '(CHANGELOG.md)' README.md && ok "README links it" || bad "README never links CHANGELOG.md"
-# every correction sent to the guide says whether a revision has applied it
-entries=$(grep -c '^## [0-9]' BOOK-CHANGES.md); statuses=$(grep -c '^\*\*Status:\*\*' BOOK-CHANGES.md)
-[ "$entries" = "$statuses" ] && ok "all $entries BOOK-CHANGES entries carry a status" \
-  || bad "BOOK-CHANGES.md has $entries entries but $statuses status lines"
 
 summary "docs"

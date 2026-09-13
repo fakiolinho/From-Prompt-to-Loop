@@ -5,8 +5,8 @@
 # tag  = the guide's own words. ships = "Ships on green". flags = "Flags, you decide".
 # star = the guide's star, the three easiest first builds.
 #
-# Where this disagrees with the printed guide, BOOK-CHANGES.md says why and the repo wins.
-# Checked against the second revision (September 2026): every row agrees. See CHANGELOG.md.
+# Where this disagrees with the printed guide, the repo wins and the next revision catches up.
+# Checked against the third revision (September 2026): every row agrees. See CHANGELOG.md.
 #
 # num	pack	tag	star	name
 01	engineering-loops	ships	no	Docs and examples sync

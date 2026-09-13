@@ -143,8 +143,7 @@ repo they were never wired to and you get a schedule full of agent runs that can
 `cloud-loops` also has a `SETUP.md`, because it runs against AWS rather than a repo.
 
 [`CHANGELOG.md`](CHANGELOG.md) says what changed, in the repo and in each revision of the field
-guide. [`BOOK-CHANGES.md`](BOOK-CHANGES.md) tracks where the repo has learned something the
-printed guide does not know yet, with the evidence, so the next revision can catch up.
+guide.
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to change something.
 [`SECURITY.md`](SECURITY.md) before you point a loop at anything you care about: what the fences
