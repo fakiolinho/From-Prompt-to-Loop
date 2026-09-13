@@ -6,7 +6,7 @@
 # star = the guide's star, the three easiest first builds.
 #
 # Where this disagrees with the printed guide, BOOK-CHANGES.md says why and the repo wins.
-# Loop 5 is flags here, ships on green in the guide. Evidence: BOOK-CHANGES.md entry 2.
+# Checked against the second revision (September 2026): every row agrees. See CHANGELOG.md.
 #
 # num	pack	tag	star	name
 01	engineering-loops	ships	no	Docs and examples sync

@@ -48,7 +48,8 @@ to your fork, so run them and commit the result.
 transcribed, and the tests fail if the repo drifts from it. If you have evidence the guide is
 wrong, do not quietly change the catalog: change it, and add an entry to
 [BOOK-CHANGES.md](BOOK-CHANGES.md) saying what you measured. That file is how a correction
-reaches the next edition instead of dying in a diff.
+reaches the next edition instead of dying in a diff. When a revision of the PDF applies an
+entry, mark its status, and list the revision in [CHANGELOG.md](CHANGELOG.md).
 
 ## Adding or changing a loop
 
@@ -101,6 +102,7 @@ binary by a bulk edit, which has happened.
 
 Say what you changed, what you ran it against, and what it found. If you changed a check, paste
 its output from a real repository. If you changed the guide's catalog, link the BOOK-CHANGES
-entry.
+entry. Anything a user of the repo would notice gets a line in [CHANGELOG.md](CHANGELOG.md),
+under the day it lands.
 
 Security issues do not go here. See [SECURITY.md](SECURITY.md).

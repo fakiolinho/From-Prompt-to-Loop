@@ -5,11 +5,20 @@ catalog transcribed, and `ci/test-docs.sh` fails if the repo drifts from it. Whe
 evidence forces the repo to change, the change lands here so the next revision of
 *From Prompt to Loop* can catch up.
 
-Each entry says what to change, where, and what the evidence was.
+Each entry says what to change, where, what the evidence was, and whether a revision has applied
+it. [CHANGELOG.md](CHANGELOG.md) lists what each revision of the PDF changed.
+
+**Second revision, September 2026:** applies entries 1 to 7, except pages 19 and 20 under
+entry 3.
+
+**Open for the next revision:** entry 3 (pages 19 and 20), and entries 8 to 15, found on
+2026-09-13 by checking the second revision page by page against the repo.
 
 ---
 
 ## 1. Chapter 1 is Software engineering, not General engineering
+
+**Status:** applied in the second revision.
 
 **Where:** page 3 (contents), page 22 (the catalog heading above loop 1).
 
@@ -20,6 +29,8 @@ Each entry says what to change, where, and what the evidence was.
 ---
 
 ## 2. Loop 5 is Flags, you decide, not Ships on green
+
+**Status:** applied in the second revision, with the suggested replacement entry.
 
 **Where:** page 23, loop 5, the tag at the end of the entry.
 
@@ -63,6 +74,9 @@ example of the same idea, and one where the evidence is measured rather than arg
 
 ## 3. A check has three answers, not two
 
+**Status:** applied on page 9 in the second revision. **Still open:** pages 19 and 20, question 2
+of the five question test, still describe the check as pass or fail.
+
 **Where:** page 9, the anatomy diagram, box 2. Also the check description on page 19,
 question 2 of the five question test.
 
@@ -97,6 +111,9 @@ repo: any check with only two answers will answer "there is work" when it is rea
 
 ## 4. Minor caveats worth a sentence
 
+**Status:** applied in the second revision. Loop 2 in full. Loop 6 carries it through entry 5's
+wording, and the note about using the project's pinned tool versions did not make the page.
+
 **Loop 6, page 22.** "A loop runs the linter, formatter, and type checker on changed files."
 Add: only the ones that project actually uses. Running a formatter a project never adopted
 flags every file it owns. On a real site `prettier --check .` reported 364 files in a repo with
@@ -111,6 +128,8 @@ no safety from this loop, which is why the check now refuses to run without one.
 ---
 
 ## 5. A loop runs the project's commands. It never invents its own.
+
+**Status:** applied in the second revision, on page 22 (loop 6) and page 9 (box 3).
 
 **Where:** loop 6, page 22. Also worth a line in the anatomy, page 9, box 3, and in the
 starter pack on page 27 where CLAUDE.md names one verification command.
@@ -148,6 +167,8 @@ own guess is not automating the team's standard, it is imposing a different one 
 
 ## 6. Loop 7 needs a release tag, not just any tag
 
+**Status:** applied in the second revision.
+
 **Where:** loop 7, page 22.
 
 **Change:** add one sentence to the entry:
@@ -168,6 +189,8 @@ than that there is a lot to write.
 ---
 
 ## 7. Say plainly that a local run needs no API key
+
+**Status:** applied in the second revision, on page 35.
 
 **Where:** page 2, "what you are holding", or the prerequisites implied on page 26. Also page 35,
 the billing box, which currently only carries the warning half.
@@ -194,3 +217,139 @@ on the existing login and ran.
 The fix in the repo is a short table on the front door, showing what each of the three surfaces
 needs and what it costs, plus the caps. The guide has the cost chapter to do this properly; it
 just needs the "nothing to buy to start" sentence somewhere a beginner meets early.
+
+---
+
+## 8. Loop 2 runs on a build script too
+
+**Status:** open.
+
+**Where:** page 22, loop 2.
+
+**Change:** "A repo with no tests gets no safety here, which is why the check refuses to run
+without one" becomes:
+
+> A repo with nothing that proves a bump is safe, no tests and no build, gets no safety here,
+> which is why the check refuses to run on one.
+
+**Why:** the check takes the project's `test` script, then its `build` script, then
+`LOOP_VERIFY`, and exits 2 only when there is none of them. On 2026-09-13 a Next.js site with no
+test suite ran loop 2 on `npm run build` and bumped five packages.
+
+---
+
+## 9. The starter pack workflow gives the check two answers
+
+**Status:** open.
+
+**Where:** page 28, `.github/workflows/docs-loop.yml`.
+
+**Change:** the check step has `continue-on-error: true` and the agent step runs on
+`if: steps.check.outcome == 'failure'`. Any failure wakes the agent, including a repo with no
+`check-docs` script at all. That is entry 3's bug, printed in the one workflow a reader copies.
+Suggested replacement for the check and the agent condition:
+
+    - id: check
+      run: |
+        if ! node -e 'process.exit((require("./package.json").scripts||{})["check-docs"]?0:1)'; then
+          echo "::error::no check-docs script. Not wired, no agent."
+          exit 2
+        fi
+        if npm run check-docs; then echo "answer=0" >> "$GITHUB_OUTPUT"
+        else echo "answer=1" >> "$GITHUB_OUTPUT"; fi
+    - name: Sync only on drift
+      if: steps.check.outputs.answer == '1'
+
+**Why:** page 9 now says a check has three answers, and the workflow on page 28 still has two.
+The repo's own copy of this example had the same bug, and was fixed on 2026-09-13.
+
+---
+
+## 10. The retry ceiling is two identical failures, not three
+
+**Status:** open.
+
+**Where:** page 29, "Cap it at three", and page 37, "three tries then stop and flag".
+
+**Change:** "Stop after two runs that fail the same way, and flag it. Never try a third."
+
+**Why:** every chapter's standing orders in the repo, and both agent prompts in every runner,
+say two: "The third identical failure is not the one that works, and every turn you spend on it
+is money out of someone's budget." Either number can be argued, but the book and the orders a
+reader installs should say the same one.
+
+---
+
+## 11. One runner per group of loops, not one workflow per loop
+
+**Status:** open.
+
+**Where:** page 31, "One workflow file per loop".
+
+**Change:** "One workflow per group of loops, and each run names its loop." Or keep one file per
+loop, and say the repo groups them.
+
+**Why:** the repo ships one `loop.yml` per chapter, with the loop as an input to the run. Nine
+files per chapter would repeat the same fence, caps and verify job nine times, and drift.
+
+---
+
+## 12. The Codex line needs a writable sandbox
+
+**Status:** open.
+
+**Where:** page 30, "the one line that changes in the workflow".
+
+**Change:** `npx @openai/codex exec "..."` becomes
+`npx @openai/codex exec --sandbox workspace-write "..."`.
+
+**Why:** a loop has to edit files. Every Codex call in the repo passes this flag, and it plays
+the part `--allowedTools` plays for Claude: the fence, stated where it is enforced.
+
+---
+
+## 13. The repo has shipped
+
+**Status:** open.
+
+**Where:** page 39, "What happens next".
+
+**Change:** "The runnable repo ... is being finished now. When it lands I will send it to you"
+becomes a pointer to it: `github.com/fakiolinho/From-Prompt-to-Loop`. Keep the list link for
+people who want the next revision, but the reader needs the repo.
+
+**Why:** the repo released 1.0.0 in September 2026. See [CHANGELOG.md](CHANGELOG.md).
+
+---
+
+## 14. Run it on your own machine before you schedule it
+
+**Status:** open.
+
+**Where:** page 29, the starter pack's "Run it" steps.
+
+**Change:** add a step before scheduling:
+
+> Try it where you can watch it. `./install.sh ~/code/my-app 02` puts one loop in your repo,
+> `./run-loop.sh 02 --check` asks whether there is work, and `./run-loop.sh 02` runs it once on
+> your own login. Read the diff. Then schedule it.
+
+**Why:** page 35 now says a local run costs nothing extra, and page 29 still jumps from dropping
+in CLAUDE.md straight to a schedule. The first real run of loop 2 was local, and what it found
+(entries 8 and 15) would otherwise have repeated on every scheduled run.
+
+---
+
+## 15. An upgrade that can never land needs a way to park it
+
+**Status:** open.
+
+**Where:** page 22, loop 2.
+
+**Change:** add one sentence: "If an upgrade cannot land, a peer dependency pin say, park it
+by name, or the loop wakes an agent every run to fail at the same thing."
+
+**Why:** on 2026-09-13, `@opennextjs/cloudflare` 1.20.6 needed `next` 16.3.3 or newer on a site
+pinned to 16.2.10. The agent was right to stop, but the check kept counting the upgrade, so
+every scheduled run would have spent up to two dollars on the same failure. The repo now reads
+`LOOP_HOLD`.

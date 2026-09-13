@@ -138,11 +138,13 @@ repo they were never wired to and you get a schedule full of agent runs that can
     WIRING.md             every setting every loop reads
     SECURITY.md           the threat model, honestly
     CONTRIBUTING.md       how to change a loop, and what to test it against
+    CHANGELOG.md          what changed, in the repo and in each revision of the guide
 
 `cloud-loops` also has a `SETUP.md`, because it runs against AWS rather than a repo.
 
-[`BOOK-CHANGES.md`](BOOK-CHANGES.md) tracks where the repo has learned something the printed
-field guide does not know yet, with the evidence, so the next revision can catch up.
+[`CHANGELOG.md`](CHANGELOG.md) says what changed, in the repo and in each revision of the field
+guide. [`BOOK-CHANGES.md`](BOOK-CHANGES.md) tracks where the repo has learned something the
+printed guide does not know yet, with the evidence, so the next revision can catch up.
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) if you want to change something.
 [`SECURITY.md`](SECURITY.md) before you point a loop at anything you care about: what the fences
