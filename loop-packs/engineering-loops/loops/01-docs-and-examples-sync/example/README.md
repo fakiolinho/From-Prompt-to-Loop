@@ -47,23 +47,29 @@ AGENTS.md hold the same orders; Claude reads CLAUDE.md, Codex reads AGENTS.md.
 **Claude, headless:**
 
     npx @anthropic-ai/claude-code -p "Read CLAUDE.md and memory/docs-loop.md. \
-      Sync /docs and /examples to the API in /src. Run npm test until green. \
+      Sync /docs and /examples to the API in /src. Run npm run check-docs until green. \
       Open or update the single PR on branch docs-loop/sync, never a second, and \
       append what drifted to memory/docs-loop.md." \
-      --allowedTools "Read,Edit,Bash(npm:*),Bash(git:*),Bash(gh:*)" \
+      --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)" \
       --max-turns 30 --max-budget-usd 2
 
 **Codex, same orders:**
 
     npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and memory/docs-loop.md. \
-      Sync /docs and /examples to the API in /src. Run npm test until green. \
+      Sync /docs and /examples to the API in /src. Run npm run check-docs until green. \
       Open or update the single PR on branch docs-loop/sync, never a second."
 
 How it behaves, and why:
 
-- **It only wakes the agent when the check fails.** A green run ends at the check, no tokens.
+- **The check has three answers.** In sync ends the run at the check, no tokens. Drift wakes
+  the agent. No `check-docs` script fails the job loudly and never wakes an agent, because there
+  is nothing it could prove its work against.
+- **One command everywhere.** The hook, the CI gate and the standing orders all run
+  `npm run check-docs`. If they checked different things, the loop could ship on a green it
+  never earned.
 - **The agent is fenced, not just asked.** `--allowedTools` limits Claude to reading, editing,
-  and the `npm`, `git`, `gh` commands it needs; Codex gets `--sandbox workspace-write`.
+  writing new files, and the `npm`, `git`, `gh` commands it needs; Codex gets
+  `--sandbox workspace-write`.
   CLAUDE.md is the standing order, the fence is what enforces it.
 - **The run is capped.** `--max-turns`, `--max-budget-usd`, and the job timeout are the kill switch.
 - **It can actually open the PR.** The workflow grants `contents: write` and

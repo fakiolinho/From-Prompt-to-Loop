@@ -29,24 +29,33 @@ jobs:
       - uses: actions/checkout@v4
       - run: npm ci
 
-      # The check. If it passes, nothing drifted and the job ends green right here.
+      # The check has three answers, not two.
+      #   no check-docs script: not wired. Fail loudly, and never wake an agent on a repo
+      #                         the check cannot read. Nothing below runs.
+      #   0: in sync. The job ends green, no tokens spent.
+      #   1: drifted. Wake the agent.
+      # The gate runs the same command as the hook and the standing orders, on purpose.
       - id: check
-        run: npm test
-        continue-on-error: true
+        run: |
+          if ! node -e 'process.exit((require("./package.json").scripts||{})["check-docs"]?0:1)'; then
+            echo "::error::no check-docs script, so nothing proves the docs match the code. Not wired, no agent."
+            exit 2
+          fi
+          if npm run check-docs; then echo "answer=0" >> "$GITHUB_OUTPUT"; else echo "answer=1" >> "$GITHUB_OUTPUT"; fi
 
       - name: In sync, nothing to do
-        if: steps.check.outcome == 'success'
+        if: steps.check.outputs.answer == '0'
         run: echo "docs match the code. No agent run, no tokens spent."
 
-      # Only a FAILED check wakes the agent. Scoped tools, capped turns, capped spend.
+      # Only a check that ran and found drift wakes the agent. Scoped tools, capped turns, capped spend.
       - name: Sync with Claude
-        if: steps.check.outcome == 'failure' && github.event.inputs.agent != 'codex'
+        if: steps.check.outputs.answer == '1' && github.event.inputs.agent != 'codex'
         run: |
           npx @anthropic-ai/claude-code -p "Read CLAUDE.md and memory/docs-loop.md. \
-            Sync /docs and /examples to the API in /src. Run npm test until green. \
+            Sync /docs and /examples to the API in /src. Run npm run check-docs until green. \
             Open or update the single PR on branch docs-loop/sync, never a second, and append one line to memory/docs-loop.md describing what drifted. \
             If you cannot map the API without guessing, open an issue and stop." \
-            --allowedTools "Read,Edit,Bash(npm:*),Bash(git:*),Bash(gh:*)" \
+            --allowedTools "Read,Edit,Write,Bash(npm:*),Bash(git:*),Bash(gh:*)" \
             --max-turns 30 \
             --max-budget-usd 2
         env:
@@ -54,10 +63,10 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Sync with Codex
-        if: steps.check.outcome == 'failure' && github.event.inputs.agent == 'codex'
+        if: steps.check.outputs.answer == '1' && github.event.inputs.agent == 'codex'
         run: |
           npx @openai/codex exec --sandbox workspace-write "Read AGENTS.md and memory/docs-loop.md. \
-            Sync /docs and /examples to the API in /src. Run npm test until green. \
+            Sync /docs and /examples to the API in /src. Run npm run check-docs until green. \
             Open or update the single PR on branch docs-loop/sync, never a second, and append one line to memory/docs-loop.md describing what drifted. \
             If you cannot map the API without guessing, open an issue and stop."
         env:

@@ -1,10 +1,9 @@
 # Standing orders for the docs loop
 
 ## How to verify a change
-- Run examples: `npm run examples`
-- Check docs:   `npm run check:docs`
-- Full check:   `npm test`
-- A change is done only when `npm test` is green. Green, or it did not happen.
+- One command: `npm run check-docs`. It runs every example, then the docs coverage check.
+- The hook and the CI gate run that same command. `npm test` is an alias for it.
+- A change is done only when `npm run check-docs` is green. Green, or it did not happen.
 
 ## What this loop owns, and what it must never touch
 - Owns:  /docs and /examples
